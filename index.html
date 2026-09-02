@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.4 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.5 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.4</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.5</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -357,8 +357,8 @@
           <div class="stat stack"><label>Distanza dal massimo mese</label><b id="monthHighDist">—</b></div>
           <div class="stat"><label>Range di giornata</label><b id="dayRange">—</b></div>
           <div class="stat"><label>Range ultimo mese</label><b id="monthRange">—</b></div>
-          <div class="stat"><label>Media mobile 50 giorni</label><b id="sma50">—</b></div>
-          <div class="stat"><label>Media mobile 200 giorni</label><b id="sma200">—</b></div>
+          <div class="stat"><label>Media mobile 50 sedute</label><b id="sma50">—</b></div>
+          <div class="stat"><label>Media mobile 200 sedute</label><b id="sma200">—</b></div>
         </div>
         </details>
       </section>
@@ -500,7 +500,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.4 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.5 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -832,10 +832,14 @@
       return { sup, res };
     }
     function sma(daily, n) {
-      const closes = (daily || []).filter(b => !b.isOpen && Number(b.close) > 0).map(b => Number(b.close));
-      if (closes.length < Math.min(n, 10)) return null;
-      const slice = closes.slice(-n);
-      return slice.reduce((a, b) => a + b, 0) / slice.length;
+      const bars = (daily || []).filter(b => !b.isOpen && Number(b.close) > 0).slice().sort((a, b) => {
+        return new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0);
+      });
+      const closes = bars.map(b => Number(b.close));
+      if (closes.length < n) return null;
+      let s = 0;
+      for (let i = closes.length - n; i < closes.length; i++) s += closes[i];
+      return s / n;
     }
     function rsiCloses(closes, n) {
       if (!closes || closes.length < n + 1) return null;
@@ -1572,10 +1576,10 @@
     }
     async function loadIntraday() { return loadChart(); }
     async function loadDaily() {
-      const gold = await loadOhlc(goldSymbol(), "1d", 260);
+      const gold = await loadOhlc(goldSymbol(), "1d", 280);
       const fx = fxSymbol();
-      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 260)) : gold;
-      state.daily = series.slice().reverse();
+      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 280)) : gold;
+      state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
     }
     async function loadQuoteBiquote() {
       const gold = await getJSON(`${API}/${goldSymbol()}`);
@@ -1970,10 +1974,10 @@
     }
     async function loadIntraday() { return loadChart(); }
     async function loadDaily() {
-      const gold = await loadOhlc(goldSymbol(), "1d", 260);
+      const gold = await loadOhlc(goldSymbol(), "1d", 280);
       const fx = fxSymbol();
-      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 260)) : gold;
-      state.daily = series.slice().reverse();
+      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 280)) : gold;
+      state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
     }
     function multiplyBars(goldBars, fxBars) {
       const fxMap = new Map();
