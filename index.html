@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.5 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.8 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.5</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.8</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -359,6 +359,8 @@
           <div class="stat"><label>Range ultimo mese</label><b id="monthRange">—</b></div>
           <div class="stat"><label>Media mobile 50 sedute</label><b id="sma50">—</b></div>
           <div class="stat"><label>Media mobile 200 sedute</label><b id="sma200">—</b></div>
+          <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
+          <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
         </div>
         </details>
       </section>
@@ -473,11 +475,7 @@
             <span class="fold-btn"></span>
           </span>
         </summary>
-        <p class="hint" id="apartMeta" style="margin-top:8px">Spread vs spot PLN live</p>
-        <div class="stat" style="margin:12px 0">
-          <label>Spot 1 oz in PLN (live)</label>
-          <b id="spotPln">—</b>
-        </div>
+        <p class="hint" id="apartMeta" style="margin-top:8px">Solo prezzi del listino Apart, senza spread calcolati.</p>
         <div class="apart-wrap">
           <table class="apart-tbl">
             <thead>
@@ -485,14 +483,12 @@
                 <th>#</th>
                 <th>Moneta</th>
                 <th class="r">Prezzo Apart</th>
-                <th class="r">Spread zł</th>
-                <th class="r">Spread %</th>
               </tr>
             </thead>
             <tbody id="apartBody"></tbody>
           </table>
         </div>
-        <p class="hint">Prezzi del listino Apart (non stimati). Lo spread è listino meno spot live. Fonte: mennica.apart.pl/zloto/monety?masa=1-oz&amp;realizacja=24h</p>
+        <p class="hint">Prezzi copiati dal listino Apart. Nessuno spread e nessuna stima. Fonte: mennica.apart.pl/zloto/monety?masa=1-oz&amp;realizacja=24h</p>
       </details>
     </section>
 
@@ -500,7 +496,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.5 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.8 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -552,41 +548,28 @@
         </tr>`).join("");
     }
     function pln(n, d = 2) { return fmt(n, d) + " zł"; }
-    function renderApart(spot) {
-      state.spotPln = spot;
+    function renderApart() {
       const now = new Date().toLocaleString("it-IT", {
         day: "2-digit", month: "2-digit", year: "numeric",
         hour: "2-digit", minute: "2-digit", second: "2-digit",
       });
       const live = Array.isArray(state.apartList) && state.apartList.length;
-      document.getElementById("apartMeta").textContent = live
-        ? ("Listino Apart · " + (state.apartSource || "aggiornato") + " · " + now)
-        : "In attesa di aggiornamento listino Apart";
-      document.getElementById("spotPln").textContent = spot ? pln(spot) : "—";
-      const clean = s => String(s || "").replace(/\*+/g, "").trim();
-      if (!live) {
-        document.getElementById("apartBody").innerHTML = APART.slice(0, 10).map((p, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td><a href="${APART_LIST_URL}" target="_blank" rel="noopener">${clean(p.name)}</a></td>
-          <td class="r">—</td>
-          <td class="r">—</td>
-          <td class="r">—</td>
-        </tr>`).join("");
-        return;
+      const catalog = live ? state.apartList : APART;
+      const meta = document.getElementById("apartMeta");
+      if (meta) {
+        meta.textContent = live
+          ? ("Listino Apart · " + (state.apartSource || "sito") + " · " + now)
+          : ("Listino Apart letto il 01/09/2026 alle 15:05 · " + now);
       }
-      const rows = state.apartList.map(p => {
-        const spread = p.price - (spot || p.price);
-        const pct = spot ? (spread / spot) * 100 : 0;
-        return { ...p, name: clean(p.name), spread, pct };
-      }).sort((a, b) => a.price - b.price).slice(0, 10);
-      document.getElementById("apartBody").innerHTML = rows.map((p, i) => `
+      const clean = s => String(s || "").replace(/\*+/g, "").trim();
+      const rows = catalog.slice().sort((a, b) => a.price - b.price).slice(0, 10);
+      const body = document.getElementById("apartBody");
+      if (!body) return;
+      body.innerHTML = rows.map((p, i) => `
         <tr>
           <td>${i + 1}</td>
-          <td><a href="${APART_LIST_URL}" target="_blank" rel="noopener">${p.name}</a></td>
-          <td class="r"><a href="${APART_LIST_URL}" target="_blank" rel="noopener">${pln(p.price, 0)}</a></td>
-          <td class="r">${spreadSign(p.spread)}</td>
-          <td class="r">${(p.pct >= 0 ? "+" : "") + fmt(p.pct, 2)}%</td>
+          <td><a href="${p.url || APART_LIST_URL}" target="_blank" rel="noopener">${clean(p.name)}</a></td>
+          <td class="r"><a href="${p.url || APART_LIST_URL}" target="_blank" rel="noopener">${pln(p.price, 0)}</a></td>
         </tr>`).join("");
     }
     function spreadSign(n) { return (n >= 0 ? "+" : "") + pln(n); }
@@ -714,6 +697,24 @@
       });
       return { high, low };
     }
+    function yearRange(daily, today) {
+      const cutoff = Date.now() - 365 * 24 * 60 * 60 * 1000;
+      const mid = today?.price || today?.high || today?.low;
+      let bars = (daily || []).filter(b => {
+        const ts = new Date(b.openTime || b.time || 0).getTime();
+        return ts && !Number.isNaN(ts) && ts >= cutoff;
+      });
+      if (mid > 0) bars = bars.filter(b => sameScale(b.high || b.close, mid, 0.45) || sameScale(b.low || b.close, mid, 0.45));
+      if (!bars.length && daily?.length) bars = daily.slice(-260);
+      let high = today?.high, low = today?.low;
+      bars.forEach(b => {
+        const h = Number(b.high || b.close);
+        const l = Number(b.low || b.close);
+        if (h > 0) high = high == null ? h : Math.max(high, h);
+        if (l > 0) low = low == null ? l : Math.min(low, l);
+      });
+      return { high, low };
+    }
     function supportLevels(daily, day) {
       const month = monthRange(daily, day);
       const closed = (daily || []).filter(b => !b.isOpen);
@@ -792,6 +793,11 @@
       const el200 = document.getElementById("sma200");
       if (el50) el50.textContent = s50 != null ? money(s50) : "—";
       if (el200) el200.textContent = s200 != null ? money(s200) : "—";
+      const yr = yearRange(state.daily, day);
+      const elYLo = document.getElementById("yLow");
+      const elYHi = document.getElementById("yHigh");
+      if (elYLo) elYLo.textContent = yr.low != null ? money(yr.low) : "—";
+      if (elYHi) elYHi.textContent = yr.high != null ? money(yr.high) : "—";
       paintMetals();
     }
     function keySR(daily, day, s50, s200) {
@@ -1576,9 +1582,9 @@
     }
     async function loadIntraday() { return loadChart(); }
     async function loadDaily() {
-      const gold = await loadOhlc(goldSymbol(), "1d", 280);
+      const gold = await loadOhlc(goldSymbol(), "1d", 400);
       const fx = fxSymbol();
-      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 280)) : gold;
+      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 400)) : gold;
       state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
     }
     async function loadQuoteBiquote() {
@@ -1644,14 +1650,7 @@
       applyQuote(q);
       document.getElementById("iosHint").style.display = "none";
       try { await loadMetals(); } catch (e) {}
-      try {
-        const xau = await getJSON(`${API}/XAUUSD`);
-        const usdpln = await getJSON(`${API}/USDPLN`);
-        renderApart(xau.mid * usdpln.mid);
-      } catch (e) {
-        if (q.eurpln && q.symbol === "XAUEUR") renderApart(q.mid * q.eurpln);
-        else if (state.ccy === "PLN") renderApart(q.mid);
-      }
+      renderApart();
     }
     async function boot(full = true) {
       try {
@@ -1770,16 +1769,27 @@
     }
     function parseApartCatalog(text) {
       const rows = [];
-      const re = /\[([^\]]+1oz[^\]]*)\]\((https:\/\/mennica\.apart\.pl\/produkt\/[^)]+)\)[\s\S]{0,180}?(\d[\d\s]{3,6})\s*PLN/gi;
+      const push = (name, url, raw) => {
+        const price = Number(String(raw).replace(/[^\d]/g, ""));
+        if (!(price > 12000 && price < 40000)) return;
+        const n = String(name || "").replace(/\s+/g, " ").replace(/\*+/g, "").trim();
+        if (!/1\s*oz/i.test(n)) return;
+        rows.push({ name: n, url: url || APART_LIST_URL, price });
+      };
+      const reMd = /\[([^\]]{8,120})\]\((https:\/\/mennica\.apart\.pl\/produkt\/[^)]+)\)[\s\S]{0,500}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
       let m;
-      while ((m = re.exec(text))) {
-        const name = m[1].replace(/\s+/g, " ").trim();
-        const url = m[2];
-        const price = Number(String(m[3]).replace(/\s/g, ""));
-        if (price > 10000 && price < 40000) rows.push({ name, url, price });
-      }
+      while ((m = reMd.exec(text))) push(m[1], m[2], m[3]);
+      const reHtml = />([^<]{8,140}1\s*oz[^<]{0,80})<[\s\S]{0,700}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
+      while ((m = reHtml.exec(text))) push(m[1], APART_LIST_URL, m[2]);
+      const reLine = /([A-Za-zÀ-ÿ0-9][^|\n]{6,80}1\s*oz[^|\n]{0,40}).{0,40}?(\d{2}\s?\d{3})\s*(?:zł|PLN)/gi;
+      while ((m = reLine.exec(text))) push(m[1], APART_LIST_URL, m[2]);
       const uniq = [], seen = new Set();
-      for (const r of rows) { if (seen.has(r.url)) continue; seen.add(r.url); uniq.push(r); }
+      for (const r of rows) {
+        const k = r.name.toLowerCase();
+        if (seen.has(k)) continue;
+        seen.add(k);
+        uniq.push(r);
+      }
       return uniq.sort((a, b) => a.price - b.price);
     }
     async function getJSONText(url) {
@@ -1792,9 +1802,12 @@
       } finally { clearTimeout(t); }
     }
     async function fetchApartCatalog() {
+      const encoded = encodeURIComponent(APART_LIST_URL);
       const proxies = [
-        "https://r.jina.ai/http://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h",
         "https://r.jina.ai/" + APART_LIST_URL,
+        "https://r.jina.ai/http://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h",
+        "https://api.allorigins.win/raw?url=" + encoded,
+        "https://corsproxy.io/?" + APART_LIST_URL
       ];
       for (const url of proxies) {
         try {
@@ -1815,15 +1828,9 @@
           state.apartList = list;
           state.apartSource = "sito live " + new Date().toLocaleTimeString("it-IT");
         } else {
-          state.apartSource = "listino vero 01/09/2026 15:05 (Apart blocca la lettura dal browser)";
+          state.apartSource = "riserva 01/09/2026 15:05 — Apart blocca il proxy, i prezzi restano quelli dell’ultimo listino letto";
         }
-        let spot = state.spotPln;
-        try {
-          const xau = await getJSON(`${API}/XAUUSD`);
-          const usdpln = await getJSON(`${API}/USDPLN`);
-          spot = xau.mid * usdpln.mid;
-        } catch (e) {}
-        renderApart(spot);
+        renderApart();
       } finally {
         btn.disabled = false;
         btn.textContent = "Aggiorna listino Apart";
@@ -1834,14 +1841,7 @@
       applyQuote(q);
       document.getElementById("iosHint").style.display = "none";
       try { await loadMetals(); } catch (e) {}
-      try {
-        const xau = await getJSON(`${API}/XAUUSD`);
-        const usdpln = await getJSON(`${API}/USDPLN`);
-        renderApart(xau.mid * usdpln.mid);
-      } catch (e) {
-        if (q.eurpln && q.symbol === "XAUEUR") renderApart(q.mid * q.eurpln);
-        else if (state.ccy === "PLN") renderApart(q.mid);
-      }
+      renderApart();
     }
     async function loadQuoteBiquote() {
       const gold = await getJSON(`${API}/${goldSymbol()}`);
@@ -1974,9 +1974,9 @@
     }
     async function loadIntraday() { return loadChart(); }
     async function loadDaily() {
-      const gold = await loadOhlc(goldSymbol(), "1d", 280);
+      const gold = await loadOhlc(goldSymbol(), "1d", 400);
       const fx = fxSymbol();
-      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 280)) : gold;
+      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 400)) : gold;
       state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
     }
     function multiplyBars(goldBars, fxBars) {
@@ -2004,14 +2004,7 @@
       applyQuote(q);
       document.getElementById("iosHint").style.display = "none";
       try { await loadMetals(); } catch (e) {}
-      try {
-        const xau = await getJSON(`${API}/XAUUSD`);
-        const usdpln = await getJSON(`${API}/USDPLN`);
-        renderApart(xau.mid * usdpln.mid);
-      } catch (e) {
-        if (q.eurpln && q.symbol === "XAUEUR") renderApart(q.mid * q.eurpln);
-        else if (state.ccy === "PLN") renderApart(q.mid);
-      }
+      renderApart();
     }
     async function loadQuoteBiquote() {
       const gold = await getJSON(`${API}/${goldSymbol()}`);
@@ -2184,9 +2177,12 @@
       } finally { clearTimeout(t); }
     }
     async function fetchApartCatalog() {
+      const encoded = encodeURIComponent(APART_LIST_URL);
       const proxies = [
-        "https://r.jina.ai/http://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h",
         "https://r.jina.ai/" + APART_LIST_URL,
+        "https://r.jina.ai/http://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h",
+        "https://api.allorigins.win/raw?url=" + encoded,
+        "https://corsproxy.io/?" + APART_LIST_URL
       ];
       for (const url of proxies) {
         try {
@@ -2552,6 +2548,7 @@
 
     document.getElementById("apartTitleLink").addEventListener("click", (e) => e.stopPropagation());
     boot(true);
+    refreshApart();
     loadNews();
     loadTreasuries();
     loadWorldNews();
