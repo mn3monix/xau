@@ -83,14 +83,7 @@
     .chg.up { color: var(--up); background: rgba(61,214,140,.12); }
     .chg.down { color: var(--down); background: rgba(255,107,107,.12); }
     .hint { color: var(--muted); font-size: .78rem; margin-top: 8px; line-height: 1.45; }
-    .meta { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,2fr); gap: 8px; margin-top: 16px; align-items: start; flex: 1; }
-    .meta-split {
-      width: 1px; min-width: 1px; max-width: 1px;
-      margin: 2px 6px;
-      padding: 0; border: 0;
-      background: rgba(212,175,55,.28);
-      align-self: stretch;
-    }
+    .meta { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,2fr); gap: 8px; margin-top: 16px; align-items: start; flex: 1; }
     .grams, .grams.side, .grams.comm {
       display: grid;
       grid-template-rows: none;
@@ -364,7 +357,6 @@
             <div class="stat"><label>21,6K — 900</label><b id="g216">—</b></div>
             <div class="stat k18"><label>18K — 750</label><b id="g18">—</b></div>
           </div>
-          <div class="meta-split" aria-hidden="true"></div>
           <div class="grams side">
             <div class="stat"><label>Minimo di giornata</label><b id="dayLow">—</b></div>
             <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
