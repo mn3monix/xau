@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.1 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.2 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.1</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.2</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -329,9 +329,9 @@
             <div class="stat"><label>9K — 375</label><b id="g9">—</b></div>
           </div>
           <div class="grams side">
-            <div class="stat"><label>EUR / USD</label><b id="eurusd">—</b></div>
-            <div class="stat"><label>EUR / PLN</label><b id="eurpln">—</b></div>
-            <div class="stat"><label>EUR / CHF</label><b id="eurchf">—</b></div>
+            <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
+            <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
+            <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
             <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
             <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
             <div class="stat stack"><label>Bitcoin</label><b id="btcPx">—</b></div>
@@ -500,7 +500,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.2 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1663,9 +1663,9 @@
         if (full || !state.fxPrev) {
           try { await loadFxPrev(); } catch (e) {}
           if (state.quote) {
-            paintFx("eurusd", state.quote.eurusd, 4);
-            paintFx("eurpln", state.quote.eurpln, 4);
-            paintFx("eurchf", state.quote.eurchf, 4);
+            paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
+            paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
+            paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
           }
         }
       } catch (e) {
@@ -2205,9 +2205,9 @@
         if (full || !state.fxPrev) {
           try { await loadFxPrev(); } catch (e) {}
           if (state.quote) {
-            paintFx("eurusd", state.quote.eurusd, 4);
-            paintFx("eurpln", state.quote.eurpln, 4);
-            paintFx("eurchf", state.quote.eurchf, 4);
+            paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
+            paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
+            paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
           }
         }
       } catch (e) {
@@ -2242,22 +2242,20 @@
       const el = document.getElementById(id);
       if (!el) return;
       if (cur == null || !Number.isFinite(cur)) { el.textContent = "—"; return; }
-      el.textContent = fmt(cur, dec);
-      el.classList.remove("up", "down");
-      if (diff != null && Number.isFinite(diff)) {
-        if (diff > 0.0001) el.classList.add("up");
-        else if (diff < -0.0001) el.classList.add("down");
-        el.style.color = diff > 0.0001 ? "var(--up)" : diff < -0.0001 ? "var(--down)" : "";
-        return;
+      let pct = (diff != null && Number.isFinite(diff)) ? Number(diff) : null;
+      if (pct == null) {
+        const bag = fxBag();
+        const prev = (state.fxPrev && state.fxPrev[id] != null) ? state.fxPrev[id] : bag.prev[id];
+        if (prev > 0) pct = ((cur - prev) / prev) * 100;
+        bag.today[id] = cur;
+        try { localStorage.setItem("oroFx", JSON.stringify(bag)); } catch (e) {}
       }
-      const bag = fxBag();
-      const prev = (state.fxPrev && state.fxPrev[id] != null) ? state.fxPrev[id] : bag.prev[id];
-      toneEl(el, cur, prev);
-      if (el.classList.contains("up")) el.style.color = "var(--up)";
-      else if (el.classList.contains("down")) el.style.color = "var(--down)";
-      else el.style.color = "";
-      bag.today[id] = cur;
-      try { localStorage.setItem("oroFx", JSON.stringify(bag)); } catch (e) {}
+      const cls = pct != null && pct > 0.0001 ? "up" : (pct != null && pct < -0.0001 ? "down" : "");
+      const pctTxt = pct != null && Number.isFinite(pct) ? ((pct >= 0 ? "+" : "") + fmt(pct, 2) + "%") : "—";
+      el.classList.remove("up", "down");
+      if (cls) el.classList.add(cls);
+      el.style.color = "";
+      el.innerHTML = fmt(cur, dec) + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pctTxt + "</span>";
     }
     async function loadFxPrev() {
       const d = new Date();
