@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.8 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.9 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.8</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.9</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -466,37 +466,11 @@
       </details>
     </section>
 
-    <section class="card apart">
-      <details class="fold">
-        <summary>
-          <strong class="fold-title" style="color:var(--gold-2)"><a id="apartTitleLink" href="https://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Mennica Apart — 1 oz, spedizione 24h</a></strong>
-          <span class="fold-actions">
-            <button class="refresh-btn" id="apartBtn" type="button">Aggiorna</button>
-            <span class="fold-btn"></span>
-          </span>
-        </summary>
-        <p class="hint" id="apartMeta" style="margin-top:8px">Solo prezzi del listino Apart, senza spread calcolati.</p>
-        <div class="apart-wrap">
-          <table class="apart-tbl">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Moneta</th>
-                <th class="r">Prezzo Apart</th>
-              </tr>
-            </thead>
-            <tbody id="apartBody"></tbody>
-          </table>
-        </div>
-        <p class="hint">Prezzi copiati dal listino Apart. Nessuno spread e nessuna stima. Fonte: mennica.apart.pl/zloto/monety?masa=1-oz&amp;realizacja=24h</p>
-      </details>
-    </section>
-
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.8 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.9 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -523,7 +497,7 @@
     const K18 = 18 / 24;
     const K14 = 14 / 24;
     const K9 = 9 / 24;
-    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null };
+    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, apartLive: false };
     const APART = [
       { name: "Krugerrand 1oz — annate miste (24h)", price: 16730, url: APART_LIST_URL },
       { name: "Britannia 1oz — annate miste (24h)", price: 16779, url: APART_LIST_URL },
@@ -548,29 +522,41 @@
         </tr>`).join("");
     }
     function pln(n, d = 2) { return fmt(n, d) + " zł"; }
-    function renderApart() {
+    function spotPlnNow() {
+      const q = state.quote || {};
+      if (q.xauusd > 0 && q.eurpln > 0 && q.eurusd > 0) return q.xauusd * (q.eurpln / q.eurusd);
+      return state.spotPln;
+    }
+    function renderApart() { return; }
+    function renderApartRemoved() {
       const now = new Date().toLocaleString("it-IT", {
         day: "2-digit", month: "2-digit", year: "numeric",
         hour: "2-digit", minute: "2-digit", second: "2-digit",
       });
-      const live = Array.isArray(state.apartList) && state.apartList.length;
-      const catalog = live ? state.apartList : APART;
+      const catalog = (Array.isArray(state.apartList) && state.apartList.length) ? state.apartList : APART;
+      const spot = spotPlnNow();
+      state.spotPln = spot;
       const meta = document.getElementById("apartMeta");
       if (meta) {
-        meta.textContent = live
-          ? ("Listino Apart · " + (state.apartSource || "sito") + " · " + now)
-          : ("Listino Apart letto il 01/09/2026 alle 15:05 · " + now);
+        meta.textContent = (state.apartLive ? "Listino Apart live · " : "Listino Apart (ultimo letto) · ") + (state.apartSource || "") + " · " + now;
       }
+      const spotEl = document.getElementById("spotPln");
+      if (spotEl) spotEl.textContent = spot ? pln(spot) : "—";
       const clean = s => String(s || "").replace(/\*+/g, "").trim();
-      const rows = catalog.slice().sort((a, b) => a.price - b.price).slice(0, 10);
       const body = document.getElementById("apartBody");
       if (!body) return;
-      body.innerHTML = rows.map((p, i) => `
-        <tr>
+      const rows = catalog.slice().filter(p => p.price > 0).sort((a, b) => a.price - b.price).slice(0, 10);
+      body.innerHTML = rows.map((p, i) => {
+        const spread = spot ? (p.price - spot) : null;
+        const pct = spot ? (spread / spot) * 100 : null;
+        return `<tr>
           <td>${i + 1}</td>
           <td><a href="${p.url || APART_LIST_URL}" target="_blank" rel="noopener">${clean(p.name)}</a></td>
           <td class="r"><a href="${p.url || APART_LIST_URL}" target="_blank" rel="noopener">${pln(p.price, 0)}</a></td>
-        </tr>`).join("");
+          <td class="r">${spread == null ? "—" : spreadSign(spread)}</td>
+          <td class="r">${pct == null ? "—" : ((pct >= 0 ? "+" : "") + fmt(pct, 2) + "%")}</td>
+        </tr>`;
+      }).join("");
     }
     function spreadSign(n) { return (n >= 0 ? "+" : "") + pln(n); }
     function goldSymbol() { return state.ccy === "EUR" ? "XAUEUR" : "XAUUSD"; }
@@ -1818,7 +1804,8 @@
       }
       return null;
     }
-    async function refreshApart() {
+    async function refreshApart() { return; }
+    async function refreshApartRemoved() {
       const btn = document.getElementById("apartBtn");
       btn.disabled = true;
       btn.textContent = "Leggo Apart…";
@@ -1826,9 +1813,12 @@
         const list = await fetchApartCatalog();
         if (list && list.length) {
           state.apartList = list;
+          state.apartLive = true;
           state.apartSource = "sito live " + new Date().toLocaleTimeString("it-IT");
         } else {
-          state.apartSource = "riserva 01/09/2026 15:05 — Apart blocca il proxy, i prezzi restano quelli dell’ultimo listino letto";
+          state.apartList = APART;
+          state.apartLive = false;
+          state.apartSource = "riserva 01/09/2026 15:05 — Apart blocca i proxy dal file locale";
         }
         renderApart();
       } finally {
@@ -2156,15 +2146,27 @@
     }
     function parseApartCatalog(text) {
       const rows = [];
-      const re = /\[([^\]]+1oz[^\]]*)\]\((https:\/\/mennica\.apart\.pl\/produkt\/[^)]+)\)[\s\S]{0,180}?(\d[\d\s]{3,6})\s*PLN/gi;
+      const push = (name, url, raw) => {
+        const price = Number(String(raw).replace(/[^\d]/g, ""));
+        if (!(price > 12000 && price < 40000)) return;
+        const n = String(name || "").replace(/\s+/g, " ").replace(/\*+/g, "").trim();
+        if (!/1\s*oz/i.test(n)) return;
+        rows.push({ name: n, url: url || APART_LIST_URL, price });
+      };
+      const reMd = /\[([^\]]{8,120})\]\((https:\/\/mennica\.apart\.pl\/produkt\/[^)]+)\)[\s\S]{0,500}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
       let m;
-      while ((m = re.exec(text))) {
-        const name = m[1].replace(/\s+/g, " ").trim();
-        const price = Number(String(m[3]).replace(/\s/g, ""));
-        if (price > 10000 && price < 40000) rows.push({ name, url: APART_LIST_URL, price });
-      }
+      while ((m = reMd.exec(text))) push(m[1], m[2], m[3]);
+      const reHtml = />([^<]{8,140}1\s*oz[^<]{0,80})<[\s\S]{0,700}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
+      while ((m = reHtml.exec(text))) push(m[1], APART_LIST_URL, m[2]);
+      const reLine = /([A-Za-zÀ-ÿ0-9][^|\n]{6,80}1\s*oz[^|\n]{0,40}).{0,40}?(\d{2}\s?\d{3})\s*(?:zł|PLN)/gi;
+      while ((m = reLine.exec(text))) push(m[1], APART_LIST_URL, m[2]);
       const uniq = [], seen = new Set();
-      for (const r of rows) { if (seen.has(r.name)) continue; seen.add(r.name); uniq.push(r); }
+      for (const r of rows) {
+        const k = r.name.toLowerCase();
+        if (seen.has(k)) continue;
+        seen.add(k);
+        uniq.push(r);
+      }
       return uniq.sort((a, b) => a.price - b.price);
     }
     async function getJSONText(url) {
@@ -2526,11 +2528,6 @@
       el.focus();
     });
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
-    document.getElementById("apartBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      refreshApart();
-    });
     function bindNewsBtn(id, fn, metaId) {
       const btn = document.getElementById(id);
       if (!btn) return;
@@ -2546,9 +2543,7 @@
     bindNewsBtn("newsBtn", loadNews, "newsMeta");
     bindNewsBtn("worldBtn", loadWorldNews, "worldMeta");
 
-    document.getElementById("apartTitleLink").addEventListener("click", (e) => e.stopPropagation());
     boot(true);
-    refreshApart();
     loadNews();
     loadTreasuries();
     loadWorldNews();
