@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.0 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.5 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -83,7 +83,9 @@
     .chg.up { color: var(--up); background: rgba(61,214,140,.12); }
     .chg.down { color: var(--down); background: rgba(255,107,107,.12); }
     .hint { color: var(--muted); font-size: .78rem; margin-top: 8px; line-height: 1.45; }
-    .meta { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,2fr); gap: 8px; margin-top: 16px; align-items: start; flex: 1; }
+    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; align-items: stretch; flex: 1; }
+    .meta > .stat { min-height: 78px; height: 78px; }
+    .meta-split-h { grid-column: 1 / -1; height: 1px; min-height: 1px; max-height: 1px; margin: 2px 0; padding: 0; border: 0; background: rgba(212,175,55,.28); }
     .grams, .grams.side, .grams.comm {
       display: grid;
       grid-template-rows: none;
@@ -323,7 +325,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.0</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.5</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -351,22 +353,17 @@
         </div>
         <p class="hint" id="priceUnit" style="margin-top:6px">Oncia troy · oro 24k</p>
         <div class="meta">
-          <div class="grams">
-            <div class="stat"><label>24K — 999,9</label><b id="g24">—</b></div>
-            <div class="stat"><label>22K — 916,7</label><b id="g22">—</b></div>
-            <div class="stat"><label>21,6K — 900</label><b id="g216">—</b></div>
-            <div class="stat k18"><label>18K — 750</label><b id="g18">—</b></div>
-          </div>
-          <div class="grams side">
-            <div class="stat"><label>Minimo di giornata</label><b id="dayLow">—</b></div>
-            <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
-            <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
-            <div class="stat stack"><label>Distanza dal massimo giorno</label><b id="dayHighDist">—</b></div>
-            <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
-            <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
-            <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
-            <div class="stat stack"><label>Distanza dal massimo 52 sett.</label><b id="yHighDist">—</b></div>
-          </div>
+          <div class="stat"><label>24K — 999,9</label><b id="g24">—</b></div>
+          <div class="stat k18"><label>18K — 750</label><b id="g18">—</b></div>
+          <div class="meta-split-h" aria-hidden="true"></div>
+          <div class="stat"><label>Minimo di giornata</label><b id="dayLow">—</b></div>
+          <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
+          <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
+          <div class="stat stack"><label>Distanza dal massimo giorno</label><b id="dayHighDist">—</b></div>
+          <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
+          <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
+          <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
+          <div class="stat stack"><label>Distanza dal massimo 52 sett.</label><b id="yHighDist">—</b></div>
         </div>
       </section>
 
@@ -497,7 +494,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.0 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.5 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1537,8 +1534,6 @@
       chgEl.textContent = (chg >= 0 ? "+" : "") + fmt(chg, 2) + "%";
       chgEl.className = "chg " + (chg >= 0 ? "up" : "down");
       document.getElementById("g24").textContent = money(g24);
-      document.getElementById("g22").textContent = money(g24 * K22);
-      document.getElementById("g216").textContent = money(g24 * K216);
       document.getElementById("g18").textContent = money(g24 * K18);
       renderCalc18(g24);
       const g14 = document.getElementById("g14"); if (g14) g14.textContent = money(g24 * K14);
