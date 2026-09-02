@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.3 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.4 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.3</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.4</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -500,7 +500,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.3 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.4 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -2348,6 +2348,11 @@
       setPct("ust30", y30, p30);
     }
     const NEWS_FALLBACK = [
+      { title: "Oro in calo il 2 settembre: spot verso 4.330 $, futures aperti deboli", source: "Yahoo Finance", url: "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-wednesday-september-2-2026-gold-slips-further-as-military-actions-escalate-in-iran-104514058.html", at: "2026-09-02T10:45:00Z", text: "Mercoledì 2 settembre i future dicembre aprono a 4.377 $ (−0,4% sulla chiusura di martedì) e lo spot scende verso 4.330–4.360 $. È il quarto giorno di pressione dopo Jackson Hole. Sulla settimana il calo resta vicino al 5–7%; sul mese l’oro è ancora in positivo." },
+      { title: "ANSA: spot a 4.321 $ in lieve calo, Comex dicembre a 4.371 $", source: "ANSA", url: "https://www.ansa.it/sito/notizie/economia/2026/09/02/prezzo-oro-in-lieve-calo-spot-scambiato-a-4.321-dollari_66358274-9b4b-4931-8119-ea4e45ded5ba.html", at: "2026-09-02T06:06:00Z", text: "Al mattino in Europa lo spot vale 4.321 $ (−0,17%). Il contratto Comex di dicembre tratta a 4.371 $ (−0,58%). In euro l’oncia resta nell’area 3.750–3.780 €, dopo il crollo di lunedì e martedì." },
+      { title: "Nuovi attacchi USA-Iran: l’oro non reagisce da safe haven, il petrolio sì", source: "Yahoo Finance", url: "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-wednesday-september-2-2026-gold-slips-further-as-military-actions-escalate-in-iran-104514058.html", at: "2026-09-02T10:46:00Z", text: "Seconda ondata di attacchi USA su obiettivi iraniani in tre giorni, con rappresaglie su basi americane. L’oro apre sui minimi di due settimane invece di salire: il mercato continua a prezzare prima i tassi Fed. Il Brent risale sullo Stretto di Hormuz." },
+      { title: "Payrolls in arrivo: i dati sul lavoro USA guidano ancora XAU", source: "Moneycontrol", url: "https://www.moneycontrol.com/news/business/personal-finance/gold-and-silver-price-today-september-2-check-rates-of-24k-22k-gold-in-delhi-mumbai-kolkata-other-cities-14020518.html", at: "2026-09-02T08:15:00Z", text: "Dopo JOLTS e ADP, il mercato aspetta nonfarm payrolls e disoccupazione. Un lavoro ancora caldo rinforza l’ipotesi di rialzo Fed a settembre e tiene compresso l’oro. Un raffreddamento riaprirebbe il bid." },
+      { title: "Future dicembre rimbalzano in giornata dopo il minimo a 4.330 $", source: "Investing.com", url: "https://it.investing.com/commodities/gold", at: "2026-09-02T15:04:00Z", text: "Il contratto dicembre ha toccato 4.330 $ e poi recuperato verso 4.420–4.430 $ (+0,7% circa sulla seduta). Range 4.330–4.444 $. Il quadro resta: correzione violenta nella settimana, mese ancora positivo, catalizzatore sui tassi USA." },
       { title: "L’oro continua a scendere sulle attese di un rialzo dei tassi Fed", source: "Forbes", url: "https://www.forbes.com/sites/conormurray/2026/09/01/gold-price-continues-fall-as-expectations-of-an-interest-rate-hike-grow/", at: "2026-09-01T15:16:00Z", text: "Martedì l’oro ha perso ancora, dopo il massimo di 15 settimane di fine agosto. Il movimento è legato alle attese di un rialzo dei tassi della Federal Reserve: i tassi più alti riducono l’attrattiva del metallo, che non paga interessi. Spot vicino a 4.414 $ dopo un minimo di giornata a 4.374 $. Anche l’argento è in calo. Saxo Bank cita il dollaro più forte e il discorso hawkish di Kevin Warsh. CME FedWatch vede circa 66% di probabilità di un rialzo a settembre." },
       { title: "Comex gold chiude a 4.348 $ (−1,88%), terzo calo consecutivo", source: "WSJ", url: "https://www.wsj.com/finance/commodities-futures/gold-rises-jackson-hole-speech-may-limit-near-term-upside-381724a6", at: "2026-09-01T00:56:00Z", text: "Il future Comex di settembre ha perso 83,10 $ l’oncia, pari a −1,88%, chiudendo a 4.348 $. È la terza seduta consecutiva in ribasso e un calo di 261,70 $ (−5,68%) in tre giorni, il più ampio da marzo. Quinta perdita in sei sedute e chiusura più bassa da inizio agosto. Il mercato sta assorbendo il tono restrittivo della Fed dopo Jackson Hole." },
       { title: "XAU/USD sui minimi di 10 giorni: rendimenti USA e discorso Warsh a Jackson Hole", source: "FXEmpire", url: "https://www.fxempire.com/forecasts/article/gold-price-hits-10-day-low-as-rising-yields-test-support-1621111", at: "2026-09-01T13:27:00Z", text: "L’oro ha toccato un minimo di 10 giorni mentre i rendimenti USA salgono: il decennale è intorno al 4,78%. Il presidente Fed Kevin Warsh ha indicato che potrebbe servire altro lavoro sui tassi se l’inflazione non torna al 2%. Nel breve pesa il repricing dei tassi; nel medio restano gli acquisti delle banche centrali, 244 tonnellate nel primo trimestre. Supporti osservati verso 4.380 / 4.334 $." },
@@ -2361,6 +2366,10 @@
     ];
     function escNews(s) {
       return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function recapNote() {
+      const d = new Date();
+      return "riepilogo " + d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
     }
     function newsWhen(iso) {
       if (!iso) return "";
@@ -2419,6 +2428,9 @@
     }
 
     const WORLD_FALLBACK = [
+      { title: "2 settembre: nuovi raid USA-Iran e rappresaglie sulle basi americane", source: "Yahoo Finance", url: "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-wednesday-september-2-2026-gold-slips-further-as-military-actions-escalate-in-iran-104514058.html", at: "2026-09-02T10:45:00Z", text: "Seconda serie di attacchi aerei USA in tre giorni. L’Iran risponde sulle basi in Medio Oriente. Hormuz torna al centro: il petrolio risale, l’oro no. Se l’energia accelera, sale anche la probabilità di un rialzo Fed a settembre." },
+      { title: "Settimana dei payrolls USA: JOLTS e ADP lasciano il campo ai nonfarm", source: "Moneycontrol", url: "https://www.moneycontrol.com/news/business/personal-finance/gold-and-silver-price-today-september-2-check-rates-of-24k-22k-gold-in-delhi-mumbai-kolkata-other-cities-14020518.html", at: "2026-09-02T08:15:00Z", text: "Il catalizzatore macro della settimana è il mercato del lavoro americano. Occupazione calda = tassi più alti più a lungo. Occupazione in raffreddamento = pausa Fed e sollievo su oro e growth." },
+      { title: "Brent di nuovo in tensione su Hormuz mentre i metalli restano sotto i tassi", source: "Investing.com", url: "https://it.investing.com/commodities", at: "2026-09-02T14:50:00Z", text: "Il greggio tiene meglio dell’oro: il premio geopolitico sull’energia è tornato, il premio safe-haven sui metalli no. La divergenza dice che oggi il mercato legge prima la Fed e poi la guerra." },
       { title: "Fed: dopo Jackson Hole sale al 66% la probabilità di un rialzo a settembre", source: "Forbes", url: "https://www.forbes.com/sites/conormurray/2026/09/01/gold-price-continues-fall-as-expectations-of-an-interest-rate-hike-grow/", at: "2026-09-01T15:16:00Z", text: "Kevin Warsh ha detto che la Fed potrebbe avere ancora lavoro da fare se l’inflazione non torna al 2%. Le probabilità di un rialzo a settembre sono salite da circa 36% a 66%, a dicembre verso il 90%. Dollaro e rendimenti si sono irrigiditi, con effetto immediato su oro e altri asset senza rendimento." },
       { title: "Treasury USA a 10 anni verso il 4,78%: pressione su bond e metalli", source: "FXEmpire", url: "https://www.fxempire.com/forecasts/article/gold-price-hits-10-day-low-as-rising-yields-test-support-1621111", at: "2026-09-01T13:27:00Z", text: "Il rialzo dei rendimenti americani è il canale principale del sell-off. Un decennale più alto alza il costo opportunità di oro e azioni growth. Il mercato aspetta JOLTS, ADP e payrolls per capire se il movimento sui tassi continua." },
       { title: "Settimana dei dati sul lavoro USA: JOLTS, ADP e nonfarm payrolls", source: "Reuters", url: "https://profit.pakistantoday.com.pk/2026/09/01/gold-slips-as-traders-await-us-jobs-data-track-mideast-tensions", at: "2026-09-01T08:10:00Z", text: "Gli investitori guardano la tenuta del mercato del lavoro. Un’occupazione ancora calda rinforza lo scenario di rialzo tassi; un raffreddamento riaprirebbe spazio a un pause della Fed. È il catalizzatore macro della settimana." },
@@ -2441,7 +2453,7 @@
       { title: "Geopolitica e guerra: il premio al rischio resta, ma oggi vince la Fed", source: "FXEmpire", url: "https://www.fxempire.com/forecasts/article/gold-xau-usd-silver-price-forecast-hawkish-fed-meets-iran-risk-as-jobs-data-looms-1620988", at: "2026-09-01T06:00:00Z", text: "Medio Oriente, Iran e rotte energetiche restano sullo sfondo. In una giornata normale basterebbero a sostenere oro e petrolio. L’1 settembre 2026 il mercato ha scelto il canale tassi: hawkish Fed, jobs data in arrivo, metalli in calo. Il rischio geopolitico non è sparito, è solo passato in secondo piano." }
     ];
     async function loadWorldNews() {
-      renderNews(WORLD_FALLBACK, new Date().toISOString(), "riepilogo 1/9/2026", "worldList", "worldMeta", 20);
+      renderNews(WORLD_FALLBACK, new Date().toISOString(), recapNote(), "worldList", "worldMeta", 20);
       const rss = "https://news.google.com/rss/search?q=economia+OR+petrolio+OR+geopolitica+OR+guerra+OR+Fed+OR+Iran+OR+Hormuz&hl=it&gl=IT&ceid=IT:it";
       try {
         const xml = await fetchNewsText(rss);
@@ -2452,7 +2464,7 @@
       } catch (e) { console.warn("world news", e); }
     }
     async function loadNews() {
-      renderNews(NEWS_FALLBACK, new Date().toISOString(), "riepilogo 1/9/2026", "newsList", "newsMeta", 10);
+      renderNews(NEWS_FALLBACK, new Date().toISOString(), recapNote(), "newsList", "newsMeta", 10);
       const rss = "https://news.google.com/rss/search?q=oro+OR+gold+price+OR+XAUUSD&hl=it&gl=IT&ceid=IT:it";
       try {
         const xml = await fetchNewsText(rss);
