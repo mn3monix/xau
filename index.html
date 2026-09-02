@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.14.1 — Prezzo e statistiche</title>
+  <title>Oro Live v2.17.0 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -83,18 +83,29 @@
     .chg.up { color: var(--up); background: rgba(61,214,140,.12); }
     .chg.down { color: var(--down); background: rgba(255,107,107,.12); }
     .hint { color: var(--muted); font-size: .78rem; margin-top: 8px; line-height: 1.45; }
-    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; align-items: stretch; flex: 1; }
-    .grams, .grams.side {
+    .meta { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,2fr); gap: 8px; margin-top: 16px; align-items: start; flex: 1; }
+    .meta-split {
+      width: 1px; min-width: 1px; max-width: 1px;
+      margin: 2px 6px;
+      padding: 0; border: 0;
+      background: rgba(212,175,55,.28);
+      align-self: stretch;
+    }
+    .grams, .grams.side, .grams.comm {
       display: grid;
       grid-template-rows: none;
       grid-auto-rows: 78px;
       gap: 8px; align-self: stretch; min-height: 0;
     }
-    .grams > .stat, .grams.side > .stat {
+    .grams.side { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+    .grams > .stat, .grams.side > .stat, .grams.comm > .stat {
       display: flex; flex-direction: column; justify-content: space-between;
-      min-height: 78px; height: 78px; padding: 8px 10px; box-sizing: border-box;
+      width: 100%;
+      min-height: 78px; height: 78px; max-height: 78px;
+      padding: 8px 10px; box-sizing: border-box;
+      overflow: hidden;
     }
-    .grams > .stat b, .grams.side > .stat b { margin-top: auto; }
+    .grams > .stat b, .grams.side > .stat b, .grams.comm > .stat b { margin-top: auto; }
     .hero > .card .buy-grid { flex: 1; grid-auto-rows: minmax(0, auto); }
     .buy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; align-items: stretch; }
     .buy-grid .stat { min-height: 78px; height: 78px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; box-sizing: border-box; }
@@ -254,6 +265,7 @@
     .tools details[open] .chart-box { min-height: 420px; height: 420px; }
     .tools .calc18 { overflow: auto; max-height: 420px; }
     .chart-box { display: flex; flex-direction: column; align-items: stretch; min-height: 420px; height: 420px; }
+    .spark { width: 100%; height: 85%; flex: 1 1 85%; max-height: none; min-height: 0; }
     .calc-steps { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; overflow: visible; max-height: none; }
     .calc-steps li {
       display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
@@ -303,7 +315,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.14.1</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.17.0</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -336,54 +348,39 @@
             <div class="stat"><label>22K — 916,7</label><b id="g22">—</b></div>
             <div class="stat"><label>21,6K — 900</label><b id="g216">—</b></div>
             <div class="stat k18"><label>18K — 750</label><b id="g18">—</b></div>
-            <div class="stat"><label>14K — 585</label><b id="g14">—</b></div>
-            <div class="stat"><label>10K — 416,7</label><b id="g10">—</b></div>
-            <div class="stat"><label>9K — 375</label><b id="g9">—</b></div>
-            <div class="stat"><label>8K — 333,3</label><b id="g8">—</b></div>
           </div>
+          <div class="meta-split" aria-hidden="true"></div>
           <div class="grams side">
             <div class="stat"><label>Minimo di giornata</label><b id="dayLow">—</b></div>
-            <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
             <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
+            <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
             <div class="stat stack"><label>Distanza dal massimo giorno</label><b id="dayHighDist">—</b></div>
             <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
-            <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
             <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
+            <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
             <div class="stat stack"><label>Distanza dal massimo 52 sett.</label><b id="yHighDist">—</b></div>
           </div>
         </div>
       </section>
 
       <section class="card">
-        <details class="fold">
+        <details class="fold" open>
           <summary>
             <strong class="fold-title" style="color:var(--gold-2)">Statistiche</strong>
             <span class="fold-actions"><span class="fold-btn"></span></span>
           </summary>
-        <p class="hint" style="margin-top:6px">Prezzi live. Variazione % rispetto alla chiusura di ieri.</p>
-        <div class="buy-grid">
-          <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
-          <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
-          <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
-          <div class="stat stack"><label>EUR / JPY</label><b id="eurjpy">—</b></div>
-          <div class="stat-sep" role="separator"></div>
-          <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
-          <div class="stat stack"><label>Platino — oncia</label><b id="xptPx">—</b></div>
-          <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
-          <div class="stat stack"><label>Gas TTF — MWh</label><b id="ttfPx">—</b></div>
-          <div class="stat-sep" role="separator"></div>
-          <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
-          <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
-          <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
-          <div class="stat stack"><label>Bund 10 anni</label><b id="de10">—</b></div>
-          <div class="stat-sep" role="separator"></div>
-          <div class="stat stack"><label>Dow Jones</label><b id="idxDji">—</b></div>
-          <div class="stat stack"><label>S&amp;P 500</label><b id="idxSpx">—</b></div>
-          <div class="stat stack"><label>Nasdaq 100</label><b id="idxIxic">—</b></div>
-          <div class="stat stack"><label>DAX</label><b id="idxDax">—</b></div>
-          <div class="stat stack"><label>Nikkei 225</label><b id="idxNky">—</b></div>
-          <div class="stat stack"><label>SSEC</label><b id="idxSsec">—</b></div>
-        </div>
+          <p class="hint" style="margin-top:6px">Prezzi live. Variazione % rispetto alla chiusura di ieri.</p>
+          <div class="buy-grid">
+            <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
+            <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
+            <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
+            <div class="stat stack"><label>EUR / JPY</label><b id="eurjpy">—</b></div>
+            <div class="stat-sep" role="separator"></div>
+            <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
+            <div class="stat stack"><label>Platino — oncia</label><b id="xptPx">—</b></div>
+            <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
+            <div class="stat stack"><label>Gas TTF — MWh</label><b id="ttfPx">—</b></div>
+          </div>
         </details>
       </section>
     </div>
@@ -420,11 +417,14 @@
           </summary>
           <div class="chart-box">
             <div class="tf-row" id="tfRow">
-              <button data-tf="5M" class="on">5M</button>
-              <button data-tf="1D">1D</button>
+              <button data-tf="1D" class="on">1D</button>
               <button data-tf="7D">7D</button>
+              <button data-tf="1M">1M</button>
+              <button data-tf="6M">6M</button>
+              <button data-tf="1Y">1Y</button>
+              <button data-tf="5Y">5Y</button>
             </div>
-            <svg class="spark" id="spark" viewBox="0 0 560 400" preserveAspectRatio="xMidYMid meet" aria-label="Grafico"></svg>
+            <svg class="spark" id="spark" viewBox="0 0 720 340" preserveAspectRatio="none" aria-label="Grafico"></svg>
           </div>
         </details>
       </section>
@@ -490,7 +490,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.14.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.17.0 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -522,7 +522,7 @@
     const K10 = 10 / 24;
     const K9 = 9 / 24;
     const K8 = 8 / 24;
-    const state = { ccy: "EUR", tf: "5M", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, apartLive: false };
+    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, apartLive: false };
     const APART = [
       { name: "Krugerrand 1oz — annate miste (24h)", price: 16730, url: APART_LIST_URL },
       { name: "Britannia 1oz — annate miste (24h)", price: 16779, url: APART_LIST_URL },
@@ -1534,10 +1534,11 @@
       document.getElementById("g216").textContent = money(g24 * K216);
       document.getElementById("g18").textContent = money(g24 * K18);
       renderCalc18(g24);
-      document.getElementById("g14").textContent = money(g24 * K14);
+      const g14 = document.getElementById("g14"); if (g14) g14.textContent = money(g24 * K14);
       const g10 = document.getElementById("g10");
       if (g10) g10.textContent = money(g24 * K10);
-      document.getElementById("g9").textContent = money(g24 * K9);
+      const g9 = document.getElementById("g9");
+      if (g9) g9.textContent = money(g24 * K9);
       const g8 = document.getElementById("g8");
       if (g8) g8.textContent = money(g24 * K8);
       renderCoins(g24);
@@ -1595,7 +1596,7 @@
       const pad = (max - min) * 0.04 || 1;
       min -= pad; max += pad;
       const span = max - min || 1;
-      const W = 560, H = 400, L = 8, R = 50, T = 8, B = 32;
+      const W = 720, H = 340, L = 8, R = 78, T = 8, B = 30;
       const pw = W - L - R, ph = H - T - B;
       function yx(v) { return T + (1 - (v - min) / span) * ph; }
       const n = rows.length;
@@ -1605,7 +1606,7 @@
       const gridH = yVals.map((v, i) => {
         const y = (T + i * ph / 2).toFixed(1);
         return `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" />
-          <text x="${W-R+5}" y="${Number(y)+4}" text-anchor="start" fill="#9aa0a6" font-size="11">${fmt(v, 0)}</text>`;
+          <text x="${W-R+5}" y="${Number(y)+4}" text-anchor="start" fill="#9aa0a6" font-size="14">${fmt(v, 0)}</text>`;
       }).join("");
       const gridV = [0,1,2].map(i => {
         const x = (L + i * pw / 2).toFixed(1);
@@ -1618,14 +1619,16 @@
         const tf = state.tf || "5M";
         const hh = String(d.getHours()).padStart(2,"0");
         const mm = String(d.getMinutes()).padStart(2,"0");
-        if (tf === "5M" || tf === "1D" || tf === "7D") return hh + ":" + mm;
+        if (tf === "1D") return hh + ":" + mm;
+        if (tf === "7D") return String(d.getDate()).padStart(2,"0") + "/" + String(d.getMonth()+1).padStart(2,"0") + " " + hh + ":" + mm;
+        if (tf === "5Y") return String(d.getMonth()+1).padStart(2,"0") + "/" + String(d.getFullYear()).slice(2);
         return String(d.getDate()).padStart(2,"0") + "/" + String(d.getMonth()+1).padStart(2,"0");
       }
       const xLabs = [0, 0.5, 1].map((p, idx) => {
         const i = Math.round(p * (rows.length - 1));
         const x = L + p * pw;
         const anchor = idx === 0 ? "start" : idx === 2 ? "end" : "middle";
-        return `<text x="${x.toFixed(1)}" y="${T+ph+22}" text-anchor="${anchor}" fill="#9aa0a6" font-size="12">${labTime(rows[i])}</text>`;
+        return `<text x="${x.toFixed(1)}" y="${T+ph+22}" text-anchor="${anchor}" fill="#9aa0a6" font-size="14">${labTime(rows[i])}</text>`;
       }).join("");
       const candles = rows.map((b, i) => {
         const o = Number(b.open || b.close);
@@ -1641,15 +1644,27 @@
         return `<line x1="${x.toFixed(1)}" y1="${yx(h).toFixed(1)}" x2="${x.toFixed(1)}" y2="${yx(l).toFixed(1)}" stroke="${col}" stroke-width="1"/>
           <rect x="${(x-cw/2).toFixed(1)}" y="${y1.toFixed(1)}" width="${cw.toFixed(1)}" height="${bh.toFixed(1)}" fill="${col}" stroke="${col}"/>`;
       }).join("");
+      const last = Number((state.quote && state.quote.mid) || rows[rows.length - 1].close);
+      const ly = Math.max(T + 10, Math.min(T + ph - 10, yx(last)));
+      const lastUp = last >= Number(rows[0] && rows[0].open || last);
+      const lastCol = lastUp ? "#3dd68c" : "#ff6b6b";
+      const lastMark = Number.isFinite(last) && last > 0 ? `
+        <line x1="${L}" y1="${ly.toFixed(1)}" x2="${W-R}" y2="${ly.toFixed(1)}" stroke="${lastCol}" stroke-width="1.15" stroke-dasharray="4 3" opacity="0.9"/>
+        <rect x="${W-R+3}" y="${(ly-11).toFixed(1)}" width="72" height="20" rx="4" fill="${lastCol}"/>
+        <text x="${W-R+39}" y="${(ly+4).toFixed(1)}" text-anchor="middle" fill="#0b0c0e" font-size="13" font-weight="700">${fmt(last, 0)}</text>` : "";
       svg.innerHTML = `<g stroke="rgba(212,175,55,.22)" stroke-width="0.7">${gridH}${gridV}</g>
         <rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="rgba(212,175,55,.35)" stroke-width="0.8" />
         ${candles}
+        ${lastMark}
         ${xLabs}`;
     }
     const TF = {
-      "5M": { interval: "5m", limit: 72 },
-      "1D": { interval: "5m", limit: 288 },
-      "7D": { interval: "5m", limit: 400 }
+      "1D": { interval: "15m", limit: 96 },
+      "7D": { interval: "1h", limit: 168 },
+      "1M": { interval: "4h", limit: 180 },
+      "6M": { interval: "1d", limit: 130 },
+      "1Y": { interval: "1d", limit: 260 },
+      "5Y": { interval: "1w", limit: 270 }
     };
     async function loadChart() {
       const spec = TF[state.tf] || TF["1D"];
@@ -1662,7 +1677,9 @@
       try {
         state.intraday = await bars(spec.interval, spec.limit);
       } catch (e) {
-        if (spec.interval === "1h") state.intraday = await bars("15m", 200);
+        if (spec.interval === "1w") state.intraday = await bars("1d", 400);
+        else if (spec.interval === "1h") state.intraday = await bars("15m", 200);
+        else if (spec.interval === "4h") state.intraday = await bars("1d", 40);
         else throw e;
       }
       drawSpark(state.intraday);
@@ -1751,7 +1768,7 @@
           drawSpark(state.intraday);
         }
         await loadQuote();
-        try { await loadTreasuries(); } catch (e) {}
+        /* treasuries/indices removed */
         if (full || !state.fxPrev) {
           try { await loadFxPrev(); } catch (e) {}
           if (state.quote) {
@@ -2767,7 +2784,7 @@
 
     boot(true);
     loadNews();
-    loadTreasuries();
+    /* treasuries/indices removed */
     loadWorldNews();
     setTimeout(() => { if (!state.quote) document.getElementById("iosHint").style.display = "block"; }, 2500);
     setInterval(() => boot(false), 8000);
