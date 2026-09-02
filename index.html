@@ -107,9 +107,19 @@
     }
     .grams > .stat b, .grams.side > .stat b, .grams.comm > .stat b {
       margin-top: auto;
-      font-size: .9rem;
-      letter-spacing: -.03em;
+      font-size: 1.02rem;
+      letter-spacing: -.035em;
       white-space: nowrap;
+    }
+    @media (max-width: 430px) {
+      .grams > .stat, .grams.side > .stat {
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+      .grams > .stat b, .grams.side > .stat b {
+        font-size: 15px;
+        letter-spacing: -.04em;
+      }
     }
     .hero > .card .buy-grid { flex: 1; grid-auto-rows: minmax(0, auto); }
     .buy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; align-items: stretch; }
