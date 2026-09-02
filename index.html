@@ -5,48 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XAU</title>
   <style>
+    * { box-sizing: border-box; }
     html, body {
-      margin: 0;
-      min-height: 100%;
+      margin: 0; min-height: 100%;
       font-family: system-ui, sans-serif;
-      background: #111;
-      color: #eee;
-      -webkit-user-select: none;
-      user-select: none;
+      background: #0d0d0d; color: #eee;
+      -webkit-user-select: none; user-select: none;
       -webkit-touch-callout: none;
     }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-    main {
-      text-align: center;
-      padding: 2rem;
-    }
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .box { width: min(92vw, 360px); padding: 1.5rem; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; }
+    h1 { margin: 0 0 1rem; font-size: 1.25rem; letter-spacing: .08em; }
+    input, button { width: 100%; padding: .7rem .8rem; border-radius: 8px; border: 1px solid #444; font-size: 1rem; }
+    input { background: #111; color: #fff; margin-bottom: .7rem; }
+    button { background: #c9a227; color: #111; font-weight: 700; cursor: pointer; border: 0; }
+    .err { color: #f66; min-height: 1.2em; font-size: .9rem; margin: .4rem 0; }
+    #app { display: none; text-align: center; padding: 2rem; }
   </style>
 </head>
 <body oncontextmenu="return false;">
-  <main>
+  <div class="box" id="gate">
     <h1>XAU</h1>
-    <p>Sito su https://mn3monix.github.io/xau</p>
-  </main>
+    <p>Inserisci la password</p>
+    <input id="pw" type="password" autocomplete="current-password" autofocus>
+    <div class="err" id="err"></div>
+    <button id="go" type="button">Entra</button>
+  </div>
+  <div id="app"></div>
   <script>
+    const SALT = "z1qE/WpnRH+d3BCjWh8gTQ==";
+    const IV = "ApjqOgeH50avsTuV";
+    const DATA = "eox3PiNTvuTyjwvgMPctORQ3/JN4GLlgxPRf7ak5QG+K/JKtkwjqal3JiUFiU3ilEONXf/e0yBiJWUAOzcYQikpdjUxK0gdx+jdLM5/0CNZ5DVCiSoDx5oJENM2k9q9gypxKXayf/jA0XQ0/4qRn";
+    const b64ToBytes = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+    async function unlock(password) {
+      const enc = new TextEncoder();
+      const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+      const key = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: b64ToBytes(SALT), iterations: 200000, hash: 'SHA-256' },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['decrypt']
+      );
+      const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64ToBytes(IV) }, key, b64ToBytes(DATA));
+      return new TextDecoder().decode(plain);
+    }
+    const gate = document.getElementById('gate');
+    const app = document.getElementById('app');
+    const err = document.getElementById('err');
+    async function tryUnlock() {
+      err.textContent = '';
+      try {
+        const html = await unlock(document.getElementById('pw').value);
+        gate.remove();
+        app.style.display = 'block';
+        app.innerHTML = html;
+      } catch {
+        err.textContent = 'Password errata';
+      }
+    }
+    document.getElementById('go').addEventListener('click', tryUnlock);
+    document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('copy', e => e.preventDefault());
     document.addEventListener('cut', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       const k = e.key.toLowerCase();
-      if (
-        e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(k)) ||
-        (e.ctrlKey && ['u', 's', 'c', 'a', 'p'].includes(k)) ||
-        (e.metaKey && ['u', 's', 'c', 'a'].includes(k))
-      ) {
-        e.preventDefault();
-      }
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) || (e.ctrlKey && ['u','s','c','a','p'].includes(k))) e.preventDefault();
     });
   </script>
 </body>
