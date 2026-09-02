@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.14.0 — Prezzo e statistiche</title>
+  <title>Oro Live v2.14.1 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -303,7 +303,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.14.0</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.14.1</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -490,7 +490,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.14.0 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.14.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -2155,8 +2155,10 @@
           if (!(close > 0)) continue;
           const series = (((res.indicators || {}).quote || [])[0] || {}).close || [];
           const prevs = series.map(Number).filter(v => v > 0);
-          let prev = prevs.length >= 2 ? prevs[prevs.length - 2] : null;
-          if (prev && Math.abs(prev - close) / close < 0.0002 && prevs.length >= 3) prev = prevs[prevs.length - 3];
+          let prev = null;
+          for (let i = prevs.length - 1; i >= 0; i--) {
+            if (Math.abs(prevs[i] - close) / close > 0.00015) { prev = prevs[i]; break; }
+          }
           const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(res.meta.regularMarketChangePercent);
           return { close, change };
         } catch (e) {}
@@ -2241,8 +2243,9 @@
       const b = rows[1] ? pick(rows[1]) : a;
       function pack(cur, prev) {
         if (!(cur > 0)) return null;
-        const change = prev > 0 ? ((cur - prev) / prev) * 100 : 0;
-        return { close: cur, change };
+        const prevUse = (prev > 0 && Math.abs(prev - cur) > 1e-8) ? prev : null;
+        const change = prevUse > 0 ? ((cur - prevUse) / prevUse) * 100 : 0;
+        return { close: cur, prev: prevUse, change };
       }
       return { ust2: pack(a.y2, b.y2), ust10: pack(a.y10, b.y10), ust30: pack(a.y30, b.y30) };
     }
@@ -2361,8 +2364,11 @@
       });
       if (!vals.length) return null;
       const close = vals[vals.length - 1];
-      const prev = vals.length > 1 ? vals[vals.length - 2] : null;
-      return { close, change: prev > 0 ? ((close - prev) / prev) * 100 : 0 };
+      let prev = null;
+      for (let i = vals.length - 2; i >= 0; i--) {
+        if (Math.abs(vals[i] - close) > 1e-8) { prev = vals[i]; break; }
+      }
+      return { close, prev, change: prev > 0 ? ((close - prev) / prev) * 100 : 0 };
     }
     async function fetchEcbDe10() {
       const urls = [
@@ -2409,9 +2415,11 @@
           const fred = await fetchFredSeries(fredMap[id]);
           if (fred && fred.close > 0) live = fred;
         }
-        const yest = (id !== "ust30" && official[id] && official[id].close > 0) ? official[id].close : null;
+        const yest = official[id] && official[id].prev > 0 ? official[id].prev : (live && live.prev);
         if (live && live.close > 0) {
-          const change = (yest > 0) ? pctFromPrev(live.close, yest, live.change) : live.change;
+          const change = (yest > 0 && Math.abs(yest - live.close) > 1e-8)
+            ? ((live.close - yest) / yest) * 100
+            : live.change;
           const q = { close: live.close, change, live: true };
           cacheQuote(id, q);
           paintYield(id, q.close, q.change);
