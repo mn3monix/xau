@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.08.1 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.0 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.08.1</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.0</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -332,9 +332,9 @@
             <div class="stat"><label>EUR / USD</label><b id="eurusd">—</b></div>
             <div class="stat"><label>EUR / PLN</label><b id="eurpln">—</b></div>
             <div class="stat"><label>EUR / CHF</label><b id="eurchf">—</b></div>
-            <div class="stat"><label>Treasury USA 2 anni</label><b id="ust2">—</b></div>
-            <div class="stat"><label>Treasury USA 10 anni</label><b id="ust10">—</b></div>
-            <div class="stat"><label>Treasury USA 30 anni</label><b id="ust30">—</b></div>
+            <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
+            <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
+            <div class="stat stack"><label>Bitcoin</label><b id="btcPx">—</b></div>
           </div>
         </div>
       </section>
@@ -359,8 +359,6 @@
           <div class="stat"><label>Range ultimo mese</label><b id="monthRange">—</b></div>
           <div class="stat"><label>Media mobile 50 giorni</label><b id="sma50">—</b></div>
           <div class="stat"><label>Media mobile 200 giorni</label><b id="sma200">—</b></div>
-          <div class="stat stack"><label>Argento — vs ieri</label><b id="xagPx">—</b></div>
-          <div class="stat stack"><label>Platino — vs ieri</label><b id="xptPx">—</b></div>
         </div>
         </details>
       </section>
@@ -527,7 +525,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.08.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.0 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1295,14 +1293,15 @@
         '<div class="sig-item ' + c.cls + '"><label>' + c.k + "</label><b>" + c.v + "</b></div>"
       ).join("");
     }
-    function paintMetalCell(id, px, diff) {
+    function paintMetalCell(id, px, diff, dec) {
       const el = document.getElementById(id);
       if (!el) return;
       if (!(px > 0)) { el.textContent = "—"; return; }
       const d = Number(diff);
       const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
-      const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "% vs ieri") : "—";
-      el.innerHTML = money(px) + '<span class="' + cls + '" style="display:block;font-size:.78em;margin-top:2px">' + pct + "</span>";
+      const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
+      const digits = dec != null ? dec : (px >= 1000 ? 0 : 2);
+      el.innerHTML = money(px, digits) + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
     }
     function lastClosedClose(bars) {
       const list = (bars || []).filter(b => Number(b.close) > 0);
@@ -1350,28 +1349,31 @@
         xag = toCcyFromUsd(m.xagUsd.mid);
         xagDiff = pctVsPrev(m.xagUsd.mid, m.xagUsdPrev, m.xagUsd.dayDiffPercent);
       }
-      let xpt = null, xptDiff = null;
-      if (m.xptUsd && m.xptUsd.mid > 0) {
-        xpt = toCcyFromUsd(m.xptUsd.mid);
-        xptDiff = pctVsPrev(m.xptUsd.mid, m.xptUsdPrev, m.xptUsd.dayDiffPercent);
-      }
-      paintMetalCell("xagPx", xag, xagDiff);
-      paintMetalCell("xptPx", xpt, xptDiff);
+      const brent = m.brent && m.brent.mid > 0 ? toCcyFromUsd(m.brent.mid) : null;
+      const brentDiff = m.brent ? pctVsPrev(m.brent.mid, m.brentPrev, m.brent.dayDiffPercent) : null;
+      const btc = m.btc && m.btc.mid > 0 ? toCcyFromUsd(m.btc.mid) : null;
+      const btcDiff = m.btc ? pctVsPrev(m.btc.mid, m.btcPrev, m.btc.dayDiffPercent) : null;
+      paintMetalCell("xagPx", xag, xagDiff, 2);
+      paintMetalCell("brentPx", brent, brentDiff, 2);
+      paintMetalCell("btcPx", btc, btcDiff, 0);
     }
     async function loadMetals() {
-      const [xagUsd, xptUsd, xagEur, xagUsdBars, xptUsdBars, xagEurBars] = await Promise.all([
+      const [xagUsd, xagEur, brent, btc, xagUsdBars, xagEurBars, brentBars, btcBars] = await Promise.all([
         getJSON(`${API}/XAGUSD`).catch(() => null),
-        getJSON(`${API}/XPTUSD`).catch(() => null),
         getJSON(`${API}/XAGEUR`).catch(() => null),
+        getJSON(`${API}/UKOIL`).catch(() => null),
+        getJSON(`${API}/BTCUSD`).catch(() => null),
         loadOhlc("XAGUSD", "1d", 6).catch(() => []),
-        loadOhlc("XPTUSD", "1d", 6).catch(() => []),
         loadOhlc("XAGEUR", "1d", 6).catch(() => []),
+        loadOhlc("UKOIL", "1d", 6).catch(() => []),
+        loadOhlc("BTCUSD", "1d", 6).catch(() => []),
       ]);
       state.metals = {
-        xagUsd, xptUsd, xagEur,
+        xagUsd, xagEur, brent, btc,
         xagUsdPrev: lastClosedClose(xagUsdBars),
-        xptUsdPrev: lastClosedClose(xptUsdBars),
-        xagEurPrev: lastClosedClose(xagEurBars)
+        xagEurPrev: lastClosedClose(xagEurBars),
+        brentPrev: lastClosedClose(brentBars),
+        btcPrev: lastClosedClose(btcBars)
       };
       paintMetals();
     }
@@ -2337,7 +2339,8 @@
       }
       return { v, prev };
     }
-    async function loadTreasuries() {
+    async function loadTreasuries() { return; }
+    async function loadTreasuriesUnused() {
       const csvUrl = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv";
       let y2 = 4.39, y10 = 4.79, y30 = 5.27, p2 = 4.34, p10 = 4.75, p30 = 5.25;
       try {
