@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.9 — Prezzo e statistiche</title>
+  <title>Oro Live v2.10.1 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.9</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.10.1</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -361,6 +361,8 @@
           <div class="stat"><label>Media mobile 200 sedute</label><b id="sma200">—</b></div>
           <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
           <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
+          <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
+          <div class="stat stack"><label>Distanza dal massimo 52 sett.</label><b id="yHighDist">—</b></div>
         </div>
         </details>
       </section>
@@ -470,7 +472,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.9 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.10.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -741,12 +743,13 @@
     function setSignedDist(id, pct, amount) {
       const el = document.getElementById(id);
       if (el == null || amount == null || Number.isNaN(amount)) {
-        if (el) el.textContent = "—";
+        if (el) { el.textContent = "—"; el.className = ""; el.style.color = ""; }
         return;
       }
-      const cls = amount > 0 ? "up" : (amount < 0 ? "down" : "");
+      const cls = amount > 0.0001 ? "up" : (amount < -0.0001 ? "down" : "");
       const as = (amount >= 0 ? "+" : "−") + money(Math.abs(amount));
       el.className = cls;
+      el.style.color = cls === "up" ? "var(--up)" : (cls === "down" ? "var(--down)" : "");
       el.textContent = as;
     }
     function renderBuy(day) {
@@ -784,6 +787,10 @@
       const elYHi = document.getElementById("yHigh");
       if (elYLo) elYLo.textContent = yr.low != null ? money(yr.low) : "—";
       if (elYHi) elYHi.textContent = yr.high != null ? money(yr.high) : "—";
+      if (yr.low != null && day.price != null) setSignedDist("yLowDist", 0, day.price - yr.low);
+      else { const el = document.getElementById("yLowDist"); if (el) el.textContent = "—"; }
+      if (yr.high != null && day.price != null) setSignedDist("yHighDist", 0, day.price - yr.high);
+      else { const el = document.getElementById("yHighDist"); if (el) el.textContent = "—"; }
       paintMetals();
     }
     function keySR(daily, day, s50, s200) {
