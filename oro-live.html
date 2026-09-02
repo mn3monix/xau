@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.09.0 — Prezzo e statistiche</title>
+  <title>Oro Live v2.09.1 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -292,7 +292,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.0</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.09.1</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -363,31 +363,6 @@
         </details>
       </section>
     </div>
-
-    <section class="card apart" id="signalCard">
-      <details class="fold" open>
-        <summary>
-          <strong class="fold-title" style="color:var(--gold-2)">Segnale acquisto fisico</strong>
-          <span class="fold-actions"><span class="fold-btn"></span></span>
-        </summary>
-        <p class="hint" style="margin-top:6px">Algoritmo su dati giornalieri 2010–2026. Cerca la fase dopo la rottura di un livello noto, quando la volatilità sale e gli stop scattano: è lì che l’accumulo fisico ha più senso. Non è trading intraday: lo spread monete (2–6%) filtra i segnali troppo frequenti.</p>
-        <div class="sig-head">
-          <div>
-            <div class="sig-score" id="sigScore">—<span>punteggio 0–100</span></div>
-          </div>
-          <div style="text-align:right">
-            <span class="badge wait" id="sigBadge">In attesa dati</span>
-            <div class="buy-level" id="sigZonePx" style="font-size:1.35rem;margin:8px 0 0">—</div>
-            <div class="hint" id="sigZoneLab" style="margin:0">ingresso prudente</div>
-          </div>
-        </div>
-        <div class="sig-bar" aria-hidden="true"><i id="sigBar"></i></div>
-        <div class="sig-phase wait" id="sigPhase"><b>Fase —</b><span>In attesa dello storico daily</span></div>
-        <p class="hint" id="sigHint">Carico lo storico per SMA200, RSI, rotture e volatilità.</p>
-        <p class="hint" id="sigRisk" style="margin-top:6px">Nessun prezzo è infallibile: il ribasso residuo è la distanza dal supporto strutturale (SMA200 / minimi / low dello sweep).</p>
-        <div class="sig-checks" id="sigChecks"></div>
-      </details>
-    </section>
 
     <div class="hero tools">
       <section class="card">
@@ -525,7 +500,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.09.0 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.09.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -818,7 +793,6 @@
       if (el50) el50.textContent = s50 != null ? money(s50) : "—";
       if (el200) el200.textContent = s200 != null ? money(s200) : "—";
       paintMetals();
-      renderSignal(day);
     }
     function keySR(daily, day, s50, s200) {
       const px = day?.price;
@@ -1266,7 +1240,8 @@
 
       return { score, zone, bcls, action, buyPx, buyLab, checks, s50, s200, rsi, dist200, s200Full, residual, riskTxt, nearFloor, flush, sweepLo, sweepHi };
     }
-    function renderSignal(day) {
+    function renderSignal(day) { return; }
+    function renderSignalRemoved(day) {
       const box = document.getElementById("sigChecks");
       if (!box) return;
       const sig = computeBuySignal(state.daily, day);
