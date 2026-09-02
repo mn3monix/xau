@@ -8,74 +8,15 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="favicon.svg">
   <style>
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0; height: 100%;
-      font-family: system-ui, sans-serif;
-      background: #0d0d0d; color: #eee;
-    }
-    body { display: flex; align-items: center; justify-content: center; }
-    .box { width: min(92vw, 360px); padding: 1.5rem; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; }
-    h1 { margin: 0 0 .35rem; font-size: 1.15rem; letter-spacing: .04em; }
-    .sub { margin: 0 0 1rem; color: #9a937f; font-size: .85rem; }
-    input, button { width: 100%; padding: .7rem .8rem; border-radius: 8px; border: 1px solid #444; font-size: 1rem; }
-    input { background: #111; color: #fff; margin-bottom: .7rem; }
-    button { background: #c9a227; color: #111; font-weight: 700; cursor: pointer; border: 0; }
-    .err { color: #f66; min-height: 1.2em; font-size: .9rem; margin: .4rem 0; }
-    iframe.app {
+    html, body { margin: 0; height: 100%; background: #0b0c0e; }
+    iframe {
       position: fixed; inset: 0; width: 100%; height: 100%;
       border: 0; background: #0b0c0e;
     }
   </style>
 </head>
 <body>
-  <div class="box" id="gate">
-    <h1>XAU Live by Mn3monix</h1>
-    <p class="sub">Inserisci la password</p>
-    <input id="pw" type="password" autocomplete="current-password" autofocus>
-    <div class="err" id="err"></div>
-    <button id="go" type="button">Entra</button>
-  </div>
-  <script>
-    const SALT = "z1qE/WpnRH+d3BCjWh8gTQ==";
-    const IV = "ApjqOgeH50avsTuV";
-    const DATA = "eox3PiNTvuTyjwvgMPctORQ3/JN4GLlgxPRf7ak5QG+K/JKtkwjqal3JiUFiU3ilEONXf/e0yBiJWUAOzcYQikpdjUxK0gdx+jdLM5/0CNZ5DVCiSoDx5oJENM2k9q9gypxKXayf/jA0XQ0/4qRn";
-    const b64ToBytes = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-    async function unlock(password) {
-      const enc = new TextEncoder();
-      const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
-      const key = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: b64ToBytes(SALT), iterations: 200000, hash: 'SHA-256' },
-        keyMaterial,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['decrypt']
-      );
-      await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64ToBytes(IV) }, key, b64ToBytes(DATA));
-    }
-    function openApp() {
-      history.replaceState(null, '', './');
-      document.body.style.display = 'block';
-      document.body.innerHTML = '';
-      const f = document.createElement('iframe');
-      f.className = 'app';
-      f.title = 'Oro Live';
-      f.src = 'oro-live.html';
-      document.body.appendChild(f);
-    }
-    async function tryUnlock() {
-      const err = document.getElementById('err');
-      err.textContent = '';
-      try {
-        await unlock(document.getElementById('pw').value);
-        sessionStorage.setItem('xau_ok', '1');
-        openApp();
-      } catch {
-        err.textContent = 'Password errata';
-      }
-    }
-    document.getElementById('go').addEventListener('click', tryUnlock);
-    document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
-  </script>
+  <iframe title="Oro Live" src="oro-live.html"></iframe>
+  <script>history.replaceState(null, '', './');</script>
 </body>
 </html>
