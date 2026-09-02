@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.11.1 — Prezzo e statistiche</title>
+  <title>Oro Live v2.14.0 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -123,6 +123,8 @@
       border: 1px solid var(--line); border-radius: 999px;
       padding: 10px 14px; font: inherit; font-size: .9rem; min-height: 44px;
     }
+    .tv-embed { height: 62px; overflow: hidden; margin-top: 2px; }
+    .tv-embed iframe { transform-origin: top left; }
     .stat.k18 {
       border: 1.5px solid var(--gold);
       box-shadow: 0 0 0 1px rgba(212,175,55,.25), 0 0 18px rgba(212,175,55,.18);
@@ -301,7 +303,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.11.1</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.14.0</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -340,14 +342,14 @@
             <div class="stat"><label>8K — 333,3</label><b id="g8">—</b></div>
           </div>
           <div class="grams side">
-            <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
-            <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
-            <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
-            <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
-            <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
-            <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
-            <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
-            <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
+            <div class="stat"><label>Minimo di giornata</label><b id="dayLow">—</b></div>
+            <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
+            <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
+            <div class="stat stack"><label>Distanza dal massimo giorno</label><b id="dayHighDist">—</b></div>
+            <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
+            <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
+            <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
+            <div class="stat stack"><label>Distanza dal massimo 52 sett.</label><b id="yHighDist">—</b></div>
           </div>
         </div>
       </section>
@@ -358,26 +360,29 @@
             <strong class="fold-title" style="color:var(--gold-2)">Statistiche</strong>
             <span class="fold-actions"><span class="fold-btn"></span></span>
           </summary>
-        <p class="hint" style="margin-top:6px">Minimi, massimi e distanze sul prezzo attuale.</p>
+        <p class="hint" style="margin-top:6px">Prezzi live. Variazione % rispetto alla chiusura di ieri.</p>
         <div class="buy-grid">
-          <div class="stat"><label>Minimo di giornata</label><b id="dayLow">—</b></div>
-          <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
-          <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
-          <div class="stat stack"><label>Distanza dal massimo giorno</label><b id="dayHighDist">—</b></div>
-          <div class="stat"><label>Range di giornata</label><b id="dayRange">—</b></div>
-          <div class="stat"><label>Media range giorno 6 mesi</label><b id="dayRangeAvg">—</b></div>
+          <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
+          <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
+          <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
+          <div class="stat stack"><label>EUR / JPY</label><b id="eurjpy">—</b></div>
           <div class="stat-sep" role="separator"></div>
-          <div class="stat"><label>Minimo ultimo mese</label><b id="monthLow">—</b></div>
-          <div class="stat"><label>Massimo ultimo mese</label><b id="monthHigh">—</b></div>
-          <div class="stat stack"><label>Distanza dal minimo mese</label><b id="monthDist">—</b></div>
-          <div class="stat stack"><label>Distanza dal massimo mese</label><b id="monthHighDist">—</b></div>
-          <div class="stat"><label>Range ultimo mese</label><b id="monthRange">—</b></div>
-          <div class="stat"><label>Media range mese 6 mesi</label><b id="monthRangeAvg">—</b></div>
+          <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
+          <div class="stat stack"><label>Platino — oncia</label><b id="xptPx">—</b></div>
+          <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
+          <div class="stat stack"><label>Gas TTF — MWh</label><b id="ttfPx">—</b></div>
           <div class="stat-sep" role="separator"></div>
-          <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
-          <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
-          <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
-          <div class="stat stack"><label>Distanza dal massimo 52 sett.</label><b id="yHighDist">—</b></div>
+          <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
+          <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
+          <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
+          <div class="stat stack"><label>Bund 10 anni</label><b id="de10">—</b></div>
+          <div class="stat-sep" role="separator"></div>
+          <div class="stat stack"><label>Dow Jones</label><b id="idxDji">—</b></div>
+          <div class="stat stack"><label>S&amp;P 500</label><b id="idxSpx">—</b></div>
+          <div class="stat stack"><label>Nasdaq 100</label><b id="idxIxic">—</b></div>
+          <div class="stat stack"><label>DAX</label><b id="idxDax">—</b></div>
+          <div class="stat stack"><label>Nikkei 225</label><b id="idxNky">—</b></div>
+          <div class="stat stack"><label>SSEC</label><b id="idxSsec">—</b></div>
         </div>
         </details>
       </section>
@@ -485,7 +490,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.11.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.14.0 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -813,7 +818,8 @@
     function renderBuy(day) {
       document.getElementById("dayLow").textContent = money(day.low);
       document.getElementById("dayHigh").textContent = money(day.high);
-      document.getElementById("dayRange").textContent = money(day.high - day.low);
+      const elDR = document.getElementById("dayRange");
+      if (elDR) elDR.textContent = money(day.high - day.low);
       const avgD = avgDayRange6m(state.daily, day);
       const elDA = document.getElementById("dayRangeAvg");
       if (elDA) elDA.textContent = avgD != null ? money(avgD) : "—";
@@ -824,9 +830,10 @@
       const toHighPct = day.high > 0 ? (toHigh / day.high) * 100 : 0;
       setSignedDist("dayHighDist", toHighPct, toHigh);
       const month = monthRange(state.daily, day);
-      document.getElementById("monthHigh").textContent = month.high != null ? money(month.high) : "—";
-      document.getElementById("monthLow").textContent = month.low != null ? money(month.low) : "—";
-      document.getElementById("monthRange").textContent = month.high != null && month.low != null ? money(month.high - month.low) : "—";
+      (document.getElementById("monthHigh")||{}).textContent = month.high != null ? money(month.high) : "—";
+      const _ml = document.getElementById("monthLow"); if (_ml) _ml.textContent = month.low != null ? money(month.low) : "—";
+      const elMR = document.getElementById("monthRange");
+      if (elMR) elMR.textContent = month.high != null && month.low != null ? money(month.high - month.low) : "—";
       const avgM = avgMonthRange6m(state.daily, day);
       const elMA = document.getElementById("monthRangeAvg");
       if (elMA) elMA.textContent = avgM != null ? money(avgM) : "—";
@@ -834,12 +841,12 @@
         const mFrom = day.price - month.low;
         const mPct = month.low > 0 ? (mFrom / month.low) * 100 : 0;
         setSignedDist("monthDist", mPct, mFrom);
-      } else document.getElementById("monthDist").textContent = "—";
+      } else { const _md = document.getElementById("monthDist"); if (_md) _md.textContent = "—"; }
       if (month.high != null && day.price != null) {
         const mTo = day.price - month.high;
         const mToPct = month.high > 0 ? (mTo / month.high) * 100 : 0;
         setSignedDist("monthHighDist", mToPct, mTo);
-      } else document.getElementById("monthHighDist").textContent = "—";
+      } else { const _mhd = document.getElementById("monthHighDist"); if (_mhd) _mhd.textContent = "—"; }
       const s50 = sma(state.daily, 50);
       const s200 = sma(state.daily, 200);
       const el50 = document.getElementById("sma50");
@@ -1395,27 +1402,48 @@
       const brentDiff = m.brent ? pctVsPrev(m.brent.mid, m.brentPrev, m.brent.dayDiffPercent) : null;
       const btc = m.btc && m.btc.mid > 0 ? toCcyFromUsd(m.btc.mid) : null;
       const btcDiff = m.btc ? pctVsPrev(m.btc.mid, m.btcPrev, m.btc.dayDiffPercent) : null;
+      let xpt = null, xptDiff = null;
+      if (m.xptUsd && m.xptUsd.mid > 0) {
+        xpt = toCcyFromUsd(m.xptUsd.mid);
+        xptDiff = pctVsPrev(m.xptUsd.mid, m.xptUsdPrev, m.xptUsd.dayDiffPercent);
+      }
       paintMetalCell("xagPx", xag, xagDiff, 2);
+      paintMetalCell("xptPx", xpt, xptDiff, 2);
       paintMetalCell("brentPx", brent, brentDiff, 2);
       paintMetalCell("btcPx", btc, btcDiff, 0);
+      if (m.ttf && m.ttf.close > 0) {
+        const el = document.getElementById("ttfPx");
+        if (el) {
+          const d = Number(m.ttf.change);
+          const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
+          const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
+          el.classList.remove("up","down");
+          el.style.color = "";
+          el.innerHTML = fmt(m.ttf.close, 2) + "\u00A0€" + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
+        }
+      }
     }
     async function loadMetals() {
-      const [xagUsd, xagEur, brent, btc, xagUsdBars, xagEurBars, brentBars, btcBars] = await Promise.all([
+      const [xagUsd, xagEur, brent, btc, xptUsd, xagUsdBars, xagEurBars, brentBars, btcBars, xptBars, ttf] = await Promise.all([
         getJSON(`${API}/XAGUSD`).catch(() => null),
         getJSON(`${API}/XAGEUR`).catch(() => null),
         getJSON(`${API}/UKOIL`).catch(() => null),
         getJSON(`${API}/BTCUSD`).catch(() => null),
+        getJSON(`${API}/XPTUSD`).catch(() => null),
         loadOhlc("XAGUSD", "1d", 6).catch(() => []),
         loadOhlc("XAGEUR", "1d", 6).catch(() => []),
         loadOhlc("UKOIL", "1d", 6).catch(() => []),
         loadOhlc("BTCUSD", "1d", 6).catch(() => []),
+        loadOhlc("XPTUSD", "1d", 6).catch(() => []),
+        fetchYahooQuote("TTF=F").catch(() => null),
       ]);
       state.metals = {
-        xagUsd, xagEur, brent, btc,
+        xagUsd, xagEur, brent, btc, xptUsd, ttf,
         xagUsdPrev: lastClosedClose(xagUsdBars),
         xagEurPrev: lastClosedClose(xagEurBars),
         brentPrev: lastClosedClose(brentBars),
-        btcPrev: lastClosedClose(btcBars)
+        btcPrev: lastClosedClose(btcBars),
+        xptUsdPrev: lastClosedClose(xptBars)
       };
       paintMetals();
     }
@@ -1516,6 +1544,7 @@
       paintFx("eurusd", q.eurusd, 4, q.eurusdDiff);
       paintFx("eurpln", q.eurpln, 4, q.eurplnDiff);
       paintFx("eurchf", q.eurchf, 4, q.eurchfDiff);
+      paintFx("eurjpy", q.eurjpy, 2, q.eurjpyDiff);
       const when = new Date(q.lastQuoteAt || q.timestamp || Date.now());
       state.lastTick = when;
       paintClock(when);
@@ -1652,10 +1681,12 @@
       const eurUsdQ = await getJSON(`${API}/EURUSD`);
       let eurChfQ = { mid: null };
       try { eurChfQ = await getJSON(`${API}/EURCHF`); } catch (e) {}
+      let eurJpyQ = { mid: null };
+      try { eurJpyQ = await getJSON(`${API}/EURJPY`); } catch (e) {}
       const fxName = fxSymbol();
       let q;
       if (!fxName) {
-        q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent };
+        q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent };
       } else {
         const fx = await getJSON(`${API}/${fxName}`);
         q = {
@@ -1663,7 +1694,7 @@
           marketState: gold.marketState, stale: gold.stale || fx.stale,
           lastQuoteAt: gold.lastQuoteAt || gold.timestamp, timestamp: gold.timestamp,
           symbol: "XAUPLN", dayDiffPercent: gold.dayDiffPercent,
-          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent,
+          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent,
         };
       }
       const closed = (state.daily || []).filter(b => !b.isOpen);
@@ -1700,7 +1731,7 @@
         mid, high: mid, low: mid, marketState: "open", stale: false,
         lastQuoteAt: ts, timestamp: ts,
         symbol: state.ccy === "PLN" ? "XAUPLN" : state.ccy === "USD" ? "XAUUSD" : state.ccy === "CHF" ? "XAUCHF" : "XAUEUR",
-        dayDiffPercent: 0, eurpln, xauusd: xauUsd, eurusd, eurchf: Number(fx.rates.CHF || 0), eurchf: Number(fx.rates.CHF || 0), _xauUsd: xauUsd,
+        dayDiffPercent: 0, eurpln, xauusd: xauUsd, eurusd, eurchf: Number(fx.rates.CHF || 0), eurjpy: Number(fx.rates.JPY || 0), _xauUsd: xauUsd,
       };
     }
     async function loadQuote() {
@@ -1727,6 +1758,8 @@
             paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
             paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
             paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
+            paintFx("eurjpy", state.quote.eurjpy, 2, state.quote.eurjpyDiff);
+            paintFx("eurjpy", state.quote.eurjpy, 2, state.quote.eurjpyDiff);
           }
         }
       } catch (e) {
@@ -1912,9 +1945,11 @@
       const eurUsdQ = await getJSON(`${API}/EURUSD`);
       let eurChfQ = { mid: null };
       try { eurChfQ = await getJSON(`${API}/EURCHF`); } catch (e) {}
+      let eurJpyQ = { mid: null };
+      try { eurJpyQ = await getJSON(`${API}/EURJPY`); } catch (e) {}
       const fxName = fxSymbol();
       let q;
-      if (!fxName) q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent };
+      if (!fxName) q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent };
       else {
         const fx = await getJSON(`${API}/${fxName}`);
         q = {
@@ -1922,7 +1957,7 @@
           marketState: gold.marketState, stale: gold.stale || fx.stale,
           lastQuoteAt: gold.lastQuoteAt || gold.timestamp, timestamp: gold.timestamp,
           symbol: "XAUPLN", dayDiffPercent: gold.dayDiffPercent,
-          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent,
+          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent,
         };
       }
       const closed = (state.daily || []).filter(b => !b.isOpen);
@@ -2011,9 +2046,9 @@
       while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() - 1);
       const iso = d.toISOString().slice(0, 10);
       try {
-        const j = await getJSON("https://api.frankfurter.app/" + iso + "?from=EUR&to=USD,PLN,CHF");
+        const j = await getJSON("https://api.frankfurter.app/" + iso + "?from=EUR&to=USD,PLN,CHF,JPY");
         if (j && j.rates) {
-          state.fxPrev = { eurusd: Number(j.rates.USD), eurpln: Number(j.rates.PLN), eurchf: Number(j.rates.CHF) };
+          state.fxPrev = { eurusd: Number(j.rates.USD), eurpln: Number(j.rates.PLN), eurchf: Number(j.rates.CHF), eurjpy: Number(j.rates.JPY) };
           return;
         }
       } catch (e) {}
@@ -2071,24 +2106,435 @@
       el.style.color = "";
       el.innerHTML = fmt(yld, 3) + "%" + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
     }
+    function parseTvQuote(raw) {
+      if (!raw) return null;
+      let txt = String(raw).trim();
+      if (txt.startsWith("{") && txt.includes('"contents"')) {
+        try { txt = JSON.parse(txt).contents || txt; } catch (e) {}
+      }
+      const start = txt.indexOf("{");
+      const end = txt.lastIndexOf("}");
+      if (start < 0 || end <= start) return null;
+      try {
+        const j = JSON.parse(txt.slice(start, end + 1));
+        const close = Number(j.close);
+        if (close > 0) return { close, change: Number(j.change) };
+      } catch (e) {}
+      return null;
+    }
     async function fetchTvSymbol(sym) {
       const url = "https://scanner.tradingview.com/symbol?symbol=" + encodeURIComponent(sym) + "&fields=close,change,change_abs";
-      const tries = [url, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + url];
+      const tries = [
+        url,
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
+        "https://api.allorigins.win/get?url=" + encodeURIComponent(url),
+        "https://corsproxy.io/?" + encodeURIComponent(url),
+        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url)
+      ];
       for (const u of tries) {
         try {
           const raw = await getJSONText(u);
-          if (!raw) continue;
-          const j = JSON.parse(raw);
-          const close = Number(j.close);
-          if (close > 0) return { close, change: Number(j.change) };
+          const q = parseTvQuote(raw);
+          if (q) return q;
         } catch (e) {}
       }
       return null;
     }
+    async function fetchYahooQuote(sym) {
+      const url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
+      const url2 = "https://query2.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
+      const tries = [url, url2, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + encodeURIComponent(url)];
+      for (const u of tries) {
+        try {
+          const raw = await getJSONText(u);
+          if (!raw || raw.indexOf("regularMarketPrice") < 0) continue;
+          const j = JSON.parse(raw);
+          const res = j.chart && j.chart.result && j.chart.result[0];
+          if (!res || !res.meta) continue;
+          const close = Number(res.meta.regularMarketPrice);
+          if (!(close > 0)) continue;
+          const series = (((res.indicators || {}).quote || [])[0] || {}).close || [];
+          const prevs = series.map(Number).filter(v => v > 0);
+          let prev = prevs.length >= 2 ? prevs[prevs.length - 2] : null;
+          if (prev && Math.abs(prev - close) / close < 0.0002 && prevs.length >= 3) prev = prevs[prevs.length - 3];
+          const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(res.meta.regularMarketChangePercent);
+          return { close, change };
+        } catch (e) {}
+      }
+      return null;
+    }
+    async function fetchAnyQuote(tvSym, yahooSym) {
+      const tv = await fetchTvSymbol(tvSym);
+      if (tv) return tv;
+      if (yahooSym) return await fetchYahooQuote(yahooSym);
+      return null;
+    }
+    function paintIndex(id, px, chg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!(px > 0)) { el.textContent = "—"; return; }
+      const d = Number(chg);
+      const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
+      const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
+      const dec = px >= 1000 ? 2 : 2;
+      el.classList.remove("up", "down");
+      el.style.color = "";
+      el.innerHTML = fmt(px, dec) + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
+    }
+    function cacheQuote(key, q) {
+      if (!q || !(q.close > 0)) return;
+      try {
+        const bag = JSON.parse(localStorage.getItem("oroTv") || "{}");
+        bag[key] = q;
+        localStorage.setItem("oroTv", JSON.stringify(bag));
+      } catch (e) {}
+    }
+    function cachedQuote(key) {
+      try {
+        const bag = JSON.parse(localStorage.getItem("oroTv") || "{}");
+        return bag[key] || null;
+      } catch (e) { return null; }
+    }
+    function pctFromPrev(live, prev, fallback) {
+      if (live > 0 && prev > 0) return ((live - prev) / prev) * 100;
+      const f = Number(fallback);
+      return Number.isFinite(f) ? f : null;
+    }
+    async function loadBqQuote(symbol) {
+      const q = await getJSON(API + "/" + symbol).catch(() => null);
+      if (!q) return null;
+      const close = Number(q.mid || ((Number(q.bid) + Number(q.ask)) / 2));
+      if (!(close > 0)) return null;
+      return { close, change: Number(q.dayDiffPercent) };
+    }
+    async function fetchTextLong(url) {
+      const tries = [
+        url,
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
+        "https://corsproxy.io/?" + encodeURIComponent(url),
+        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url)
+      ];
+      for (const u of tries) {
+        try {
+          const ctrl = new AbortController();
+          const tmo = setTimeout(() => ctrl.abort(), 12000);
+          const r = await fetch(u, { signal: ctrl.signal, cache: "no-store" });
+          clearTimeout(tmo);
+          if (!r.ok) continue;
+          const txt = await r.text();
+          if (txt && txt.length > 20) return txt;
+        } catch (e) {}
+      }
+      return "";
+    }
+    async function fetchUsCurve() {
+      const url = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv";
+      const txt = await fetchTextLong(url);
+      if (!txt || txt.indexOf("10 Yr") < 0) return {};
+      const rows = txt.split(/\n/).map(l => l.trim()).filter(l => /^\d{2}\/\d{2}\/\d{4},/.test(l));
+      if (!rows.length) return {};
+      function pick(line) {
+        const c = line.split(",");
+        return { y2: Number(c[8]), y10: Number(c[12]), y30: Number(c[14]) };
+      }
+      const a = pick(rows[0]);
+      const b = rows[1] ? pick(rows[1]) : a;
+      function pack(cur, prev) {
+        if (!(cur > 0)) return null;
+        const change = prev > 0 ? ((cur - prev) / prev) * 100 : 0;
+        return { close: cur, change };
+      }
+      return { ust2: pack(a.y2, b.y2), ust10: pack(a.y10, b.y10), ust30: pack(a.y30, b.y30) };
+    }
+
+    async function fetchTvPage(path, kind) {
+      const url = "https://www.tradingview.com/symbols/" + path;
+      const txt = await fetchTextLong(url);
+      if (!txt) return null;
+      if (kind === "yield") {
+        const m = txt.match(/current yield rate is ([0-9.]+)%/i);
+        if (!m) return null;
+        return { close: Number(m[1]), change: 0 };
+      }
+      const m = txt.match(/current price of Dutch TTF[^0-9]{0,40}([0-9]+(?:\.[0-9]+)?)/i);
+      if (!m) return null;
+      let chg = 0;
+      const up = txt.match(/it has risen ([0-9]+(?:\.[0-9]+)?)%/i);
+      const dn = txt.match(/it has fallen ([0-9]+(?:\.[0-9]+)?)%/i);
+      if (up) chg = Number(up[1]);
+      if (dn) chg = -Number(dn[1]);
+      return { close: Number(m[1]), change: chg };
+    }
+    async function fetchGoogleQuote(symbol) {
+      const url = "https://www.google.com/finance/quote/" + symbol;
+      const txt = await fetchTextLong(url);
+      if (!txt) return null;
+      let m = txt.match(/data-last-price="([0-9.]+)"/);
+      if (!m) m = txt.match(/class="YMlKec[^"]*">\s*([0-9][0-9.,]*)/);
+      if (!m) {
+        const fmt = txt.match(/>([0-9]{1,3}(?:,[0-9]{3})+\.\d{1,4})</);
+        if (fmt) m = [null, fmt[1].replace(/,/g, "")];
+      }
+      if (!m) {
+        const raw = txt.match(/(?:^|[^0-9])((?:3941|3\.37)\d*\.\d+)/);
+        if (raw) m = [null, raw[1]];
+      }
+      const close = m ? Number(String(m[1]).replace(/,/g, "")) : NaN;
+      if (!(close > 0)) return null;
+      let chg = 0;
+      const p = txt.match(/data-last-change="([+\-0-9.]+)"/) || txt.match(/([+\-][0-9]+[.,][0-9]+)%/);
+      if (p) chg = Number(String(p[1]).replace(",", "."));
+      return { close, change: chg };
+    }
+    async function fetchInvestingTtf() {
+      const pages = [
+        "https://www.investing.com/commodities/dutch-ttf-gas-c1",
+        "https://it.investing.com/commodities/dutch-ttf-gas-c1",
+        "https://www.investing.com/commodities/ice-dutch-ttf-gas-c1-futures",
+        "https://www.investing.com/commodities/dutch-ttf-gas-c1-futures"
+      ];
+      for (const page of pages) {
+        const txt = await fetchTextLong(page);
+        if (!txt || txt.length < 200) continue;
+        let last = null, chg = null, prev = null;
+        let m = txt.match(/data-test="instrument-price-last"[^>]*>\s*([0-9][0-9.,]*)/);
+        if (m) last = Number(m[1].replace(/\./g, "").replace(",", ".").replace(/,(?=[0-9]{3}\b)/g, ""));
+        if (!(last > 0)) {
+          m = txt.match(/instrument-price-last[^>]*>\s*([0-9]+[.,][0-9]+)/);
+          if (m) last = Number(String(m[1]).replace(",", "."));
+        }
+        if (!(last > 0)) {
+          m = txt.match(/The Dutch TTF Natural Gas price today is ([0-9.]+)/i) || txt.match(/price today is ([0-9.]+)/i);
+          if (m) last = Number(m[1]);
+        }
+        const pc = txt.match(/previous close of ([0-9.]+)/i) || txt.match(/Prev\.?\s*Close[:\s]*([0-9.]+)/i);
+        if (pc) prev = Number(pc[1]);
+        const cp = txt.match(/data-test="instrument-price-change-percent"[^>]*>\s*\(?([+\-]?[0-9][0-9.,]*)%/) || txt.match(/\(([+\-][0-9]+[.,][0-9]+)%\)/);
+        if (cp) chg = Number(String(cp[1]).replace(",", "."));
+        if (last > 0 && prev > 0) chg = ((last - prev) / prev) * 100;
+        if (last > 5 && last < 400) return { close: last, change: chg };
+      }
+      return null;
+    }
+    function parseInvNum(s) {
+      s = String(s || "").trim().replace(/\s/g, "");
+      if (!s) return NaN;
+      if (s.indexOf(",") >= 0 && s.indexOf(".") >= 0) s = s.replace(/\./g, "").replace(",", ".");
+      else s = s.replace(",", ".");
+      return Number(s);
+    }
+    async function fetchInvestingYield(slug) {
+      const pages = [
+        "https://it.investing.com/rates-bonds/" + slug,
+        "https://www.investing.com/rates-bonds/" + slug
+      ];
+      for (const page of pages) {
+        const txt = await fetchTextLong(page);
+        if (!txt || txt.length < 200) continue;
+        let last = null, chg = null, prev = null;
+        let m = txt.match(/data-test="instrument-price-last"[^>]*>\s*([0-9][0-9.,]*)/);
+        if (m) last = parseInvNum(m[1]);
+        if (!(last > 0)) {
+          m = txt.match(/instrument-price-last[^>]*>\s*([0-9]+[.,][0-9]+)/);
+          if (m) last = parseInvNum(m[1]);
+        }
+        const pc = txt.match(/previous close of ([0-9][0-9.,]+)/i) || txt.match(/Prev\.?\s*Close[:\s]*([0-9][0-9.,]+)/i);
+        if (pc) prev = parseInvNum(pc[1]);
+        const cp = txt.match(/data-test="instrument-price-change-percent"[^>]*>\s*\(?([+\-]?[0-9][0-9.,]*)%/)
+          || txt.match(/\(([+\-][0-9]+[.,][0-9]+)%\)/);
+        if (cp) chg = parseInvNum(cp[1]);
+        if (last > 0 && prev > 0) chg = ((last - prev) / prev) * 100;
+        if (last > 0.4 && last < 15) return { close: last, change: chg };
+      }
+      return null;
+    }
+    async function fetchFredSeries(id) {
+      const url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=" + encodeURIComponent(id);
+      const txt = await fetchTextLong(url);
+      if (!txt || txt.indexOf(",") < 0) return null;
+      const vals = [];
+      txt.split(/\n/).forEach(l => {
+        const p = l.trim().split(",");
+        if (p.length < 2) return;
+        const v = Number(p[1]);
+        if (v > 0) vals.push(v);
+      });
+      if (!vals.length) return null;
+      const close = vals[vals.length - 1];
+      const prev = vals.length > 1 ? vals[vals.length - 2] : null;
+      return { close, change: prev > 0 ? ((close - prev) / prev) * 100 : 0 };
+    }
+    async function fetchEcbDe10() {
+      const urls = [
+        "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y?lastNObservations=8&format=csvdata"
+      ];
+      for (const url of urls) {
+        const txt = await fetchTextLong(url);
+        if (!txt) continue;
+        const nums = [];
+        txt.split(/\n/).forEach(l => {
+          const c = l.split(",");
+          const v = Number(String(c[c.length-1] || "").replace(/"/g,""));
+          if (v > 0 && v < 20) nums.push(v);
+        });
+        if (nums.length) {
+          const close = nums[nums.length - 1];
+          const prev = nums.length > 1 ? nums[nums.length - 2] : null;
+          return { close, change: prev > 0 ? ((close - prev) / prev) * 100 : 0 };
+        }
+      }
+      return fetchFredSeries("IRLTLT01DEM156N");
+    }
     async function loadTreasuries() {
-      const pairs = [["ust2","TVC:US02Y"],["ust10","TVC:US10Y"],["ust30","TVC:US30Y"]];
-      const rows = await Promise.all(pairs.map(async ([id, sym]) => [id, await fetchTvSymbol(sym)]));
-      rows.forEach(([id, q]) => { if (q) paintYield(id, q.close, q.change); });
+      const pages = [
+        ["ust2", "TVC-US02Y/", "TVC:US02Y", null],
+        ["ust10", "TVC-US10Y/", "TVC:US10Y", "^TNX"],
+        ["ust30", "TVC-US30Y/", "TVC:US30Y", "^TYX"],
+        ["de10", "TVC-DE10Y/", "TVC:DE10Y", null]
+      ];
+      let official = {};
+      try { official = await fetchUsCurve(); } catch (e) {}
+      let dxBonds = {};
+      try { dxBonds = await fetchDxFeed(["US10Y","US02Y","US30Y","DE10Y","$TNX","/ZN","/ZT","/ZB"]); } catch (e) {}
+      const dxBondMap = { ust2: ["US02Y"], ust10: ["US10Y","$TNX"], ust30: ["US30Y"], de10: ["DE10Y"] };
+      const fredMap = { ust2: "DGS2", ust10: "DGS10", ust30: "DGS30" };
+      await Promise.all(pages.map(async ([id, path, sym, y]) => {
+        let live = null;
+        if (id === "de10") {
+          live = await fetchEcbDe10();
+          if (!live) live = await fetchTvSymbol("TVC:DE10Y");
+          if (!live) live = await fetchTvPage("TVC-DE10Y/", "yield");
+        } else {
+          live = official[id] || null;
+          const fred = await fetchFredSeries(fredMap[id]);
+          if (fred && fred.close > 0) live = fred;
+        }
+        const yest = (id !== "ust30" && official[id] && official[id].close > 0) ? official[id].close : null;
+        if (live && live.close > 0) {
+          const change = (yest > 0) ? pctFromPrev(live.close, yest, live.change) : live.change;
+          const q = { close: live.close, change, live: true };
+          cacheQuote(id, q);
+          paintYield(id, q.close, q.change);
+          return;
+        }
+        const cached = cachedQuote(id);
+        if (cached && cached.live) paintYield(id, cached.close, cached.change);
+      }));
+      try { await loadIndices(); } catch (e) {}
+      const empty = (id) => {
+        const el = document.getElementById(id);
+        return el && (!el.textContent || el.textContent.trim() === "—") && !el.querySelector("span");
+      };
+      if (empty("de10")) {
+        let g = await fetchTvPage("TVC-DE10Y/", "yield");
+        if (!g) g = await fetchGoogleQuote("DE10Y:DE");
+        if (g) { cacheQuote("de10", g); paintYield("de10", g.close, g.change); }
+      }
+      if (empty("ttfPx")) {
+        let g = await fetchYahooQuote("TTF=F");
+        if (!g) g = await fetchInvestingTtf();
+        if (!g) g = await fetchTvSymbol("NYMEX:TTF1!");
+        if (g) {
+          cacheQuote("ttfPx", g);
+          const el = document.getElementById("ttfPx");
+          if (el) {
+            const d = Number(g.change);
+            const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
+            const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
+            el.innerHTML = fmt(g.close, 2) + "\u00A0€" + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
+          }
+        }
+      }
+      if (empty("idxSsec")) {
+        let g = await fetchGoogleQuote("000001:SHA");
+        if (!g) g = await fetchYahooQuote("000001.SS");
+        if (g) { cacheQuote("idxSsec", g); paintIndex("idxSsec", g.close, g.change); }
+      }
+    }
+    async function fetchDxFeed(symbols) {
+      const list = [].concat(symbols);
+      const q = "events=Trade,Summary&timeout=4&symbols=" + encodeURIComponent(list.join(","));
+      const urls = [
+        "https://demo.dxfeed.com/webservice/rest/events.json?" + q,
+        "https://tools.dxfeed.com/webservice/rest/events.json?" + q
+      ];
+      for (const u of urls) {
+        try {
+          const raw = await getJSONText(u);
+          if (!raw || raw.indexOf("Trade") < 0) continue;
+          const j = JSON.parse(raw);
+          const out = {};
+          const trades = j.Trade || {};
+          const sums = j.Summary || {};
+          Object.keys(trades).forEach(sym => {
+            const tr = trades[sym] || {};
+            const sm = sums[sym] || {};
+            const close = Number(tr.price);
+            if (!(close > 0)) return;
+            const prev = Number(sm.prevDayClosePrice);
+            const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(tr.change);
+            out[sym] = { close, change, prev };
+          });
+          if (Object.keys(out).length) return out;
+        } catch (e) {}
+      }
+      return {};
+    }
+    async function fetchTwelveQuote(symbol) {
+      const key = (localStorage.getItem("TWELVEDATA_API_KEY") || "demo");
+      const url = "https://api.twelvedata.com/quote?symbol=" + encodeURIComponent(symbol) + "&apikey=" + encodeURIComponent(key);
+      try {
+        const raw = await getJSONText(url);
+        if (!raw || raw.indexOf("percent_change") < 0) return null;
+        const j = JSON.parse(raw);
+        const close = Number(j.close || j.price);
+        const prev = Number(j.previous_close);
+        if (!(close > 0)) return null;
+        const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(j.percent_change);
+        return { close, change };
+      } catch (e) { return null; }
+    }
+    async function loadIndices() {
+      const pairs = [
+        ["idxDji", "US30", "TVC:DJI", "^DJI"],
+        ["idxSpx", "US500", "SP:SPX", "^GSPC"],
+        ["idxIxic", "USTEC", "NASDAQ:IXIC", "^IXIC"],
+        ["idxDax", "DE30", "XETR:DAX", "^GDAXI"],
+        ["idxNky", "JP225", "TVC:NI225", "^N225"],
+        ["idxSsec", null, "SSE:000001", "000001.SS"]
+      ];
+      const dxMap = {
+        idxDji: ["$DJI", "INDU", "DJI"],
+        idxSpx: ["SPX"],
+        idxIxic: ["$COMPQ", "NDX", "COMPQ"],
+        idxDax: ["DAX", "GDAXI"],
+        idxNky: ["N225", "NKY"],
+        idxSsec: ["SSEC", "SHCOMP"]
+      };
+      let dx = {};
+      try { dx = await fetchDxFeed(["SPX","$DJI","INDU","$COMPQ","NDX","DAX","GDAXI","N225","NKY","SSEC"]); } catch (e) {}
+      const tdMap = {
+        idxDji: ["DJI"],
+        idxSpx: ["SPX", "GSPC"],
+        idxIxic: ["IXIC"],
+        idxDax: ["GDAXI"],
+        idxNky: ["N225"],
+        idxSsec: ["000001.SHH", "000001"]
+      };
+      await Promise.all(pairs.map(async ([id, bq, tv, y]) => {
+        let q = null;
+        const tds = tdMap[id] || [];
+        for (let i = 0; i < tds.length && !q; i++) q = await fetchTwelveQuote(tds[i]);
+        if (!q && y) q = await fetchYahooQuote(y);
+        const aliases = dxMap[id] || [];
+        for (let i = 0; i < aliases.length && !q; i++) {
+          if (dx[aliases[i]]) q = dx[aliases[i]];
+        }
+        if (!q && bq) q = await loadBqQuote(bq);
+        if (!q && tv) q = await fetchTvSymbol(tv);
+        if (!q) q = cachedQuote(id);
+        if (q) { cacheQuote(id, q); paintIndex(id, q.close, q.change); }
+      }));
     }
     async function loadTreasuriesUnused() {
       const csvUrl = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv";
