@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.10.9 — Prezzo e statistiche</title>
+  <title>Oro Live v2.11.1 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -95,9 +95,16 @@
       min-height: 78px; height: 78px; padding: 8px 10px; box-sizing: border-box;
     }
     .grams > .stat b, .grams.side > .stat b { margin-top: auto; }
-    .hero > .card .buy-grid { flex: 1; grid-auto-rows: 78px; }
+    .hero > .card .buy-grid { flex: 1; grid-auto-rows: minmax(0, auto); }
     .buy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; align-items: stretch; }
     .buy-grid .stat { min-height: 78px; height: 78px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; box-sizing: border-box; }
+    .buy-grid .stat-sep {
+      grid-column: 1 / -1;
+      height: 1px; min-height: 1px; max-height: 1px;
+      margin: 6px 2px;
+      padding: 0; border: 0;
+      background: rgba(212,175,55,.28);
+    }
     .stat { background: var(--bg-3); border-radius: 12px; padding: 8px 10px; min-height: 78px; box-sizing: border-box; }
     .stat label {
       display: block; color: var(--muted); font-size: .62rem;
@@ -294,7 +301,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.10.9</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.11.1</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -337,10 +344,10 @@
             <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
             <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
             <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
+            <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
             <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
             <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
             <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
-            <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
           </div>
         </div>
       </section>
@@ -357,12 +364,16 @@
           <div class="stat"><label>Massimo di giornata</label><b id="dayHigh">—</b></div>
           <div class="stat stack"><label>Distanza dal minimo giorno</label><b id="buyDist">—</b></div>
           <div class="stat stack"><label>Distanza dal massimo giorno</label><b id="dayHighDist">—</b></div>
+          <div class="stat"><label>Range di giornata</label><b id="dayRange">—</b></div>
+          <div class="stat"><label>Media range giorno 6 mesi</label><b id="dayRangeAvg">—</b></div>
+          <div class="stat-sep" role="separator"></div>
           <div class="stat"><label>Minimo ultimo mese</label><b id="monthLow">—</b></div>
           <div class="stat"><label>Massimo ultimo mese</label><b id="monthHigh">—</b></div>
           <div class="stat stack"><label>Distanza dal minimo mese</label><b id="monthDist">—</b></div>
           <div class="stat stack"><label>Distanza dal massimo mese</label><b id="monthHighDist">—</b></div>
-          <div class="stat"><label>Range di giornata</label><b id="dayRange">—</b></div>
           <div class="stat"><label>Range ultimo mese</label><b id="monthRange">—</b></div>
+          <div class="stat"><label>Media range mese 6 mesi</label><b id="monthRangeAvg">—</b></div>
+          <div class="stat-sep" role="separator"></div>
           <div class="stat"><label>Minimo 52 settimane</label><b id="yLow">—</b></div>
           <div class="stat"><label>Massimo 52 settimane</label><b id="yHigh">—</b></div>
           <div class="stat stack"><label>Distanza dal minimo 52 sett.</label><b id="yLowDist">—</b></div>
@@ -474,7 +485,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.10.9 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.11.1 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -692,6 +703,46 @@
       });
       return { high, low };
     }
+    function avgDayRange6m(daily, today) {
+      const cutoff = Date.now() - 183 * 24 * 60 * 60 * 1000;
+      const mid = today?.price || today?.high || today?.low;
+      const rs = [];
+      (daily || []).forEach(b => {
+        const ts = new Date(b.openTime || b.time || 0).getTime();
+        if (!ts || ts < cutoff) return;
+        const h = Number(b.high || b.close);
+        const l = Number(b.low || b.close);
+        if (h > 0 && l > 0 && h >= l) {
+          if (mid > 0 && !sameScale(h, mid, 0.45) && !sameScale(l, mid, 0.45)) return;
+          rs.push(h - l);
+        }
+      });
+      if (!rs.length) return null;
+      return rs.reduce((a, b) => a + b, 0) / rs.length;
+    }
+    function avgMonthRange6m(daily, today) {
+      const mid = today?.price || today?.high || today?.low;
+      const buckets = new Map();
+      (daily || []).forEach(b => {
+        const d = new Date(b.openTime || b.time || 0);
+        if (Number.isNaN(d.getTime())) return;
+        const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+        const h = Number(b.high || b.close);
+        const l = Number(b.low || b.close);
+        if (!(h > 0 && l > 0)) return;
+        if (mid > 0 && !sameScale(h, mid, 0.45) && !sameScale(l, mid, 0.45)) return;
+        const cur = buckets.get(key) || { high: h, low: l };
+        cur.high = Math.max(cur.high, h);
+        cur.low = Math.min(cur.low, l);
+        buckets.set(key, cur);
+      });
+      const keys = [...buckets.keys()].sort();
+      const last = keys.slice(-6);
+      if (!last.length) return null;
+      const rs = last.map(k => buckets.get(k).high - buckets.get(k).low).filter(v => v > 0);
+      if (!rs.length) return null;
+      return rs.reduce((a, b) => a + b, 0) / rs.length;
+    }
     function yearRange(daily, today) {
       const cutoff = Date.now() - 365 * 24 * 60 * 60 * 1000;
       const mid = today?.price || today?.high || today?.low;
@@ -763,6 +814,9 @@
       document.getElementById("dayLow").textContent = money(day.low);
       document.getElementById("dayHigh").textContent = money(day.high);
       document.getElementById("dayRange").textContent = money(day.high - day.low);
+      const avgD = avgDayRange6m(state.daily, day);
+      const elDA = document.getElementById("dayRangeAvg");
+      if (elDA) elDA.textContent = avgD != null ? money(avgD) : "—";
       const fromLow = day.price - day.low;
       const fromLowPct = day.low > 0 ? (fromLow / day.low) * 100 : 0;
       setSignedDist("buyDist", fromLowPct, fromLow);
@@ -773,6 +827,9 @@
       document.getElementById("monthHigh").textContent = month.high != null ? money(month.high) : "—";
       document.getElementById("monthLow").textContent = month.low != null ? money(month.low) : "—";
       document.getElementById("monthRange").textContent = month.high != null && month.low != null ? money(month.high - month.low) : "—";
+      const avgM = avgMonthRange6m(state.daily, day);
+      const elMA = document.getElementById("monthRangeAvg");
+      if (elMA) elMA.textContent = avgM != null ? money(avgM) : "—";
       if (month.low != null && day.price != null) {
         const mFrom = day.price - month.low;
         const mPct = month.low > 0 ? (mFrom / month.low) * 100 : 0;
