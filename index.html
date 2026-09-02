@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.10.4 — Prezzo e statistiche</title>
+  <title>Oro Live v2.10.9 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -85,18 +85,20 @@
     .hint { color: var(--muted); font-size: .78rem; margin-top: 8px; line-height: 1.45; }
     .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; align-items: stretch; flex: 1; }
     .grams, .grams.side {
-      display: grid; grid-template-rows: repeat(6, minmax(0, 1fr));
+      display: grid;
+      grid-template-rows: none;
+      grid-auto-rows: 78px;
       gap: 8px; align-self: stretch; min-height: 0;
     }
     .grams > .stat, .grams.side > .stat {
       display: flex; flex-direction: column; justify-content: space-between;
-      min-height: 0; height: 100%; padding: 8px 10px;
+      min-height: 78px; height: 78px; padding: 8px 10px; box-sizing: border-box;
     }
     .grams > .stat b, .grams.side > .stat b { margin-top: auto; }
-    .hero > .card .buy-grid { flex: 1; grid-auto-rows: 1fr; }
+    .hero > .card .buy-grid { flex: 1; grid-auto-rows: 78px; }
     .buy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; align-items: stretch; }
-    .buy-grid .stat { min-height: 64px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; }
-    .stat { background: var(--bg-3); border-radius: 12px; padding: 8px 10px; }
+    .buy-grid .stat { min-height: 78px; height: 78px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; box-sizing: border-box; }
+    .stat { background: var(--bg-3); border-radius: 12px; padding: 8px 10px; min-height: 78px; box-sizing: border-box; }
     .stat label {
       display: block; color: var(--muted); font-size: .62rem;
       letter-spacing: .06em; text-transform: uppercase;
@@ -292,7 +294,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.10.4</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.10.9</span></h1>
         <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
       </div>
       <div class="status">
@@ -326,15 +328,19 @@
             <div class="stat"><label>21,6K — 900</label><b id="g216">—</b></div>
             <div class="stat k18"><label>18K — 750</label><b id="g18">—</b></div>
             <div class="stat"><label>14K — 585</label><b id="g14">—</b></div>
+            <div class="stat"><label>10K — 416,7</label><b id="g10">—</b></div>
             <div class="stat"><label>9K — 375</label><b id="g9">—</b></div>
+            <div class="stat"><label>8K — 333,3</label><b id="g8">—</b></div>
           </div>
           <div class="grams side">
             <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
             <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
             <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
             <div class="stat stack"><label>Argento — oncia</label><b id="xagPx">—</b></div>
+            <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
+            <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
+            <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
             <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
-            <div class="stat stack"><label>Bitcoin</label><b id="btcPx">—</b></div>
           </div>
         </div>
       </section>
@@ -398,11 +404,9 @@
           </summary>
           <div class="chart-box">
             <div class="tf-row" id="tfRow">
-              <button data-tf="1D" class="on">1D</button>
+              <button data-tf="5M" class="on">5M</button>
+              <button data-tf="1D">1D</button>
               <button data-tf="7D">7D</button>
-              <button data-tf="1M">1M</button>
-              <button data-tf="3M">3M</button>
-              <button data-tf="6M">6M</button>
             </div>
             <svg class="spark" id="spark" viewBox="0 0 560 400" preserveAspectRatio="xMidYMid meet" aria-label="Grafico"></svg>
           </div>
@@ -468,9 +472,9 @@
 
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
-      Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 9k = 375.
+      Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.10.4 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.10.9 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -499,8 +503,10 @@
     const K216 = 21.6 / 24;
     const K18 = 18 / 24;
     const K14 = 14 / 24;
+    const K10 = 10 / 24;
     const K9 = 9 / 24;
-    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, apartLive: false };
+    const K8 = 8 / 24;
+    const state = { ccy: "EUR", tf: "5M", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, apartLive: false };
     const APART = [
       { name: "Krugerrand 1oz — annate miste (24h)", price: 16730, url: APART_LIST_URL },
       { name: "Britannia 1oz — annate miste (24h)", price: 16779, url: APART_LIST_URL },
@@ -1444,7 +1450,11 @@
       document.getElementById("g18").textContent = money(g24 * K18);
       renderCalc18(g24);
       document.getElementById("g14").textContent = money(g24 * K14);
+      const g10 = document.getElementById("g10");
+      if (g10) g10.textContent = money(g24 * K10);
       document.getElementById("g9").textContent = money(g24 * K9);
+      const g8 = document.getElementById("g8");
+      if (g8) g8.textContent = money(g24 * K8);
       renderCoins(g24);
       paintFx("eurusd", q.eurusd, 4, q.eurusdDiff);
       paintFx("eurpln", q.eurpln, 4, q.eurplnDiff);
@@ -1489,28 +1499,22 @@
     function drawSpark(bars) {
       const svg = document.getElementById("spark");
       if (!svg) return;
-      const rows = (bars || []).filter(b => Number(b.close) > 0);
-      const pts = rows.map(b => Number(b.close));
-      if (pts.length < 2) { svg.innerHTML = ""; return; }
-      const s50 = sma(state.daily, 50);
-      const s200 = sma(state.daily, 200);
-      let min = Math.min(...pts), max = Math.max(...pts);
-      [s50, s200].forEach(v => {
-        if (v != null && v > 0) {
-          const mid = (min + max) / 2;
-          if (Math.abs(v - mid) / mid < 0.15) { min = Math.min(min, v); max = Math.max(max, v); }
-        }
-      });
+      const rows = (bars || []).filter(b => Number(b.close) > 0 || Number(b.open) > 0);
+      if (rows.length < 2) { svg.innerHTML = ""; return; }
+      const highs = rows.map(b => Number(b.high || Math.max(b.open||0, b.close||0)));
+      const lows = rows.map(b => Number(b.low || Math.min(b.open||b.close||0, b.close||b.open||0)));
+      let min = Math.min(...lows.filter(v => v > 0));
+      let max = Math.max(...highs.filter(v => v > 0));
+      if (!(max > min)) { min = Math.min(...rows.map(b => Number(b.close))); max = Math.max(...rows.map(b => Number(b.close))); }
+      const pad = (max - min) * 0.04 || 1;
+      min -= pad; max += pad;
       const span = max - min || 1;
       const W = 560, H = 400, L = 8, R = 50, T = 8, B = 32;
       const pw = W - L - R, ph = H - T - B;
       function yx(v) { return T + (1 - (v - min) / span) * ph; }
-      const line = pts.map((v, i) => {
-        const x = L + (i / (pts.length - 1)) * pw;
-        return x.toFixed(1) + "," + yx(v).toFixed(1);
-      }).join(" ");
-      const up = pts[pts.length - 1] >= pts[0];
-      const col = up ? "#3dd68c" : "#ff6b6b";
+      const n = rows.length;
+      const slot = pw / n;
+      const cw = Math.max(1.1, Math.min(7, slot * 0.72));
       const yVals = [max, min + span * 0.5, min];
       const gridH = yVals.map((v, i) => {
         const y = (T + i * ph / 2).toFixed(1);
@@ -1525,10 +1529,10 @@
         if (!b) return "";
         const d = new Date(b.openTime || b.time || 0);
         if (Number.isNaN(d.getTime())) return "";
-        const tf = state.tf || "1D";
+        const tf = state.tf || "5M";
         const hh = String(d.getHours()).padStart(2,"0");
         const mm = String(d.getMinutes()).padStart(2,"0");
-        if (tf === "1D" || tf === "7D") return hh + ":" + mm;
+        if (tf === "5M" || tf === "1D" || tf === "7D") return hh + ":" + mm;
         return String(d.getDate()).padStart(2,"0") + "/" + String(d.getMonth()+1).padStart(2,"0");
       }
       const xLabs = [0, 0.5, 1].map((p, idx) => {
@@ -1537,26 +1541,29 @@
         const anchor = idx === 0 ? "start" : idx === 2 ? "end" : "middle";
         return `<text x="${x.toFixed(1)}" y="${T+ph+22}" text-anchor="${anchor}" fill="#9aa0a6" font-size="12">${labTime(rows[i])}</text>`;
       }).join("");
-      function smaLine(val, color, tag) {
-        if (val == null || val <= 0) return "";
-        if (val < min || val > max) return "";
-        const y = yx(val);
-        return `<line x1="${L}" y1="${y.toFixed(1)}" x2="${W-R}" y2="${y.toFixed(1)}" stroke="${color}" stroke-width="1.2" stroke-dasharray="5 4" />
-          <text x="${L+4}" y="${(y-4).toFixed(1)}" fill="${color}" font-size="10">${tag} ${fmt(val, 0)}</text>`;
-      }
+      const candles = rows.map((b, i) => {
+        const o = Number(b.open || b.close);
+        const c = Number(b.close || b.open);
+        const h = Number(b.high || Math.max(o, c));
+        const l = Number(b.low || Math.min(o, c));
+        const x = L + (i + 0.5) * slot;
+        const up = c >= o;
+        const col = up ? "#3dd68c" : "#ff6b6b";
+        const y1 = yx(Math.max(o, c));
+        const y2 = yx(Math.min(o, c));
+        const bh = Math.max(0.8, y2 - y1);
+        return `<line x1="${x.toFixed(1)}" y1="${yx(h).toFixed(1)}" x2="${x.toFixed(1)}" y2="${yx(l).toFixed(1)}" stroke="${col}" stroke-width="1"/>
+          <rect x="${(x-cw/2).toFixed(1)}" y="${y1.toFixed(1)}" width="${cw.toFixed(1)}" height="${bh.toFixed(1)}" fill="${col}" stroke="${col}"/>`;
+      }).join("");
       svg.innerHTML = `<g stroke="rgba(212,175,55,.22)" stroke-width="0.7">${gridH}${gridV}</g>
         <rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="rgba(212,175,55,.35)" stroke-width="0.8" />
-        ${smaLine(s50, "#f0d78c", "SMA50")}
-        ${smaLine(s200, "#7ec8e3", "SMA200")}
-        <polyline fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${line}" />
+        ${candles}
         ${xLabs}`;
     }
     const TF = {
-      "1D": { interval: "15m", limit: 96 },
-      "7D": { interval: "1h", limit: 168 },
-      "1M": { interval: "1d", limit: 32 },
-      "3M": { interval: "1d", limit: 95 },
-      "6M": { interval: "1d", limit: 190 }
+      "5M": { interval: "5m", limit: 72 },
+      "1D": { interval: "5m", limit: 288 },
+      "7D": { interval: "5m", limit: 400 }
     };
     async function loadChart() {
       const spec = TF[state.tf] || TF["1D"];
@@ -1905,331 +1912,6 @@
       const data = await getJSON(`${API}/${symbol}/ohlc?interval=${interval}&limit=${limit}`);
       return data.bars || [];
     }
-    function drawSpark(bars) {
-      const svg = document.getElementById("spark");
-      if (!svg) return;
-      const rows = (bars || []).filter(b => Number(b.close) > 0);
-      const pts = rows.map(b => Number(b.close));
-      if (pts.length < 2) { svg.innerHTML = ""; return; }
-      const s50 = sma(state.daily, 50);
-      const s200 = sma(state.daily, 200);
-      let min = Math.min(...pts), max = Math.max(...pts);
-      [s50, s200].forEach(v => {
-        if (v != null && v > 0) {
-          const mid = (min + max) / 2;
-          if (Math.abs(v - mid) / mid < 0.15) { min = Math.min(min, v); max = Math.max(max, v); }
-        }
-      });
-      const span = max - min || 1;
-      const W = 560, H = 400, L = 8, R = 50, T = 8, B = 32;
-      const pw = W - L - R, ph = H - T - B;
-      function yx(v) { return T + (1 - (v - min) / span) * ph; }
-      const line = pts.map((v, i) => {
-        const x = L + (i / (pts.length - 1)) * pw;
-        return x.toFixed(1) + "," + yx(v).toFixed(1);
-      }).join(" ");
-      const up = pts[pts.length - 1] >= pts[0];
-      const col = up ? "#3dd68c" : "#ff6b6b";
-      const yVals = [max, min + span * 0.5, min];
-      const gridH = yVals.map((v, i) => {
-        const y = (T + i * ph / 2).toFixed(1);
-        return `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" />
-          <text x="${W-R+5}" y="${Number(y)+4}" text-anchor="start" fill="#9aa0a6" font-size="11">${fmt(v, 0)}</text>`;
-      }).join("");
-      const gridV = [0,1,2].map(i => {
-        const x = (L + i * pw / 2).toFixed(1);
-        return `<line x1="${x}" y1="${T}" x2="${x}" y2="${T+ph}" />`;
-      }).join("");
-      function labTime(b) {
-        if (!b) return "";
-        const d = new Date(b.openTime || b.time || 0);
-        if (Number.isNaN(d.getTime())) return "";
-        const tf = state.tf || "1D";
-        const hh = String(d.getHours()).padStart(2,"0");
-        const mm = String(d.getMinutes()).padStart(2,"0");
-        if (tf === "1D" || tf === "7D") return hh + ":" + mm;
-        return String(d.getDate()).padStart(2,"0") + "/" + String(d.getMonth()+1).padStart(2,"0");
-      }
-      const xLabs = [0, 0.5, 1].map((p, idx) => {
-        const i = Math.round(p * (rows.length - 1));
-        const x = L + p * pw;
-        const anchor = idx === 0 ? "start" : idx === 2 ? "end" : "middle";
-        return `<text x="${x.toFixed(1)}" y="${T+ph+22}" text-anchor="${anchor}" fill="#9aa0a6" font-size="12">${labTime(rows[i])}</text>`;
-      }).join("");
-      function smaLine(val, color, tag) {
-        if (val == null || val <= 0) return "";
-        if (val < min || val > max) return "";
-        const y = yx(val);
-        return `<line x1="${L}" y1="${y.toFixed(1)}" x2="${W-R}" y2="${y.toFixed(1)}" stroke="${color}" stroke-width="1.2" stroke-dasharray="5 4" />
-          <text x="${L+4}" y="${(y-4).toFixed(1)}" fill="${color}" font-size="10">${tag} ${fmt(val, 0)}</text>`;
-      }
-      svg.innerHTML = `<g stroke="rgba(212,175,55,.22)" stroke-width="0.7">${gridH}${gridV}</g>
-        <rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="rgba(212,175,55,.35)" stroke-width="0.8" />
-        ${smaLine(s50, "#f0d78c", "SMA50")}
-        ${smaLine(s200, "#7ec8e3", "SMA200")}
-        <polyline fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${line}" />
-        ${xLabs}`;
-    }
-    async function loadIntraday() { return loadChart(); }
-    async function loadDaily() {
-      const gold = await loadOhlc(goldSymbol(), "1d", 400);
-      const fx = fxSymbol();
-      const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 400)) : gold;
-      state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
-    }
-    function multiplyBars(goldBars, fxBars) {
-      const fxMap = new Map();
-      (fxBars || []).forEach(b => fxMap.set(b.openTime, b));
-      const times = [...fxMap.keys()].sort();
-      function nearestFx(t) {
-        if (fxMap.has(t)) return fxMap.get(t);
-        let best = null, bestDt = Infinity;
-        for (const ft of times) {
-          const dt = Math.abs(new Date(ft) - new Date(t));
-          if (dt < bestDt) { bestDt = dt; best = fxMap.get(ft); }
-        }
-        return best;
-      }
-      return goldBars.map(g => {
-        const fx = nearestFx(g.openTime);
-        if (!fx) return null;
-        const m = fx.close;
-        return { openTime: g.openTime, open: g.open * (fx.open || m), high: g.high * (fx.high || m), low: g.low * (fx.low || m), close: g.close * m, isOpen: g.isOpen };
-      }).filter(Boolean);
-    }
-    async function loadQuote() {
-      const q = await firstOk([loadQuoteBiquote, loadQuoteFallback]);
-      applyQuote(q);
-      document.getElementById("iosHint").style.display = "none";
-      try { await loadMetals(); } catch (e) {}
-      renderApart();
-    }
-    async function loadQuoteBiquote() {
-      const gold = await getJSON(`${API}/${goldSymbol()}`);
-      const epln = await getJSON(`${API}/EURPLN`);
-      const xauUsdQ = await getJSON(`${API}/XAUUSD`);
-      const eurUsdQ = await getJSON(`${API}/EURUSD`);
-      let eurChfQ = { mid: null };
-      try { eurChfQ = await getJSON(`${API}/EURCHF`); } catch (e) {}
-      const fxName = fxSymbol();
-      let q;
-      if (!fxName) q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent };
-      else {
-        const fx = await getJSON(`${API}/${fxName}`);
-        q = {
-          mid: gold.mid * fx.mid, high: gold.high * fx.high, low: gold.low * fx.low,
-          marketState: gold.marketState, stale: gold.stale || fx.stale,
-          lastQuoteAt: gold.lastQuoteAt || gold.timestamp, timestamp: gold.timestamp,
-          symbol: "XAUPLN", dayDiffPercent: gold.dayDiffPercent,
-          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent,
-        };
-      }
-      const closed = (state.daily || []).filter(b => !b.isOpen);
-      if (closed.length >= 1) {
-        const prev = closed[closed.length - 1].close;
-        q.dayDiffPercent = ((q.mid - prev) / prev) * 100;
-      }
-      const day = sessionDayKey(new Date());
-      const todayBars = (state.daily || []).filter(b => {
-        const t0 = new Date(b.openTime || b.time || 0);
-        return !Number.isNaN(t0.getTime()) && sessionDayKey(t0) === day;
-      });
-      if (todayBars.length) {
-        const th = Math.max(...todayBars.map(b => b.high || q.mid), q.mid);
-        const tl = Math.min(...todayBars.map(b => b.low || q.mid), q.mid);
-        q.high = Math.max(q.high || q.mid, th);
-        q.low = Math.min(q.low || q.mid, tl);
-      } else {
-        q.high = q.mid;
-        q.low = q.mid;
-      }
-      return q;
-    }
-    async function loadQuoteFallback() {
-      const [eur, usd, fx] = await Promise.all([
-        getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-EUR-SPOT"),
-        getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT"),
-        getJSON("https://api.frankfurter.app/latest?from=EUR&to=PLN,USD,CHF"),
-      ]);
-      const xauEur = Number(eur.symbols[0].price);
-      const xauUsd = Number(usd.symbols[0].price);
-      const eurpln = Number(fx.rates.PLN);
-      const eurusd = Number(fx.rates.USD);
-      const ts = eur.symbols[0].computed_at;
-      const mid = state.ccy === "PLN" ? xauEur * eurpln : state.ccy === "USD" ? xauUsd : state.ccy === "CHF" ? xauEur * Number(fx.rates.CHF || 0) : xauEur;
-      return {
-        mid, high: mid, low: mid, marketState: "open", stale: false,
-        lastQuoteAt: ts, timestamp: ts,
-        symbol: state.ccy === "PLN" ? "XAUPLN" : state.ccy === "USD" ? "XAUUSD" : state.ccy === "CHF" ? "XAUCHF" : "XAUEUR",
-        dayDiffPercent: 0, eurpln, xauusd: xauUsd, eurusd, eurchf: Number(fx.rates.CHF || 0),
-      };
-    }
-    function goldSymbol() { return state.ccy === "EUR" ? "XAUEUR" : "XAUUSD"; }
-    function fxSymbol() { return state.ccy === "PLN" ? "USDPLN" : state.ccy === "CHF" ? "USDCHF" : null; }
-    function fmt(n, d = 2) {
-      if (n == null || Number.isNaN(n)) return "—";
-      return Number(n).toLocaleString("it-IT", { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: true });
-    }
-    function money(n, d = 2) {
-      const num = fmt(n, d);
-      if (state.ccy === "PLN") return num + "\u00A0zł";
-      if (state.ccy === "CHF") return num + "\u00A0CHF";
-      if (state.ccy === "USD") return num + "\u00A0$";
-      return num + "\u00A0€";
-    }
-    function paintClock(d) {
-      const elD = document.getElementById("updD");
-      const elT = document.getElementById("updT");
-      if (!elD || !elT) return;
-      const x = d instanceof Date ? d : new Date();
-      if (Number.isNaN(x.getTime())) return;
-      elD.textContent = x.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" });
-      elT.textContent = x.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    }
-    function fmtDateTime(iso) {
-      if (!iso) return "—";
-      return new Date(iso).toLocaleString("it-IT");
-    }
-    function showErr(msg) {
-      const box = document.getElementById("errBox");
-      if (!msg) { box.style.display = "none"; box.textContent = ""; return; }
-      box.style.display = "block"; box.textContent = msg;
-    }
-    async function getJSON(url, ms = 8000) {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), ms);
-      try {
-        const res = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return await res.json();
-      } finally { clearTimeout(t); }
-    }
-    async function firstOk(jobs) {
-      let last = null;
-      for (const job of jobs) { try { return await job(); } catch (e) { last = e; } }
-      throw last || new Error("nessuna fonte");
-    }
-    function sameScale(v, mid, band) {
-      if (v == null || mid == null || !(mid > 0)) return false;
-      const b = band || 0.2;
-      return v > mid * (1 - b) && v < mid * (1 + b);
-    }
-    function todayBar(daily, quote) {
-      const mid = quote?.mid;
-      const day = sessionDayKey(new Date()) + "|" + (state.ccy || "EUR");
-      if (state.sessionDay !== day) {
-        state.sessionDay = day;
-        state.sessionCcy = state.ccy;
-        state.sessionHigh = mid ?? null;
-        state.sessionLow = mid ?? null;
-        state.sessionOpen = mid ?? null;
-      }
-      const pool = []
-        .concat(daily || [])
-        .concat(state.intraday || []);
-      const bars = pool.filter(b => {
-        const t0 = new Date(b.openTime || b.time || 0);
-        return !Number.isNaN(t0.getTime()) && sessionDayKey(t0) === sessionDayKey(new Date());
-      });
-      let high = mid, low = mid;
-      bars.forEach(b => {
-        if (sameScale(b.high, mid, 0.18)) high = Math.max(high, b.high);
-        if (sameScale(b.low, mid, 0.18)) low = Math.min(low, b.low);
-        if (sameScale(b.close, mid, 0.18)) {
-          high = Math.max(high, b.close);
-          low = Math.min(low, b.close);
-        }
-      });
-      if (sameScale(quote?.high, mid, 0.18)) high = Math.max(high, quote.high);
-      if (sameScale(quote?.low, mid, 0.18)) low = Math.min(low, quote.low);
-      if (sameScale(state.sessionHigh, mid, 0.18)) high = Math.max(high, state.sessionHigh);
-      if (sameScale(state.sessionLow, mid, 0.18)) low = Math.min(low, state.sessionLow);
-      const openPx = bars.find(b => sameScale(b.open, mid, 0.18))?.open
-        || state.sessionOpen
-        || mid;
-      if (state.sessionOpen == null && openPx) state.sessionOpen = openPx;
-      state.sessionHigh = high;
-      state.sessionLow = low;
-      return { open: openPx, high, low, price: mid };
-    }
-    function parseApartCatalog(text) {
-      const rows = [];
-      const push = (name, url, raw) => {
-        const price = Number(String(raw).replace(/[^\d]/g, ""));
-        if (!(price > 12000 && price < 40000)) return;
-        const n = String(name || "").replace(/\s+/g, " ").replace(/\*+/g, "").trim();
-        if (!/1\s*oz/i.test(n)) return;
-        rows.push({ name: n, url: url || APART_LIST_URL, price });
-      };
-      const reMd = /\[([^\]]{8,120})\]\((https:\/\/mennica\.apart\.pl\/produkt\/[^)]+)\)[\s\S]{0,500}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
-      let m;
-      while ((m = reMd.exec(text))) push(m[1], m[2], m[3]);
-      const reHtml = />([^<]{8,140}1\s*oz[^<]{0,80})<[\s\S]{0,700}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
-      while ((m = reHtml.exec(text))) push(m[1], APART_LIST_URL, m[2]);
-      const reLine = /([A-Za-zÀ-ÿ0-9][^|\n]{6,80}1\s*oz[^|\n]{0,40}).{0,40}?(\d{2}\s?\d{3})\s*(?:zł|PLN)/gi;
-      while ((m = reLine.exec(text))) push(m[1], APART_LIST_URL, m[2]);
-      const uniq = [], seen = new Set();
-      for (const r of rows) {
-        const k = r.name.toLowerCase();
-        if (seen.has(k)) continue;
-        seen.add(k);
-        uniq.push(r);
-      }
-      return uniq.sort((a, b) => a.price - b.price);
-    }
-    async function getJSONText(url) {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), 12000);
-      try {
-        const res = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return await res.text();
-      } finally { clearTimeout(t); }
-    }
-    async function fetchApartCatalog() {
-      const encoded = encodeURIComponent(APART_LIST_URL);
-      const proxies = [
-        "https://r.jina.ai/" + APART_LIST_URL,
-        "https://r.jina.ai/http://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h",
-        "https://api.allorigins.win/raw?url=" + encoded,
-        "https://corsproxy.io/?" + APART_LIST_URL
-      ];
-      for (const url of proxies) {
-        try {
-          const text = await getJSONText(url);
-          const list = parseApartCatalog(text);
-          if (list.length >= 5) return list;
-        } catch (e) {}
-      }
-      return null;
-    }
-    async function boot(full = true) {
-      try {
-        showErr("");
-        if (full) {
-          try { await loadDaily(); } catch (e) { console.warn("storico non disponibile", e); }
-          try { await loadIntraday(); } catch (e) { console.warn("intraday non disponibile", e); }
-        } else if (state.intraday?.length) drawSpark(state.intraday);
-        await loadQuote();
-        try { await loadTreasuries(); } catch (e) {}
-        if (full || !state.fxPrev) {
-          try { await loadFxPrev(); } catch (e) {}
-          if (state.quote) {
-            paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
-            paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
-            paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
-          }
-        }
-      } catch (e) {
-        console.error(e);
-        document.getElementById("iosHint").style.display = "block";
-        showErr("Dati non arrivati. Su iPhone apri il file in Safari. (" + (e.name === "AbortError" ? "timeout" : e.message) + ")");
-        document.getElementById("liveDot").classList.add("off");
-        document.getElementById("liveLabel").textContent = "Offline";
-      }
-    }
-
-
     function toneEl(el, cur, prev) {
       if (!el) return;
       el.classList.remove("up", "down");
@@ -2321,7 +2003,36 @@
       }
       return { v, prev };
     }
-    async function loadTreasuries() { return; }
+    function paintYield(id, yld, chg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!(yld > 0)) { el.textContent = "—"; return; }
+      const d = Number(chg);
+      const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
+      const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
+      el.classList.remove("up", "down");
+      el.style.color = "";
+      el.innerHTML = fmt(yld, 3) + "%" + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
+    }
+    async function fetchTvSymbol(sym) {
+      const url = "https://scanner.tradingview.com/symbol?symbol=" + encodeURIComponent(sym) + "&fields=close,change,change_abs";
+      const tries = [url, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + url];
+      for (const u of tries) {
+        try {
+          const raw = await getJSONText(u);
+          if (!raw) continue;
+          const j = JSON.parse(raw);
+          const close = Number(j.close);
+          if (close > 0) return { close, change: Number(j.change) };
+        } catch (e) {}
+      }
+      return null;
+    }
+    async function loadTreasuries() {
+      const pairs = [["ust2","TVC:US02Y"],["ust10","TVC:US10Y"],["ust30","TVC:US30Y"]];
+      const rows = await Promise.all(pairs.map(async ([id, sym]) => [id, await fetchTvSymbol(sym)]));
+      rows.forEach(([id, q]) => { if (q) paintYield(id, q.close, q.change); });
+    }
     async function loadTreasuriesUnused() {
       const csvUrl = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv";
       let y2 = 4.39, y10 = 4.79, y30 = 5.27, p2 = 4.34, p10 = 4.75, p30 = 5.25;
@@ -2358,11 +2069,6 @@
       setPct("ust30", y30, p30);
     }
     const NEWS_FALLBACK = [
-      { title: "Oro in calo il 2 settembre: spot verso 4.330 $, futures aperti deboli", source: "Yahoo Finance", url: "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-wednesday-september-2-2026-gold-slips-further-as-military-actions-escalate-in-iran-104514058.html", at: "2026-09-02T10:45:00Z", text: "Mercoledì 2 settembre i future dicembre aprono a 4.377 $ (−0,4% sulla chiusura di martedì) e lo spot scende verso 4.330–4.360 $. È il quarto giorno di pressione dopo Jackson Hole. Sulla settimana il calo resta vicino al 5–7%; sul mese l’oro è ancora in positivo." },
-      { title: "ANSA: spot a 4.321 $ in lieve calo, Comex dicembre a 4.371 $", source: "ANSA", url: "https://www.ansa.it/sito/notizie/economia/2026/09/02/prezzo-oro-in-lieve-calo-spot-scambiato-a-4.321-dollari_66358274-9b4b-4931-8119-ea4e45ded5ba.html", at: "2026-09-02T06:06:00Z", text: "Al mattino in Europa lo spot vale 4.321 $ (−0,17%). Il contratto Comex di dicembre tratta a 4.371 $ (−0,58%). In euro l’oncia resta nell’area 3.750–3.780 €, dopo il crollo di lunedì e martedì." },
-      { title: "Nuovi attacchi USA-Iran: l’oro non reagisce da safe haven, il petrolio sì", source: "Yahoo Finance", url: "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-wednesday-september-2-2026-gold-slips-further-as-military-actions-escalate-in-iran-104514058.html", at: "2026-09-02T10:46:00Z", text: "Seconda ondata di attacchi USA su obiettivi iraniani in tre giorni, con rappresaglie su basi americane. L’oro apre sui minimi di due settimane invece di salire: il mercato continua a prezzare prima i tassi Fed. Il Brent risale sullo Stretto di Hormuz." },
-      { title: "Payrolls in arrivo: i dati sul lavoro USA guidano ancora XAU", source: "Moneycontrol", url: "https://www.moneycontrol.com/news/business/personal-finance/gold-and-silver-price-today-september-2-check-rates-of-24k-22k-gold-in-delhi-mumbai-kolkata-other-cities-14020518.html", at: "2026-09-02T08:15:00Z", text: "Dopo JOLTS e ADP, il mercato aspetta nonfarm payrolls e disoccupazione. Un lavoro ancora caldo rinforza l’ipotesi di rialzo Fed a settembre e tiene compresso l’oro. Un raffreddamento riaprirebbe il bid." },
-      { title: "Future dicembre rimbalzano in giornata dopo il minimo a 4.330 $", source: "Investing.com", url: "https://it.investing.com/commodities/gold", at: "2026-09-02T15:04:00Z", text: "Il contratto dicembre ha toccato 4.330 $ e poi recuperato verso 4.420–4.430 $ (+0,7% circa sulla seduta). Range 4.330–4.444 $. Il quadro resta: correzione violenta nella settimana, mese ancora positivo, catalizzatore sui tassi USA." },
       { title: "L’oro continua a scendere sulle attese di un rialzo dei tassi Fed", source: "Forbes", url: "https://www.forbes.com/sites/conormurray/2026/09/01/gold-price-continues-fall-as-expectations-of-an-interest-rate-hike-grow/", at: "2026-09-01T15:16:00Z", text: "Martedì l’oro ha perso ancora, dopo il massimo di 15 settimane di fine agosto. Il movimento è legato alle attese di un rialzo dei tassi della Federal Reserve: i tassi più alti riducono l’attrattiva del metallo, che non paga interessi. Spot vicino a 4.414 $ dopo un minimo di giornata a 4.374 $. Anche l’argento è in calo. Saxo Bank cita il dollaro più forte e il discorso hawkish di Kevin Warsh. CME FedWatch vede circa 66% di probabilità di un rialzo a settembre." },
       { title: "Comex gold chiude a 4.348 $ (−1,88%), terzo calo consecutivo", source: "WSJ", url: "https://www.wsj.com/finance/commodities-futures/gold-rises-jackson-hole-speech-may-limit-near-term-upside-381724a6", at: "2026-09-01T00:56:00Z", text: "Il future Comex di settembre ha perso 83,10 $ l’oncia, pari a −1,88%, chiudendo a 4.348 $. È la terza seduta consecutiva in ribasso e un calo di 261,70 $ (−5,68%) in tre giorni, il più ampio da marzo. Quinta perdita in sei sedute e chiusura più bassa da inizio agosto. Il mercato sta assorbendo il tono restrittivo della Fed dopo Jackson Hole." },
       { title: "XAU/USD sui minimi di 10 giorni: rendimenti USA e discorso Warsh a Jackson Hole", source: "FXEmpire", url: "https://www.fxempire.com/forecasts/article/gold-price-hits-10-day-low-as-rising-yields-test-support-1621111", at: "2026-09-01T13:27:00Z", text: "L’oro ha toccato un minimo di 10 giorni mentre i rendimenti USA salgono: il decennale è intorno al 4,78%. Il presidente Fed Kevin Warsh ha indicato che potrebbe servire altro lavoro sui tassi se l’inflazione non torna al 2%. Nel breve pesa il repricing dei tassi; nel medio restano gli acquisti delle banche centrali, 244 tonnellate nel primo trimestre. Supporti osservati verso 4.380 / 4.334 $." },
@@ -2438,9 +2144,6 @@
     }
 
     const WORLD_FALLBACK = [
-      { title: "2 settembre: nuovi raid USA-Iran e rappresaglie sulle basi americane", source: "Yahoo Finance", url: "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-wednesday-september-2-2026-gold-slips-further-as-military-actions-escalate-in-iran-104514058.html", at: "2026-09-02T10:45:00Z", text: "Seconda serie di attacchi aerei USA in tre giorni. L’Iran risponde sulle basi in Medio Oriente. Hormuz torna al centro: il petrolio risale, l’oro no. Se l’energia accelera, sale anche la probabilità di un rialzo Fed a settembre." },
-      { title: "Settimana dei payrolls USA: JOLTS e ADP lasciano il campo ai nonfarm", source: "Moneycontrol", url: "https://www.moneycontrol.com/news/business/personal-finance/gold-and-silver-price-today-september-2-check-rates-of-24k-22k-gold-in-delhi-mumbai-kolkata-other-cities-14020518.html", at: "2026-09-02T08:15:00Z", text: "Il catalizzatore macro della settimana è il mercato del lavoro americano. Occupazione calda = tassi più alti più a lungo. Occupazione in raffreddamento = pausa Fed e sollievo su oro e growth." },
-      { title: "Brent di nuovo in tensione su Hormuz mentre i metalli restano sotto i tassi", source: "Investing.com", url: "https://it.investing.com/commodities", at: "2026-09-02T14:50:00Z", text: "Il greggio tiene meglio dell’oro: il premio geopolitico sull’energia è tornato, il premio safe-haven sui metalli no. La divergenza dice che oggi il mercato legge prima la Fed e poi la guerra." },
       { title: "Fed: dopo Jackson Hole sale al 66% la probabilità di un rialzo a settembre", source: "Forbes", url: "https://www.forbes.com/sites/conormurray/2026/09/01/gold-price-continues-fall-as-expectations-of-an-interest-rate-hike-grow/", at: "2026-09-01T15:16:00Z", text: "Kevin Warsh ha detto che la Fed potrebbe avere ancora lavoro da fare se l’inflazione non torna al 2%. Le probabilità di un rialzo a settembre sono salite da circa 36% a 66%, a dicembre verso il 90%. Dollaro e rendimenti si sono irrigiditi, con effetto immediato su oro e altri asset senza rendimento." },
       { title: "Treasury USA a 10 anni verso il 4,78%: pressione su bond e metalli", source: "FXEmpire", url: "https://www.fxempire.com/forecasts/article/gold-price-hits-10-day-low-as-rising-yields-test-support-1621111", at: "2026-09-01T13:27:00Z", text: "Il rialzo dei rendimenti americani è il canale principale del sell-off. Un decennale più alto alza il costo opportunità di oro e azioni growth. Il mercato aspetta JOLTS, ADP e payrolls per capire se il movimento sui tassi continua." },
       { title: "Settimana dei dati sul lavoro USA: JOLTS, ADP e nonfarm payrolls", source: "Reuters", url: "https://profit.pakistantoday.com.pk/2026/09/01/gold-slips-as-traders-await-us-jobs-data-track-mideast-tensions", at: "2026-09-01T08:10:00Z", text: "Gli investitori guardano la tenuta del mercato del lavoro. Un’occupazione ancora calda rinforza lo scenario di rialzo tassi; un raffreddamento riaprirebbe spazio a un pause della Fed. È il catalizzatore macro della settimana." },
