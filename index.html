@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.9 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.10 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -331,7 +331,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.9</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.10</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -465,7 +465,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.9 — 4 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.10 — 4 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -885,6 +885,32 @@
       let s = 0;
       for (let i = closes.length - n; i < closes.length; i++) s += closes[i];
       return s / n;
+    }
+    function smaSeries(daily, n) {
+      const bars = (daily || []).filter(b => !b.isOpen && Number(b.close) > 0).slice().sort((a, b) => {
+        return new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0);
+      });
+      const out = [];
+      let s = 0;
+      for (let i = 0; i < bars.length; i++) {
+        s += Number(bars[i].close);
+        if (i >= n) s -= Number(bars[i - n].close);
+        if (i >= n - 1) {
+          const t = new Date(bars[i].openTime || bars[i].time || 0).getTime();
+          if (t) out.push({ t, v: s / n });
+        }
+      }
+      return out;
+    }
+    function smaAt(series, t) {
+      if (!series || !series.length || !(t > 0)) return null;
+      let lo = 0, hi = series.length - 1, ans = null;
+      while (lo <= hi) {
+        const m = (lo + hi) >> 1;
+        if (series[m].t <= t) { ans = series[m].v; lo = m + 1; }
+        else hi = m - 1;
+      }
+      return ans;
     }
     function rsiCloses(closes, n) {
       if (!closes || closes.length < n + 1) return null;
@@ -1570,6 +1596,10 @@
       let min = Math.min(...lows.filter(v => v > 0));
       let max = Math.max(...highs.filter(v => v > 0));
       if (!(max > min)) { min = Math.min(...rows.map(b => Number(b.close))); max = Math.max(...rows.map(b => Number(b.close))); }
+      const ma200s = (state.tf === "6M" || state.tf === "1Y" || state.tf === "5Y")
+        ? smaSeries(state.daily, 200) : [];
+      const maVals = rows.map(b => smaAt(ma200s, new Date(b.openTime || b.time || 0).getTime()));
+      maVals.forEach(v => { if (v > 0) { min = Math.min(min, v); max = Math.max(max, v); } });
       const pad = (max - min) * 0.04 || 1;
       min -= pad; max += pad;
       const span = max - min || 1;
@@ -1629,10 +1659,31 @@
         <line x1="${L}" y1="${ly.toFixed(1)}" x2="${W-R}" y2="${ly.toFixed(1)}" stroke="${lastCol}" stroke-width="1.15" stroke-dasharray="4 3" opacity="0.9"/>
         <rect x="${W-R+4}" y="${(ly-16).toFixed(1)}" width="110" height="32" rx="6" fill="${lastCol}"/>
         <text x="${W-R+59}" y="${(ly+6).toFixed(1)}" text-anchor="middle" fill="#0b0c0e" font-size="22" font-weight="700">${fmt(last, 0)}</text>` : "";
+      const maPts = maVals.map((v, i) => {
+        if (!(v > 0)) return "";
+        const x = L + (i + 0.5) * slot;
+        return x.toFixed(1) + "," + yx(v).toFixed(1);
+      }).filter(Boolean);
+      const maLine = maPts.length > 1
+        ? `<polyline fill="none" stroke="#f0d78c" stroke-width="2.2" points="${maPts.join(" ")}" />`
+        : "";
+      const lastMa = [...maVals].reverse().find(v => v > 0);
+      let maLab = "";
+      if (lastMa > 0) {
+        const my = Math.max(T + 18, Math.min(T + ph - 18, yx(lastMa)));
+        const clash = Math.abs(my - ly) < 28;
+        const my2 = clash ? (my < ly ? my - 30 : my + 30) : my;
+        const yy = Math.max(T + 18, Math.min(T + ph - 18, my2));
+        maLab = `<text x="${L+10}" y="${T+26}" fill="#f0d78c" font-size="22" font-weight="700">MA200</text>
+          <rect x="${W-R+4}" y="${(yy-16).toFixed(1)}" width="110" height="32" rx="6" fill="#d4af37"/>
+          <text x="${W-R+59}" y="${(yy+6).toFixed(1)}" text-anchor="middle" fill="#0b0c0e" font-size="20" font-weight="700">${fmt(lastMa, 0)}</text>`;
+      }
       svg.innerHTML = `<g stroke="rgba(212,175,55,.22)" stroke-width="0.7">${gridH}${gridV}</g>
         <rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="rgba(212,175,55,.35)" stroke-width="0.8" />
         ${candles}
+        ${maLine}
         ${lastMark}
+        ${maLab}
         ${xLabs}`;
     }
     const TF = {
@@ -1663,7 +1714,7 @@
     }
     async function loadIntraday() { return loadChart(); }
     async function loadDaily() {
-      const gold = await loadOhlc(goldSymbol(), "1d", 400);
+      const gold = await loadOhlc(goldSymbol(), "1d", 500);
       const fx = fxSymbol();
       const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 400)) : gold;
       state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
