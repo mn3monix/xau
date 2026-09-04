@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.11 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.12 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -331,7 +331,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.11</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.12</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -406,6 +406,7 @@
             <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
             <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
             <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
+            <div class="stat stack"><label>Bund 10 anni</label><b id="de10">—</b></div>
           </div>
         </details>
       </section>
@@ -469,7 +470,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.11 — 4 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.12 — 5 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -2448,7 +2449,8 @@
       const specs = [
         { id: "ust2", tv: "TVC:US02Y", y: "2YY=F" },
         { id: "ust10", tv: "TVC:US10Y", y: "^TNX" },
-        { id: "ust30", tv: "TVC:US30Y", y: "^TYX" }
+        { id: "ust30", tv: "TVC:US30Y", y: "^TYX" },
+        { id: "de10", tv: "TVC:DE10Y", y: null }
       ];
       await Promise.all(specs.map(async it => {
         let close = null, change = null;
@@ -2459,7 +2461,7 @@
             change = tv.change;
           }
         } catch (e) {}
-        if (!(close > 0)) {
+        if (!(close > 0) && it.y) {
           try {
             const yq = await fetchYahooQuote(it.y);
             if (yq && yq.close > 0) {
