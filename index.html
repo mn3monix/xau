@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.10 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.11 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -331,7 +331,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.10</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.11</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -402,6 +402,10 @@
             <div class="stat stack"><label>Argento — kg</label><b id="xagKg">—</b></div>
             <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
             <div class="stat stack"><label>Gas TTF — MWh</label><b id="ttfPx">—</b></div>
+            <div class="stat-sep" role="separator"></div>
+            <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
+            <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
+            <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
           </div>
         </details>
       </section>
@@ -465,7 +469,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.10 — 4 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.11 — 4 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1796,7 +1800,7 @@
           drawSpark(state.intraday);
         }
         await loadQuote();
-        /* treasuries/indices removed */
+        loadUsTreasuries().catch(e => console.warn("treasury", e));
         if (full || !state.fxPrev) {
           try { await loadFxPrev(); } catch (e) {}
           if (state.quote) {
@@ -2436,73 +2440,36 @@
       }
       return fetchFredSeries("IRLTLT01DEM156N");
     }
-    async function loadTreasuries() {
-      const pages = [
-        ["ust2", "TVC-US02Y/", "TVC:US02Y", null],
-        ["ust10", "TVC-US10Y/", "TVC:US10Y", "^TNX"],
-        ["ust30", "TVC-US30Y/", "TVC:US30Y", "^TYX"],
-        ["de10", "TVC-DE10Y/", "TVC:DE10Y", null]
+    async function loadUsTreasuries() {
+      function asYld(v) {
+        if (!(v > 0)) return null;
+        return v > 20 ? v / 10 : v;
+      }
+      const specs = [
+        { id: "ust2", tv: "TVC:US02Y", y: "2YY=F" },
+        { id: "ust10", tv: "TVC:US10Y", y: "^TNX" },
+        { id: "ust30", tv: "TVC:US30Y", y: "^TYX" }
       ];
-      let official = {};
-      try { official = await fetchUsCurve(); } catch (e) {}
-      let dxBonds = {};
-      try { dxBonds = await fetchDxFeed(["US10Y","US02Y","US30Y","DE10Y","$TNX","/ZN","/ZT","/ZB"]); } catch (e) {}
-      const dxBondMap = { ust2: ["US02Y"], ust10: ["US10Y","$TNX"], ust30: ["US30Y"], de10: ["DE10Y"] };
-      const fredMap = { ust2: "DGS2", ust10: "DGS10", ust30: "DGS30" };
-      await Promise.all(pages.map(async ([id, path, sym, y]) => {
-        let live = null;
-        if (id === "de10") {
-          live = await fetchEcbDe10();
-          if (!live) live = await fetchTvSymbol("TVC:DE10Y");
-          if (!live) live = await fetchTvPage("TVC-DE10Y/", "yield");
-        } else {
-          live = official[id] || null;
-          const fred = await fetchFredSeries(fredMap[id]);
-          if (fred && fred.close > 0) live = fred;
-        }
-        const yest = official[id] && official[id].prev > 0 ? official[id].prev : (live && live.prev);
-        if (live && live.close > 0) {
-          const change = (yest > 0 && Math.abs(yest - live.close) > 1e-8)
-            ? ((live.close - yest) / yest) * 100
-            : live.change;
-          const q = { close: live.close, change, live: true };
-          cacheQuote(id, q);
-          paintYield(id, q.close, q.change);
-          return;
-        }
-        const cached = cachedQuote(id);
-        if (cached && cached.live) paintYield(id, cached.close, cached.change);
-      }));
-      try { await loadIndices(); } catch (e) {}
-      const empty = (id) => {
-        const el = document.getElementById(id);
-        return el && (!el.textContent || el.textContent.trim() === "—") && !el.querySelector("span");
-      };
-      if (empty("de10")) {
-        let g = await fetchTvPage("TVC-DE10Y/", "yield");
-        if (!g) g = await fetchGoogleQuote("DE10Y:DE");
-        if (g) { cacheQuote("de10", g); paintYield("de10", g.close, g.change); }
-      }
-      if (empty("ttfPx")) {
-        let g = await fetchYahooQuote("TTF=F");
-        if (!g) g = await fetchInvestingTtf();
-        if (!g) g = await fetchTvSymbol("NYMEX:TTF1!");
-        if (g) {
-          cacheQuote("ttfPx", g);
-          const el = document.getElementById("ttfPx");
-          if (el) {
-            const d = Number(g.change);
-            const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
-            const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
-            el.innerHTML = fmt(g.close, 2) + "\u00A0€" + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
+      await Promise.all(specs.map(async it => {
+        let close = null, change = null;
+        try {
+          const tv = await fetchTvSymbol(it.tv);
+          if (tv && tv.close > 0) {
+            close = asYld(tv.close);
+            change = tv.change;
           }
+        } catch (e) {}
+        if (!(close > 0)) {
+          try {
+            const yq = await fetchYahooQuote(it.y);
+            if (yq && yq.close > 0) {
+              close = asYld(yq.close);
+              change = yq.change;
+            }
+          } catch (e) {}
         }
-      }
-      if (empty("idxSsec")) {
-        let g = await fetchGoogleQuote("000001:SHA");
-        if (!g) g = await fetchYahooQuote("000001.SS");
-        if (g) { cacheQuote("idxSsec", g); paintIndex("idxSsec", g.close, g.change); }
-      }
+        if (close > 0) paintYield(it.id, close, change);
+      }));
     }
     async function fetchDxFeed(symbols) {
       const list = [].concat(symbols);
