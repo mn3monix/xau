@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.12 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.13 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -331,7 +331,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.12</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.13</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -470,7 +470,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.12 — 5 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.13 — 5 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -596,7 +596,7 @@
       box.style.display = "block";
       box.textContent = msg;
     }
-    async function getJSON(url, ms = 8000) {
+    async function getJSON(url, ms = 5000) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), ms);
       try {
@@ -1406,18 +1406,10 @@
       }
       const brent = m.brent && m.brent.mid > 0 ? toCcyFromUsd(m.brent.mid) : null;
       const brentDiff = m.brent ? pctVsPrev(m.brent.mid, m.brentPrev, m.brent.dayDiffPercent) : null;
-      const btc = m.btc && m.btc.mid > 0 ? toCcyFromUsd(m.btc.mid) : null;
-      const btcDiff = m.btc ? pctVsPrev(m.btc.mid, m.btcPrev, m.btc.dayDiffPercent) : null;
-      let xpt = null, xptDiff = null;
-      if (m.xptUsd && m.xptUsd.mid > 0) {
-        xpt = toCcyFromUsd(m.xptUsd.mid);
-        xptDiff = pctVsPrev(m.xptUsd.mid, m.xptUsdPrev, m.xptUsd.dayDiffPercent);
-      }
       paintMetalCell("xagPx", xag, xagDiff, 2);
       const ozPerKg = 1000 / TROY_G;
       paintMetalCell("xagKg", xag ? xag * ozPerKg : null, xagDiff, 0);
       paintMetalCell("brentPx", brent, brentDiff, 2);
-      paintMetalCell("btcPx", btc, btcDiff, 0);
       if (m.ttf && m.ttf.close > 0) {
         const el = document.getElementById("ttfPx");
         if (el) {
@@ -1431,26 +1423,20 @@
       }
     }
     async function loadMetals() {
-      const [xagUsd, xagEur, brent, btc, xptUsd, xagUsdBars, xagEurBars, brentBars, btcBars, xptBars, ttf] = await Promise.all([
-        getJSON(`${API}/XAGUSD`).catch(() => null),
-        getJSON(`${API}/XAGEUR`).catch(() => null),
-        getJSON(`${API}/UKOIL`).catch(() => null),
-        getJSON(`${API}/BTCUSD`).catch(() => null),
-        getJSON(`${API}/XPTUSD`).catch(() => null),
+      const [xagUsd, xagEur, brent, xagUsdBars, xagEurBars, brentBars, ttf] = await Promise.all([
+        getJSON(`${API}/XAGUSD`, 4500).catch(() => null),
+        getJSON(`${API}/XAGEUR`, 4500).catch(() => null),
+        getJSON(`${API}/UKOIL`, 4500).catch(() => null),
         loadOhlc("XAGUSD", "1d", 6).catch(() => []),
         loadOhlc("XAGEUR", "1d", 6).catch(() => []),
         loadOhlc("UKOIL", "1d", 6).catch(() => []),
-        loadOhlc("BTCUSD", "1d", 6).catch(() => []),
-        loadOhlc("XPTUSD", "1d", 6).catch(() => []),
         fetchYahooQuote("TTF=F").catch(() => null),
       ]);
       state.metals = {
-        xagUsd, xagEur, brent, btc, xptUsd, ttf,
+        xagUsd, xagEur, brent, ttf,
         xagUsdPrev: lastClosedClose(xagUsdBars),
         xagEurPrev: lastClosedClose(xagEurBars),
-        brentPrev: lastClosedClose(brentBars),
-        btcPrev: lastClosedClose(btcBars),
-        xptUsdPrev: lastClosedClose(xptBars)
+        brentPrev: lastClosedClose(brentBars)
       };
       paintMetals();
     }
@@ -1725,20 +1711,21 @@
       state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
     }
     async function loadQuoteBiquote() {
-      const gold = await getJSON(`${API}/${goldSymbol()}`);
-      const epln = await getJSON(`${API}/EURPLN`);
-      const xauUsdQ = await getJSON(`${API}/XAUUSD`);
-      const eurUsdQ = await getJSON(`${API}/EURUSD`);
-      let eurChfQ = { mid: null };
-      try { eurChfQ = await getJSON(`${API}/EURCHF`); } catch (e) {}
-      let eurJpyQ = { mid: null };
-      try { eurJpyQ = await getJSON(`${API}/EURJPY`); } catch (e) {}
       const fxName = fxSymbol();
+      const reqs = [
+        getJSON(`${API}/${goldSymbol()}`, 4500),
+        getJSON(`${API}/EURPLN`, 4500),
+        getJSON(`${API}/XAUUSD`, 4500),
+        getJSON(`${API}/EURUSD`, 4500),
+        getJSON(`${API}/EURCHF`, 3500).catch(() => ({ mid: null })),
+        getJSON(`${API}/EURJPY`, 3500).catch(() => ({ mid: null }))
+      ];
+      if (fxName) reqs.push(getJSON(`${API}/${fxName}`, 4500));
+      const [gold, epln, xauUsdQ, eurUsdQ, eurChfQ, eurJpyQ, fx] = await Promise.all(reqs);
       let q;
       if (!fxName) {
-        q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent };
+        q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent };
       } else {
-        const fx = await getJSON(`${API}/${fxName}`);
         q = {
           mid: gold.mid * fx.mid, high: gold.high * fx.high, low: gold.low * fx.low,
           marketState: gold.marketState, stale: gold.stale || fx.stale,
@@ -1788,27 +1775,32 @@
       const q = await firstOk([loadQuoteBiquote, loadQuoteFallback]);
       applyQuote(q);
       document.getElementById("iosHint").style.display = "none";
-      try { await loadMetals(); } catch (e) {}
-      renderApart();
+      loadMetals().catch(() => {});
     }
     async function boot(full = true) {
       try {
         showErr("");
+        const quoteP = loadQuote();
         if (full) {
-          try { await loadDaily(); } catch (e) { console.warn("storico non disponibile", e); }
-          try { await loadIntraday(); } catch (e) { console.warn("intraday non disponibile", e); }
+          Promise.all([loadDaily().catch(e => console.warn("storico", e)), loadIntraday().catch(e => console.warn("intraday", e))])
+            .then(() => { if (state.quote) applyQuote(state.quote); });
         } else if (state.intraday?.length) {
           drawSpark(state.intraday);
         }
-        await loadQuote();
+        await quoteP;
         loadUsTreasuries().catch(e => console.warn("treasury", e));
         if (full || !state.fxPrev) {
-          try { await loadFxPrev(); } catch (e) {}
-          if (state.quote) {
+          loadFxPrev().then(() => {
+            if (!state.quote) return;
             paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
             paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
             paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
             paintFx("eurjpy", state.quote.eurjpy, 2, state.quote.eurjpyDiff);
+          }).catch(() => {});
+          if (state.quote) {
+            paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
+            paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
+            paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
             paintFx("eurjpy", state.quote.eurjpy, 2, state.quote.eurjpyDiff);
           }
         }
@@ -1820,239 +1812,14 @@
         document.getElementById("liveLabel").textContent = "Offline";
       }
     }
-    function goldSymbol() { return state.ccy === "EUR" ? "XAUEUR" : "XAUUSD"; }
-    function fxSymbol() { return state.ccy === "PLN" ? "USDPLN" : state.ccy === "CHF" ? "USDCHF" : null; }
-    function fmt(n, d = 2) {
-      if (n == null || Number.isNaN(n)) return "—";
-      return Number(n).toLocaleString("it-IT", { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: true });
-    }
-    function money(n, d = 2) {
-      const num = fmt(n, d);
-      if (state.ccy === "PLN") return num + "\u00A0zł";
-      if (state.ccy === "CHF") return num + "\u00A0CHF";
-      if (state.ccy === "USD") return num + "\u00A0$";
-      return num + "\u00A0€";
-    }
-    function paintClock(d) {
-      const elD = document.getElementById("updD");
-      const elT = document.getElementById("updT");
-      if (!elD || !elT) return;
-      const x = d instanceof Date ? d : new Date();
-      if (Number.isNaN(x.getTime())) return;
-      elD.textContent = x.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" });
-      elT.textContent = x.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    }
-    function fmtDateTime(iso) {
-      if (!iso) return "—";
-      return new Date(iso).toLocaleString("it-IT");
-    }
-    function showErr(msg) {
-      const box = document.getElementById("errBox");
-      if (!msg) { box.style.display = "none"; box.textContent = ""; return; }
-      box.style.display = "block"; box.textContent = msg;
-    }
-    async function getJSON(url, ms = 8000) {
+    async function getJSONText(url, ms = 6000) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), ms);
       try {
         const res = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
         if (!res.ok) throw new Error("HTTP " + res.status);
-        return await res.json();
-      } finally { clearTimeout(t); }
-    }
-    async function firstOk(jobs) {
-      let last = null;
-      for (const job of jobs) { try { return await job(); } catch (e) { last = e; } }
-      throw last || new Error("nessuna fonte");
-    }
-    function sameScale(v, mid, band) {
-      if (v == null || mid == null || !(mid > 0)) return false;
-      const b = band || 0.2;
-      return v > mid * (1 - b) && v < mid * (1 + b);
-    }
-    function todayBar(daily, quote) {
-      const mid = quote?.mid;
-      const day = sessionDayKey(new Date()) + "|" + (state.ccy || "EUR");
-      if (state.sessionDay !== day) {
-        state.sessionDay = day;
-        state.sessionCcy = state.ccy;
-        state.sessionHigh = mid ?? null;
-        state.sessionLow = mid ?? null;
-        state.sessionOpen = mid ?? null;
-      }
-      const pool = []
-        .concat(daily || [])
-        .concat(state.intraday || []);
-      const bars = pool.filter(b => {
-        const t0 = new Date(b.openTime || b.time || 0);
-        return !Number.isNaN(t0.getTime()) && sessionDayKey(t0) === sessionDayKey(new Date());
-      });
-      let high = mid, low = mid;
-      bars.forEach(b => {
-        if (sameScale(b.high, mid, 0.18)) high = Math.max(high, b.high);
-        if (sameScale(b.low, mid, 0.18)) low = Math.min(low, b.low);
-        if (sameScale(b.close, mid, 0.18)) {
-          high = Math.max(high, b.close);
-          low = Math.min(low, b.close);
-        }
-      });
-      if (sameScale(quote?.high, mid, 0.18)) high = Math.max(high, quote.high);
-      if (sameScale(quote?.low, mid, 0.18)) low = Math.min(low, quote.low);
-      if (sameScale(state.sessionHigh, mid, 0.18)) high = Math.max(high, state.sessionHigh);
-      if (sameScale(state.sessionLow, mid, 0.18)) low = Math.min(low, state.sessionLow);
-      const openPx = bars.find(b => sameScale(b.open, mid, 0.18))?.open
-        || state.sessionOpen
-        || mid;
-      if (state.sessionOpen == null && openPx) state.sessionOpen = openPx;
-      state.sessionHigh = high;
-      state.sessionLow = low;
-      return { open: openPx, high, low, price: mid };
-    }
-    function parseApartCatalog(text) {
-      const rows = [];
-      const push = (name, url, raw) => {
-        const price = Number(String(raw).replace(/[^\d]/g, ""));
-        if (!(price > 12000 && price < 40000)) return;
-        const n = String(name || "").replace(/\s+/g, " ").replace(/\*+/g, "").trim();
-        if (!/1\s*oz/i.test(n)) return;
-        rows.push({ name: n, url: url || APART_LIST_URL, price });
-      };
-      const reMd = /\[([^\]]{8,120})\]\((https:\/\/mennica\.apart\.pl\/produkt\/[^)]+)\)[\s\S]{0,500}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
-      let m;
-      while ((m = reMd.exec(text))) push(m[1], m[2], m[3]);
-      const reHtml = />([^<]{8,140}1\s*oz[^<]{0,80})<[\s\S]{0,700}?(\d[\d\s\u00a0.]{3,10})\s*(?:zł|PLN)/gi;
-      while ((m = reHtml.exec(text))) push(m[1], APART_LIST_URL, m[2]);
-      const reLine = /([A-Za-zÀ-ÿ0-9][^|\n]{6,80}1\s*oz[^|\n]{0,40}).{0,40}?(\d{2}\s?\d{3})\s*(?:zł|PLN)/gi;
-      while ((m = reLine.exec(text))) push(m[1], APART_LIST_URL, m[2]);
-      const uniq = [], seen = new Set();
-      for (const r of rows) {
-        const k = r.name.toLowerCase();
-        if (seen.has(k)) continue;
-        seen.add(k);
-        uniq.push(r);
-      }
-      return uniq.sort((a, b) => a.price - b.price);
-    }
-    async function getJSONText(url) {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), 12000);
-      try {
-        const res = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
         return await res.text();
       } finally { clearTimeout(t); }
-    }
-    async function fetchApartCatalog() {
-      const encoded = encodeURIComponent(APART_LIST_URL);
-      const proxies = [
-        "https://r.jina.ai/" + APART_LIST_URL,
-        "https://r.jina.ai/http://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h",
-        "https://api.allorigins.win/raw?url=" + encoded,
-        "https://corsproxy.io/?" + APART_LIST_URL
-      ];
-      for (const url of proxies) {
-        try {
-          const text = await getJSONText(url);
-          const list = parseApartCatalog(text);
-          if (list.length >= 5) return list;
-        } catch (e) {}
-      }
-      return null;
-    }
-    async function refreshApart() { return; }
-    async function refreshApartRemoved() {
-      const btn = document.getElementById("apartBtn");
-      btn.disabled = true;
-      btn.textContent = "Leggo Apart…";
-      try {
-        const list = await fetchApartCatalog();
-        if (list && list.length) {
-          state.apartList = list;
-          state.apartLive = true;
-          state.apartSource = "sito live " + new Date().toLocaleTimeString("it-IT");
-        } else {
-          state.apartList = APART;
-          state.apartLive = false;
-          state.apartSource = "riserva 01/09/2026 15:05 — Apart blocca i proxy dal file locale";
-        }
-        renderApart();
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Aggiorna listino Apart";
-      }
-    }
-    async function loadQuote() {
-      const q = await firstOk([loadQuoteBiquote, loadQuoteFallback]);
-      applyQuote(q);
-      document.getElementById("iosHint").style.display = "none";
-      try { await loadMetals(); } catch (e) {}
-      renderApart();
-    }
-    async function loadQuoteBiquote() {
-      const gold = await getJSON(`${API}/${goldSymbol()}`);
-      const epln = await getJSON(`${API}/EURPLN`);
-      const xauUsdQ = await getJSON(`${API}/XAUUSD`);
-      const eurUsdQ = await getJSON(`${API}/EURUSD`);
-      let eurChfQ = { mid: null };
-      try { eurChfQ = await getJSON(`${API}/EURCHF`); } catch (e) {}
-      let eurJpyQ = { mid: null };
-      try { eurJpyQ = await getJSON(`${API}/EURJPY`); } catch (e) {}
-      const fxName = fxSymbol();
-      let q;
-      if (!fxName) q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent };
-      else {
-        const fx = await getJSON(`${API}/${fxName}`);
-        q = {
-          mid: gold.mid * fx.mid, high: gold.high * fx.high, low: gold.low * fx.low,
-          marketState: gold.marketState, stale: gold.stale || fx.stale,
-          lastQuoteAt: gold.lastQuoteAt || gold.timestamp, timestamp: gold.timestamp,
-          symbol: "XAUPLN", dayDiffPercent: gold.dayDiffPercent,
-          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent,
-        };
-      }
-      const closed = (state.daily || []).filter(b => !b.isOpen);
-      if (closed.length >= 1) {
-        const prev = closed[closed.length - 1].close;
-        q.dayDiffPercent = ((q.mid - prev) / prev) * 100;
-      }
-      const day = sessionDayKey(new Date());
-      const todayBars = (state.daily || []).filter(b => {
-        const t0 = new Date(b.openTime || b.time || 0);
-        return !Number.isNaN(t0.getTime()) && sessionDayKey(t0) === day;
-      });
-      if (todayBars.length) {
-        const th = Math.max(...todayBars.map(b => b.high || q.mid), q.mid);
-        const tl = Math.min(...todayBars.map(b => b.low || q.mid), q.mid);
-        q.high = Math.max(q.high || q.mid, th);
-        q.low = Math.min(q.low || q.mid, tl);
-      } else {
-        q.high = q.mid;
-        q.low = q.mid;
-      }
-      return q;
-    }
-    async function loadQuoteFallback() {
-      const [eur, usd, fx] = await Promise.all([
-        getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-EUR-SPOT"),
-        getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT"),
-        getJSON("https://api.frankfurter.app/latest?from=EUR&to=PLN,USD,CHF"),
-      ]);
-      const xauEur = Number(eur.symbols[0].price);
-      const xauUsd = Number(usd.symbols[0].price);
-      const eurpln = Number(fx.rates.PLN);
-      const eurusd = Number(fx.rates.USD);
-      const ts = eur.symbols[0].computed_at;
-      const mid = state.ccy === "PLN" ? xauEur * eurpln : state.ccy === "USD" ? xauUsd : state.ccy === "CHF" ? xauEur * Number(fx.rates.CHF || 0) : xauEur;
-      return {
-        mid, high: mid, low: mid, marketState: "open", stale: false,
-        lastQuoteAt: ts, timestamp: ts,
-        symbol: state.ccy === "PLN" ? "XAUPLN" : state.ccy === "USD" ? "XAUUSD" : state.ccy === "CHF" ? "XAUCHF" : "XAUEUR",
-        dayDiffPercent: 0, eurpln, xauusd: xauUsd, eurusd, eurchf: Number(fx.rates.CHF || 0),
-      };
-    }
-    async function loadOhlc(symbol, interval, limit) {
-      const data = await getJSON(`${API}/${symbol}/ohlc?interval=${interval}&limit=${limit}`);
-      return data.bars || [];
     }
     function toneEl(el, cur, prev) {
       if (!el) return;
@@ -2174,16 +1941,10 @@
     }
     async function fetchTvSymbol(sym) {
       const url = "https://scanner.tradingview.com/symbol?symbol=" + encodeURIComponent(sym) + "&fields=close,change,change_abs";
-      const tries = [
-        url,
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
-        "https://api.allorigins.win/get?url=" + encodeURIComponent(url),
-        "https://corsproxy.io/?" + encodeURIComponent(url),
-        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url)
-      ];
+      const tries = [url, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)];
       for (const u of tries) {
         try {
-          const raw = await getJSONText(u);
+          const raw = await getJSONText(u, 4000);
           const q = parseTvQuote(raw);
           if (q) return q;
         } catch (e) {}
@@ -2193,7 +1954,7 @@
     async function fetchYahooQuote(sym) {
       const url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
       const url2 = "https://query2.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
-      const tries = [url, url2, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + encodeURIComponent(url)];
+      const tries = [url, url2, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)];
       for (const u of tries) {
         try {
           const raw = await getJSONText(u);
@@ -2215,50 +1976,6 @@
       }
       return null;
     }
-    async function fetchAnyQuote(tvSym, yahooSym) {
-      const tv = await fetchTvSymbol(tvSym);
-      if (tv) return tv;
-      if (yahooSym) return await fetchYahooQuote(yahooSym);
-      return null;
-    }
-    function paintIndex(id, px, chg) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (!(px > 0)) { el.textContent = "—"; return; }
-      const d = Number(chg);
-      const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
-      const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
-      const dec = px >= 1000 ? 2 : 2;
-      el.classList.remove("up", "down");
-      el.style.color = "";
-      el.innerHTML = fmt(px, dec) + '<span class="' + cls + '" style="display:block;font-size:.72em;margin-top:2px;white-space:nowrap">' + pct + "</span>";
-    }
-    function cacheQuote(key, q) {
-      if (!q || !(q.close > 0)) return;
-      try {
-        const bag = JSON.parse(localStorage.getItem("oroTv") || "{}");
-        bag[key] = q;
-        localStorage.setItem("oroTv", JSON.stringify(bag));
-      } catch (e) {}
-    }
-    function cachedQuote(key) {
-      try {
-        const bag = JSON.parse(localStorage.getItem("oroTv") || "{}");
-        return bag[key] || null;
-      } catch (e) { return null; }
-    }
-    function pctFromPrev(live, prev, fallback) {
-      if (live > 0 && prev > 0) return ((live - prev) / prev) * 100;
-      const f = Number(fallback);
-      return Number.isFinite(f) ? f : null;
-    }
-    async function loadBqQuote(symbol) {
-      const q = await getJSON(API + "/" + symbol).catch(() => null);
-      if (!q) return null;
-      const close = Number(q.mid || ((Number(q.bid) + Number(q.ask)) / 2));
-      if (!(close > 0)) return null;
-      return { close, change: Number(q.dayDiffPercent) };
-    }
     async function fetchTextLong(url) {
       const tries = [
         url,
@@ -2278,66 +1995,6 @@
         } catch (e) {}
       }
       return "";
-    }
-    async function fetchUsCurve() {
-      const url = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv";
-      const txt = await fetchTextLong(url);
-      if (!txt || txt.indexOf("10 Yr") < 0) return {};
-      const rows = txt.split(/\n/).map(l => l.trim()).filter(l => /^\d{2}\/\d{2}\/\d{4},/.test(l));
-      if (!rows.length) return {};
-      function pick(line) {
-        const c = line.split(",");
-        return { y2: Number(c[8]), y10: Number(c[12]), y30: Number(c[14]) };
-      }
-      const a = pick(rows[0]);
-      const b = rows[1] ? pick(rows[1]) : a;
-      function pack(cur, prev) {
-        if (!(cur > 0)) return null;
-        const prevUse = (prev > 0 && Math.abs(prev - cur) > 1e-8) ? prev : null;
-        const change = prevUse > 0 ? ((cur - prevUse) / prevUse) * 100 : 0;
-        return { close: cur, prev: prevUse, change };
-      }
-      return { ust2: pack(a.y2, b.y2), ust10: pack(a.y10, b.y10), ust30: pack(a.y30, b.y30) };
-    }
-
-    async function fetchTvPage(path, kind) {
-      const url = "https://www.tradingview.com/symbols/" + path;
-      const txt = await fetchTextLong(url);
-      if (!txt) return null;
-      if (kind === "yield") {
-        const m = txt.match(/current yield rate is ([0-9.]+)%/i);
-        if (!m) return null;
-        return { close: Number(m[1]), change: 0 };
-      }
-      const m = txt.match(/current price of Dutch TTF[^0-9]{0,40}([0-9]+(?:\.[0-9]+)?)/i);
-      if (!m) return null;
-      let chg = 0;
-      const up = txt.match(/it has risen ([0-9]+(?:\.[0-9]+)?)%/i);
-      const dn = txt.match(/it has fallen ([0-9]+(?:\.[0-9]+)?)%/i);
-      if (up) chg = Number(up[1]);
-      if (dn) chg = -Number(dn[1]);
-      return { close: Number(m[1]), change: chg };
-    }
-    async function fetchGoogleQuote(symbol) {
-      const url = "https://www.google.com/finance/quote/" + symbol;
-      const txt = await fetchTextLong(url);
-      if (!txt) return null;
-      let m = txt.match(/data-last-price="([0-9.]+)"/);
-      if (!m) m = txt.match(/class="YMlKec[^"]*">\s*([0-9][0-9.,]*)/);
-      if (!m) {
-        const fmt = txt.match(/>([0-9]{1,3}(?:,[0-9]{3})+\.\d{1,4})</);
-        if (fmt) m = [null, fmt[1].replace(/,/g, "")];
-      }
-      if (!m) {
-        const raw = txt.match(/(?:^|[^0-9])((?:3941|3\.37)\d*\.\d+)/);
-        if (raw) m = [null, raw[1]];
-      }
-      const close = m ? Number(String(m[1]).replace(/,/g, "")) : NaN;
-      if (!(close > 0)) return null;
-      let chg = 0;
-      const p = txt.match(/data-last-change="([+\-0-9.]+)"/) || txt.match(/([+\-][0-9]+[.,][0-9]+)%/);
-      if (p) chg = Number(String(p[1]).replace(",", "."));
-      return { close, change: chg };
     }
     async function fetchInvestingTtf() {
       const pages = [
@@ -2376,71 +2033,6 @@
       else s = s.replace(",", ".");
       return Number(s);
     }
-    async function fetchInvestingYield(slug) {
-      const pages = [
-        "https://it.investing.com/rates-bonds/" + slug,
-        "https://www.investing.com/rates-bonds/" + slug
-      ];
-      for (const page of pages) {
-        const txt = await fetchTextLong(page);
-        if (!txt || txt.length < 200) continue;
-        let last = null, chg = null, prev = null;
-        let m = txt.match(/data-test="instrument-price-last"[^>]*>\s*([0-9][0-9.,]*)/);
-        if (m) last = parseInvNum(m[1]);
-        if (!(last > 0)) {
-          m = txt.match(/instrument-price-last[^>]*>\s*([0-9]+[.,][0-9]+)/);
-          if (m) last = parseInvNum(m[1]);
-        }
-        const pc = txt.match(/previous close of ([0-9][0-9.,]+)/i) || txt.match(/Prev\.?\s*Close[:\s]*([0-9][0-9.,]+)/i);
-        if (pc) prev = parseInvNum(pc[1]);
-        const cp = txt.match(/data-test="instrument-price-change-percent"[^>]*>\s*\(?([+\-]?[0-9][0-9.,]*)%/)
-          || txt.match(/\(([+\-][0-9]+[.,][0-9]+)%\)/);
-        if (cp) chg = parseInvNum(cp[1]);
-        if (last > 0 && prev > 0) chg = ((last - prev) / prev) * 100;
-        if (last > 0.4 && last < 15) return { close: last, change: chg };
-      }
-      return null;
-    }
-    async function fetchFredSeries(id) {
-      const url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=" + encodeURIComponent(id);
-      const txt = await fetchTextLong(url);
-      if (!txt || txt.indexOf(",") < 0) return null;
-      const vals = [];
-      txt.split(/\n/).forEach(l => {
-        const p = l.trim().split(",");
-        if (p.length < 2) return;
-        const v = Number(p[1]);
-        if (v > 0) vals.push(v);
-      });
-      if (!vals.length) return null;
-      const close = vals[vals.length - 1];
-      let prev = null;
-      for (let i = vals.length - 2; i >= 0; i--) {
-        if (Math.abs(vals[i] - close) > 1e-8) { prev = vals[i]; break; }
-      }
-      return { close, prev, change: prev > 0 ? ((close - prev) / prev) * 100 : 0 };
-    }
-    async function fetchEcbDe10() {
-      const urls = [
-        "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y?lastNObservations=8&format=csvdata"
-      ];
-      for (const url of urls) {
-        const txt = await fetchTextLong(url);
-        if (!txt) continue;
-        const nums = [];
-        txt.split(/\n/).forEach(l => {
-          const c = l.split(",");
-          const v = Number(String(c[c.length-1] || "").replace(/"/g,""));
-          if (v > 0 && v < 20) nums.push(v);
-        });
-        if (nums.length) {
-          const close = nums[nums.length - 1];
-          const prev = nums.length > 1 ? nums[nums.length - 2] : null;
-          return { close, change: prev > 0 ? ((close - prev) / prev) * 100 : 0 };
-        }
-      }
-      return fetchFredSeries("IRLTLT01DEM156N");
-    }
     async function loadUsTreasuries() {
       function asYld(v) {
         if (!(v > 0)) return null;
@@ -2472,126 +2064,6 @@
         }
         if (close > 0) paintYield(it.id, close, change);
       }));
-    }
-    async function fetchDxFeed(symbols) {
-      const list = [].concat(symbols);
-      const q = "events=Trade,Summary&timeout=4&symbols=" + encodeURIComponent(list.join(","));
-      const urls = [
-        "https://demo.dxfeed.com/webservice/rest/events.json?" + q,
-        "https://tools.dxfeed.com/webservice/rest/events.json?" + q
-      ];
-      for (const u of urls) {
-        try {
-          const raw = await getJSONText(u);
-          if (!raw || raw.indexOf("Trade") < 0) continue;
-          const j = JSON.parse(raw);
-          const out = {};
-          const trades = j.Trade || {};
-          const sums = j.Summary || {};
-          Object.keys(trades).forEach(sym => {
-            const tr = trades[sym] || {};
-            const sm = sums[sym] || {};
-            const close = Number(tr.price);
-            if (!(close > 0)) return;
-            const prev = Number(sm.prevDayClosePrice);
-            const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(tr.change);
-            out[sym] = { close, change, prev };
-          });
-          if (Object.keys(out).length) return out;
-        } catch (e) {}
-      }
-      return {};
-    }
-    async function fetchTwelveQuote(symbol) {
-      const key = (localStorage.getItem("TWELVEDATA_API_KEY") || "demo");
-      const url = "https://api.twelvedata.com/quote?symbol=" + encodeURIComponent(symbol) + "&apikey=" + encodeURIComponent(key);
-      try {
-        const raw = await getJSONText(url);
-        if (!raw || raw.indexOf("percent_change") < 0) return null;
-        const j = JSON.parse(raw);
-        const close = Number(j.close || j.price);
-        const prev = Number(j.previous_close);
-        if (!(close > 0)) return null;
-        const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(j.percent_change);
-        return { close, change };
-      } catch (e) { return null; }
-    }
-    async function loadIndices() {
-      const pairs = [
-        ["idxDji", "US30", "TVC:DJI", "^DJI"],
-        ["idxSpx", "US500", "SP:SPX", "^GSPC"],
-        ["idxIxic", "USTEC", "NASDAQ:IXIC", "^IXIC"],
-        ["idxDax", "DE30", "XETR:DAX", "^GDAXI"],
-        ["idxNky", "JP225", "TVC:NI225", "^N225"],
-        ["idxSsec", null, "SSE:000001", "000001.SS"]
-      ];
-      const dxMap = {
-        idxDji: ["$DJI", "INDU", "DJI"],
-        idxSpx: ["SPX"],
-        idxIxic: ["$COMPQ", "NDX", "COMPQ"],
-        idxDax: ["DAX", "GDAXI"],
-        idxNky: ["N225", "NKY"],
-        idxSsec: ["SSEC", "SHCOMP"]
-      };
-      let dx = {};
-      try { dx = await fetchDxFeed(["SPX","$DJI","INDU","$COMPQ","NDX","DAX","GDAXI","N225","NKY","SSEC"]); } catch (e) {}
-      const tdMap = {
-        idxDji: ["DJI"],
-        idxSpx: ["SPX", "GSPC"],
-        idxIxic: ["IXIC"],
-        idxDax: ["GDAXI"],
-        idxNky: ["N225"],
-        idxSsec: ["000001.SHH", "000001"]
-      };
-      await Promise.all(pairs.map(async ([id, bq, tv, y]) => {
-        let q = null;
-        const tds = tdMap[id] || [];
-        for (let i = 0; i < tds.length && !q; i++) q = await fetchTwelveQuote(tds[i]);
-        if (!q && y) q = await fetchYahooQuote(y);
-        const aliases = dxMap[id] || [];
-        for (let i = 0; i < aliases.length && !q; i++) {
-          if (dx[aliases[i]]) q = dx[aliases[i]];
-        }
-        if (!q && bq) q = await loadBqQuote(bq);
-        if (!q && tv) q = await fetchTvSymbol(tv);
-        if (!q) q = cachedQuote(id);
-        if (q) { cacheQuote(id, q); paintIndex(id, q.close, q.change); }
-      }));
-    }
-    async function loadTreasuriesUnused() {
-      const csvUrl = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv";
-      let y2 = 4.39, y10 = 4.79, y30 = 5.27, p2 = 4.34, p10 = 4.75, p30 = 5.25;
-      try {
-        const txt = await getJSONText(csvUrl).catch(() => "");
-        if (txt) {
-          const rows = txt.split(/\n/).map(l => l.trim()).filter(l => /^\d{2}\/\d{2}\/\d{4},/.test(l));
-          if (rows[0]) {
-            const c = rows[0].split(",");
-            if (Number(c[8]) > 0) y2 = Number(c[8]);
-            if (Number(c[12]) > 0) y10 = Number(c[12]);
-            if (Number(c[14]) > 0) y30 = Number(c[14]);
-          }
-          if (rows[1]) {
-            const c = rows[1].split(",");
-            if (Number(c[8]) > 0) p2 = Number(c[8]);
-            if (Number(c[12]) > 0) p10 = Number(c[12]);
-            if (Number(c[14]) > 0) p30 = Number(c[14]);
-          }
-        }
-      } catch (e) {}
-      try {
-        const [l2, l10, l30] = await Promise.all([
-          yahooYield("2YY=F"),
-          yahooYield("^TNX"),
-          yahooYield("^TYX"),
-        ]);
-        if (l2 && Math.abs(l2.v - y2) < 0.12) { y2 = l2.v; if (l2.prev) p2 = l2.prev; }
-        if (l10) { y10 = l10.v; if (l10.prev) p10 = l10.prev; }
-        if (l30) { y30 = l30.v; if (l30.prev) p30 = l30.prev; }
-      } catch (e) { console.warn("treasury live", e); }
-      setPct("ust2", y2, p2);
-      setPct("ust10", y10, p10);
-      setPct("ust30", y30, p30);
     }
         document.querySelectorAll(".pair-tabs button").forEach(btn => {
       btn.addEventListener("click", async () => {
