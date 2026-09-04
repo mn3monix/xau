@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.7 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.8 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,11 +29,22 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; }
     .wrap { max-width: 1100px; margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px 40px; }
-    header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 18px; }
-    h1 { margin: 0; font-family: Manrope, Inter, sans-serif; letter-spacing: -.03em; }
-    header p { margin: 6px 0 0; color: var(--muted); font-size: .9rem; }
-    .status { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; color: var(--muted); font-size: .85rem; }
-    .status-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    header {
+      display: flex; flex-direction: column; align-items: stretch;
+      gap: 10px; margin-bottom: 10px;
+    }
+    h1 { margin: 0; font-family: Manrope, Inter, sans-serif; letter-spacing: -.03em; line-height: 1.1; }
+    header p { margin: 0; }
+    .status { display: flex; flex-direction: column; align-items: stretch; gap: 0; color: var(--muted); font-size: .85rem; }
+    .status-row { display: flex; align-items: center; gap: 8px; width: 100%; }
+    .live-pill {
+      flex: 1; min-width: 0;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 10px 14px; font: inherit; font-size: .9rem; min-height: 44px;
+    }
+    .refresh-btn { flex: 0 0 auto; }
     .live-pill .upd-d { color: var(--text); font-weight: 600; text-transform: capitalize; margin-left: 6px; }
     .live-pill .upd-t { color: var(--gold-2); font-variant-numeric: tabular-nums; font-weight: 600; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--up); box-shadow: 0 0 10px var(--up); }
@@ -46,8 +57,7 @@
       .tools details[open] .calc18,
       .tools details[open] .chart-box { min-height: 0; height: auto; }
       .tools .calc18 { max-height: none; overflow: visible; }
-      .chart-box { min-height: 380px; height: 400px; }
-      .tools .spark { min-height: 340px; height: 340px; margin-top: 4px; }
+      .price-chart .spark { width: 100%; height: auto; aspect-ratio: 3 / 2; }
     }
     .card {
       background: var(--bg-2); border: 1px solid var(--line);
@@ -76,16 +86,24 @@
       font-weight: 600; letter-spacing: .04em; min-height: 32px;
     }
 
-    .price-row { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; }
-    .px { font-size: 3.55rem; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    #priceUnit { text-align: center; }
-    .chg { font-weight: 700; padding: 8px 12px; border-radius: 10px; font-size: 1.35rem; }
+    .price-row {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 14px; text-align: center;
+    }
+    .price-row .tf-row { width: 100%; margin: 0; }
+    .px { font-size: 3.55rem; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; white-space: nowrap; line-height: 1; }
+    .chg { font-weight: 700; padding: 8px 12px; border-radius: 10px; font-size: 1.35rem; margin: 0; }
     .chg.up { color: var(--up); background: rgba(61,214,140,.12); }
     .chg.down { color: var(--down); background: rgba(255,107,107,.12); }
     .hint { color: var(--muted); font-size: .78rem; margin-top: 8px; line-height: 1.45; }
-    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; align-items: stretch; flex: 1; }
+    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; align-items: stretch; flex: 1; }
     .meta > .stat { min-height: 78px; height: 78px; }
-    .meta-split-h { grid-column: 1 / -1; height: 1px; min-height: 1px; max-height: 1px; margin: 2px 0; padding: 0; border: 0; background: rgba(212,175,55,.28); }
+    .meta-split-h {
+      grid-column: 1 / -1;
+      height: 1px; min-height: 1px; max-height: 1px;
+      margin: 6px 2px; padding: 0; border: 0;
+      background: rgba(212,175,55,.28);
+    }
     .grams, .grams.side, .grams.comm {
       display: grid;
       grid-template-rows: none;
@@ -138,12 +156,6 @@
     .stat.upd label { text-align: left; }
     .stat.upd b { text-align: right; }
     .stat.stack b { line-height: 1.28; }
-    .live-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent; color: var(--muted);
-      border: 1px solid var(--line); border-radius: 999px;
-      padding: 10px 14px; font: inherit; font-size: .9rem; min-height: 44px;
-    }
     .tv-embed { height: 62px; overflow: hidden; margin-top: 2px; }
     .tv-embed iframe { transform-origin: top left; }
     .stat.k18 {
@@ -263,7 +275,14 @@
     .tools details[open] .calc18,
     .tools details[open] .chart-box { min-height: 420px; height: 420px; }
     .tools .calc18 { overflow: auto; max-height: 420px; }
-    .chart-box { display: flex; flex-direction: column; align-items: stretch; min-height: 420px; height: 420px; }
+    .price-chart { margin: 10px 0 10px; }
+    .price-chart .tf-row { margin: 0 0 8px; }
+    .price-chart .chart-box { display: block; width: 100%; height: auto; }
+    .price-chart .spark {
+      display: block; width: 100%; height: auto;
+      aspect-ratio: 3 / 2;
+      min-height: 0;
+    }
     .spark { width: 100%; height: 85%; flex: 1 1 85%; max-height: none; min-height: 0; }
     .calc-steps { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; overflow: visible; max-height: none; }
     .calc-steps li {
@@ -278,7 +297,11 @@
     }
     .calc-steps li.tot span { font-weight: 700; }
     .calc-steps li.tot span:last-child { font-weight: 700; color: var(--text); }
-    .calc-steps li.eq { color: var(--gold-2); font-size: 1.12rem; font-weight: 700; }
+    .calc-steps li.eq {
+      color: var(--gold-2); font-size: 1.12rem; font-weight: 700;
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(212,175,55,.28);
+    }
     .calc-steps li.eq span:last-child { color: var(--gold-2); font-size: 1.38rem; font-weight: 700; }
     .tools .spark { flex: 1; width: 100%; min-height: 0; height: 100%; margin: 8px 0 0; }
     .spark {
@@ -303,8 +326,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.7</span></h1>
-        <p>Prezzi in euro, zloty e dollari — oncia, grammo 24k / 22k / 21,6k / 18k / 14k / 9k</p>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.8</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -328,9 +350,22 @@
         <div class="price-row">
           <div class="px" id="price">—</div>
           <div class="chg" id="chg">—</div>
+          <div class="tf-row" id="tfRow">
+            <button data-tf="1D" class="on">1D</button>
+            <button data-tf="7D">7D</button>
+            <button data-tf="1M">1M</button>
+            <button data-tf="6M">6M</button>
+            <button data-tf="1Y">1Y</button>
+            <button data-tf="5Y">5Y</button>
+          </div>
         </div>
-        <p class="hint" id="priceUnit" style="margin-top:6px">Oncia troy · oro 24k</p>
+        <div class="price-chart">
+          <div class="chart-box">
+            <svg class="spark" id="spark" viewBox="0 0 720 480" preserveAspectRatio="xMidYMid meet" aria-label="Grafico"></svg>
+          </div>
+        </div>
         <div class="meta">
+          <div class="meta-split-h" aria-hidden="true"></div>
           <div class="stat"><label>24K — 999,9</label><b id="g24">—</b></div>
           <div class="stat k18"><label>18K — 750</label><b id="g18">—</b></div>
           <div class="meta-split-h" aria-hidden="true"></div>
@@ -365,9 +400,6 @@
           </div>
         </details>
       </section>
-    </div>
-
-    <div class="hero tools">
       <section class="card">
         <details class="fold">
           <summary>
@@ -388,25 +420,6 @@
               <button type="button" data-act="ac" class="danger">C</button>
             </div>
             <ul class="calc-steps" id="calc18"></ul>
-          </div>
-        </details>
-      </section>
-      <section class="card">
-        <details class="fold">
-          <summary>
-            <strong class="fold-title" style="color:var(--gold-2)">Grafico</strong>
-            <span class="fold-actions"><span class="fold-btn"></span></span>
-          </summary>
-          <div class="chart-box">
-            <div class="tf-row" id="tfRow">
-              <button data-tf="1D" class="on">1D</button>
-              <button data-tf="7D">7D</button>
-              <button data-tf="1M">1M</button>
-              <button data-tf="6M">6M</button>
-              <button data-tf="1Y">1Y</button>
-              <button data-tf="5Y">5Y</button>
-            </div>
-            <svg class="spark" id="spark" viewBox="0 0 720 340" preserveAspectRatio="none" aria-label="Grafico"></svg>
           </div>
         </details>
       </section>
@@ -440,7 +453,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.7 — 2 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.8 — 4 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1467,8 +1480,11 @@
       const mid = q.mid;
       const g24 = mid / TROY_G;
       document.getElementById("price").textContent = money(mid);
-      document.getElementById("priceUnit").textContent =
-        "Oncia troy · oro puro 24k · " + (state.ccy === "PLN" ? "złoty polacchi" : state.ccy === "USD" ? "dollari USA" : state.ccy === "CHF" ? "franchi svizzeri" : "euro");
+      const unitEl = document.getElementById("priceUnit");
+      if (unitEl) {
+        unitEl.textContent =
+          "Oncia troy · oro puro 24k · " + (state.ccy === "PLN" ? "złoty polacchi" : state.ccy === "USD" ? "dollari USA" : state.ccy === "CHF" ? "franchi svizzeri" : "euro");
+      }
       const chgEl = document.getElementById("chg");
       const today = sessionDayKey(new Date());
       const prevBar = (state.daily || []).filter(b => {
@@ -1545,7 +1561,7 @@
       const pad = (max - min) * 0.04 || 1;
       min -= pad; max += pad;
       const span = max - min || 1;
-      const W = 720, H = 340, L = 8, R = 78, T = 8, B = 30;
+      const W = 720, H = 480, L = 10, R = 118, T = 16, B = 44;
       const pw = W - L - R, ph = H - T - B;
       function yx(v) { return T + (1 - (v - min) / span) * ph; }
       const n = rows.length;
@@ -1555,7 +1571,7 @@
       const gridH = yVals.map((v, i) => {
         const y = (T + i * ph / 2).toFixed(1);
         return `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" />
-          <text x="${W-R+5}" y="${Number(y)+4}" text-anchor="start" fill="#9aa0a6" font-size="14">${fmt(v, 0)}</text>`;
+          <text x="${W-R+8}" y="${Number(y)+8}" text-anchor="start" fill="#cfc6b0" font-size="26" font-weight="600">${fmt(v, 0)}</text>`;
       }).join("");
       const gridV = [0,1,2].map(i => {
         const x = (L + i * pw / 2).toFixed(1);
@@ -1577,7 +1593,7 @@
         const i = Math.round(p * (rows.length - 1));
         const x = L + p * pw;
         const anchor = idx === 0 ? "start" : idx === 2 ? "end" : "middle";
-        return `<text x="${x.toFixed(1)}" y="${T+ph+22}" text-anchor="${anchor}" fill="#9aa0a6" font-size="14">${labTime(rows[i])}</text>`;
+        return `<text x="${x.toFixed(1)}" y="${T+ph+32}" text-anchor="${anchor}" fill="#cfc6b0" font-size="24" font-weight="600">${labTime(rows[i])}</text>`;
       }).join("");
       const candles = rows.map((b, i) => {
         const o = Number(b.open || b.close);
@@ -1594,13 +1610,13 @@
           <rect x="${(x-cw/2).toFixed(1)}" y="${y1.toFixed(1)}" width="${cw.toFixed(1)}" height="${bh.toFixed(1)}" fill="${col}" stroke="${col}"/>`;
       }).join("");
       const last = Number((state.quote && state.quote.mid) || rows[rows.length - 1].close);
-      const ly = Math.max(T + 10, Math.min(T + ph - 10, yx(last)));
+      const ly = Math.max(T + 16, Math.min(T + ph - 16, yx(last)));
       const lastUp = last >= Number(rows[0] && rows[0].open || last);
       const lastCol = lastUp ? "#3dd68c" : "#ff6b6b";
       const lastMark = Number.isFinite(last) && last > 0 ? `
         <line x1="${L}" y1="${ly.toFixed(1)}" x2="${W-R}" y2="${ly.toFixed(1)}" stroke="${lastCol}" stroke-width="1.15" stroke-dasharray="4 3" opacity="0.9"/>
-        <rect x="${W-R+3}" y="${(ly-11).toFixed(1)}" width="72" height="20" rx="4" fill="${lastCol}"/>
-        <text x="${W-R+39}" y="${(ly+4).toFixed(1)}" text-anchor="middle" fill="#0b0c0e" font-size="13" font-weight="700">${fmt(last, 0)}</text>` : "";
+        <rect x="${W-R+4}" y="${(ly-16).toFixed(1)}" width="110" height="32" rx="6" fill="${lastCol}"/>
+        <text x="${W-R+59}" y="${(ly+6).toFixed(1)}" text-anchor="middle" fill="#0b0c0e" font-size="22" font-weight="700">${fmt(last, 0)}</text>` : "";
       svg.innerHTML = `<g stroke="rgba(212,175,55,.22)" stroke-width="0.7">${gridH}${gridV}</g>
         <rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="none" stroke="rgba(212,175,55,.35)" stroke-width="0.8" />
         ${candles}
@@ -2582,8 +2598,7 @@
       e.stopPropagation();
       if (btn.dataset.act === "ac") { el.value = ""; renderCalc18(state.g24); el.focus(); return; }
       if (btn.dataset.act === "del") {
-        el.value = el.value.replace(/[+\-*/×÷−]?[\d.,]*$/, "") ;
-        if (!el.value) el.value = "";
+        el.value = el.value.slice(0, -1);
         renderCalc18(state.g24); el.focus(); return;
       }
       const op = btn.dataset.op;
