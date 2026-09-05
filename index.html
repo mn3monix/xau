@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.29 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.30 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -335,7 +335,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.29</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.30</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -474,7 +474,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.29 — 6 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.30 — 6 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -483,48 +483,22 @@
     const TROY_G = 31.1034768;
     const APART_LIST_URL = "https://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h";
     const COINS = [
-      { name: "Mezza sterlina", karat: "22K — 916,7", gross: 3.99403, fine: 3.66119, cc: "UK" },
-      { name: "Sterlina (Sovereign)", karat: "22K — 916,7", gross: 7.98805, fine: 7.32238, cc: "UK" },
-      { name: "2 Pounds", karat: "22K — 916,7", gross: 15.97610, fine: 14.64476, cc: "UK" },
-      { name: "5 Pounds", karat: "22K — 916,7", gross: 39.94025, fine: 36.61190, cc: "UK" },
-      { name: "Britannia 1 oz", karat: "24K — 999,9", gross: 31.21000, fine: 31.10350, cc: "UK" },
-      { name: "10 Lire", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "IT" },
-      { name: "20 Lire (Marengo)", karat: "21,6K — 900", gross: 6.45161, fine: 5.80645, cc: "IT" },
-      { name: "40 Lire", karat: "21,6K — 900", gross: 12.90322, fine: 11.61290, cc: "IT" },
-      { name: "80 Lire", karat: "21,6K — 900", gross: 25.80644, fine: 23.22580, cc: "IT" },
-      { name: "100 Lire", karat: "21,6K — 900", gross: 32.25805, fine: 29.03225, cc: "IT" },
-      { name: "50 Franchi (Francia)", karat: "21,6K — 900", gross: 16.12903, fine: 14.51612, cc: "FR" },
-      { name: "100 Franchi (Francia)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "FR" },
-      { name: "10 Pesetas (Spagna)", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "ES" },
-      { name: "25 Pesetas (Spagna)", karat: "21,6K — 900", gross: 8.06451, fine: 7.25806, cc: "ES" },
-      { name: "100 Pesetas (Spagna)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "ES" },
-      { name: "5 Rubli (Russia)", karat: "21,6K — 900", gross: 4.30128, fine: 3.87115, cc: "RU" },
-      { name: "7,5 Rubli (Russia)", karat: "21,6K — 900", gross: 6.45200, fine: 5.80680, cc: "RU" },
-      { name: "10 Rubli (Russia)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
-      { name: "15 Rubli (Russia)", karat: "21,6K — 900", gross: 12.90390, fine: 11.61351, cc: "RU" },
-      { name: "Chervonetz 10 Rubli (URSS)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
-      { name: "10 Gulden (Olanda)", karat: "21,6K — 900", gross: 6.72900, fine: 6.05610, cc: "NL" },
-      { name: "10 Marchi", karat: "21,6K — 900", gross: 3.98250, fine: 3.58425, cc: "DE" },
-      { name: "20 Marchi", karat: "21,6K — 900", gross: 7.96500, fine: 7.16850, cc: "DE" },
       { name: "1 Ducato (Austria)", karat: "23,6K — 986", gross: 3.49090, fine: 3.44203, cc: "AT" },
       { name: "4 Ducati (Austria)", karat: "23,6K — 986", gross: 13.96360, fine: 13.76811, cc: "AT" },
       { name: "10 Corone (Austria)", karat: "21,6K — 900", gross: 3.38753, fine: 3.04878, cc: "AT" },
       { name: "20 Corone (Austria)", karat: "21,6K — 900", gross: 6.77506, fine: 6.09755, cc: "AT" },
       { name: "100 Corone (Austria)", karat: "21,6K — 900", gross: 33.87530, fine: 30.48780, cc: "AT" },
       { name: "Filarmonica di Vienna 1 oz", karat: "24K — 999,9", gross: 31.10300, fine: 31.10300, cc: "AT" },
-      { name: "2,5 Dollari USA (Quarter Eagle)", karat: "21,6K — 900", gross: 4.17900, fine: 3.76110, cc: "US" },
-      { name: "5 Dollari USA (Half Eagle)", karat: "21,6K — 900", gross: 8.35900, fine: 7.52310, cc: "US" },
-      { name: "10 Dollari USA (Eagle)", karat: "21,6K — 900", gross: 16.71800, fine: 15.04620, cc: "US" },
-      { name: "20 Dollari USA (Double Eagle)", karat: "21,6K — 900", gross: 33.43600, fine: 30.09260, cc: "US" },
-      { name: "25 Dollari USA (Eagle 1/2 oz)", karat: "22K — 916,7", gross: 16.96600, fine: 15.55170, cc: "US" },
-      { name: "50 Dollari USA (Eagle 1 oz)", karat: "22K — 916,7", gross: 33.93100, fine: 31.10350, cc: "US" },
       { name: "100 Pesos (Cile)", karat: "21,6K — 900", gross: 20.33970, fine: 18.30573, cc: "CL" },
-      { name: "50 Soles (Perù)", karat: "21,6K — 900", gross: 23.40560, fine: 21.06504, cc: "PE" },
-      { name: "100 Soles (Perù)", karat: "21,6K — 900", gross: 46.80710, fine: 42.12639, cc: "PE" },
-      { name: "Krugerrand 1/10 oz", karat: "22K — 916,7", gross: 3.39300, fine: 3.11035, cc: "ZA" },
-      { name: "Krugerrand 1/4 oz", karat: "22K — 916,7", gross: 8.48250, fine: 7.77587, cc: "ZA" },
-      { name: "Krugerrand 1/2 oz", karat: "22K — 916,7", gross: 16.96500, fine: 15.55175, cc: "ZA" },
-      { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA" },
+      { name: "50 Franchi (Francia)", karat: "21,6K — 900", gross: 16.12903, fine: 14.51612, cc: "FR" },
+      { name: "100 Franchi (Francia)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "FR" },
+      { name: "10 Marchi", karat: "21,6K — 900", gross: 3.98250, fine: 3.58425, cc: "DE" },
+      { name: "20 Marchi", karat: "21,6K — 900", gross: 7.96500, fine: 7.16850, cc: "DE" },
+      { name: "10 Lire", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "IT" },
+      { name: "20 Lire (Marengo)", karat: "21,6K — 900", gross: 6.45161, fine: 5.80645, cc: "IT" },
+      { name: "40 Lire", karat: "21,6K — 900", gross: 12.90322, fine: 11.61290, cc: "IT" },
+      { name: "80 Lire", karat: "21,6K — 900", gross: 25.80644, fine: 23.22580, cc: "IT" },
+      { name: "100 Lire", karat: "21,6K — 900", gross: 32.25805, fine: 29.03225, cc: "IT" },
       { name: "2 Pesos (Messico)", karat: "21,6K — 900", gross: 1.66660, fine: 1.50000, cc: "MX" },
       { name: "2,5 Pesos (Messico)", karat: "21,6K — 900", gross: 2.08330, fine: 1.87500, cc: "MX" },
       { name: "5 Pesos (Messico)", karat: "21,6K — 900", gross: 4.16660, fine: 3.75000, cc: "MX" },
@@ -532,6 +506,32 @@
       { name: "20 Pesos (Messico)", karat: "21,6K — 900", gross: 16.66660, fine: 15.00000, cc: "MX" },
       { name: "50 Pesos (Messico)", karat: "21,6K — 900", gross: 41.66660, fine: 37.50000, cc: "MX" },
       { name: "Libertad 1 oz (Messico)", karat: "24K — 999", gross: 31.10300, fine: 31.10300, cc: "MX" },
+      { name: "10 Gulden (Olanda)", karat: "21,6K — 900", gross: 6.72900, fine: 6.05610, cc: "NL" },
+      { name: "50 Soles (Perù)", karat: "21,6K — 900", gross: 23.40560, fine: 21.06504, cc: "PE" },
+      { name: "100 Soles (Perù)", karat: "21,6K — 900", gross: 46.80710, fine: 42.12639, cc: "PE" },
+      { name: "Mezza sterlina", karat: "22K — 916,7", gross: 3.99403, fine: 3.66119, cc: "UK" },
+      { name: "Sterlina (Sovereign)", karat: "22K — 916,7", gross: 7.98805, fine: 7.32238, cc: "UK" },
+      { name: "2 Pounds", karat: "22K — 916,7", gross: 15.97610, fine: 14.64476, cc: "UK" },
+      { name: "5 Pounds", karat: "22K — 916,7", gross: 39.94025, fine: 36.61190, cc: "UK" },
+      { name: "Britannia 1 oz", karat: "24K — 999,9", gross: 31.21000, fine: 31.10350, cc: "UK" },
+      { name: "5 Rubli (Russia)", karat: "21,6K — 900", gross: 4.30128, fine: 3.87115, cc: "RU" },
+      { name: "7,5 Rubli (Russia)", karat: "21,6K — 900", gross: 6.45200, fine: 5.80680, cc: "RU" },
+      { name: "10 Rubli (Russia)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
+      { name: "15 Rubli (Russia)", karat: "21,6K — 900", gross: 12.90390, fine: 11.61351, cc: "RU" },
+      { name: "Chervonetz 10 Rubli (URSS)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
+      { name: "10 Pesetas (Spagna)", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "ES" },
+      { name: "25 Pesetas (Spagna)", karat: "21,6K — 900", gross: 8.06451, fine: 7.25806, cc: "ES" },
+      { name: "100 Pesetas (Spagna)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "ES" },
+      { name: "2,5 Dollari USA (Quarter Eagle)", karat: "21,6K — 900", gross: 4.17900, fine: 3.76110, cc: "US" },
+      { name: "5 Dollari USA (Half Eagle)", karat: "21,6K — 900", gross: 8.35900, fine: 7.52310, cc: "US" },
+      { name: "10 Dollari USA (Eagle)", karat: "21,6K — 900", gross: 16.71800, fine: 15.04620, cc: "US" },
+      { name: "20 Dollari USA (Double Eagle)", karat: "21,6K — 900", gross: 33.43600, fine: 30.09260, cc: "US" },
+      { name: "25 Dollari USA (Eagle 1/2 oz)", karat: "22K — 916,7", gross: 16.96600, fine: 15.55170, cc: "US" },
+      { name: "50 Dollari USA (Eagle 1 oz)", karat: "22K — 916,7", gross: 33.93100, fine: 31.10350, cc: "US" },
+      { name: "Krugerrand 1/10 oz", karat: "22K — 916,7", gross: 3.39300, fine: 3.11035, cc: "ZA" },
+      { name: "Krugerrand 1/4 oz", karat: "22K — 916,7", gross: 8.48250, fine: 7.77587, cc: "ZA" },
+      { name: "Krugerrand 1/2 oz", karat: "22K — 916,7", gross: 16.96500, fine: 15.55175, cc: "ZA" },
+      { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA" },
     ];
     const K22 = 22 / 24;
     const K216 = 21.6 / 24;
