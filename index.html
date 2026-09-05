@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.18 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.19 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -335,7 +335,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.18</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.19</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -474,7 +474,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.18 — 5 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.19 — 5 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1600,9 +1600,8 @@
       const nAll = all.length;
       let ia = 0, ib = nAll;
       if (state.cv) {
-        ia = Math.max(0, Math.min(nAll - 2, state.cv.a | 0));
-        ib = Math.max(ia + 2, Math.min(nAll, state.cv.b | 0));
-        state.cv = { a: ia, b: ib };
+        ia = Math.max(0, Math.min(nAll - 2, Math.floor(state.cv.a)));
+        ib = Math.max(ia + 2, Math.min(nAll, Math.ceil(state.cv.b)));
       }
       const rows = all.slice(ia, ib);
       const highs = rows.map(b => Number(b.high || Math.max(b.open||0, b.close||0)));
@@ -2141,71 +2140,82 @@
       const el = document.querySelector(".price-chart .chart-box") || document.getElementById("spark");
       if (!el || el._cvBound) return;
       el._cvBound = true;
+      el.style.touchAction = "none";
+      el.style.webkitUserSelect = "none";
       let t0 = null, moved = false, lastTap = 0, raf = 0;
       function allN() { return (state.intraday || []).filter(b => Number(b.close) > 0 || Number(b.open) > 0).length; }
       function win() {
         const n = allN();
-        return state.cv ? { a: state.cv.a, b: state.cv.b, n } : { a: 0, b: n, n };
+        if (state.cv) return { a: state.cv.a, b: state.cv.b, n };
+        return { a: 0, b: n, n };
       }
       function apply(a, b) {
         const n = allN();
         if (n < 2) return;
-        const minW = Math.min(12, n);
+        const minW = Math.min(8, n);
         let w = Math.max(minW, b - a);
         w = Math.min(n, w);
         a = Math.max(0, Math.min(n - w, a));
-        state.cv = (a <= 0 && a + w >= n) ? null : { a, b: a + w };
+        state.cv = (a <= 0.01 && a + w >= n - 0.01) ? null : { a, b: a + w };
         if (raf) return;
-        raf = requestAnimationFrame(() => { raf = 0; drawSpark(state.intraday); });
+        raf = requestAnimationFrame(() => { raf = 0; if (state.intraday) drawSpark(state.intraday); });
       }
       function loc(ev) {
         const r = el.getBoundingClientRect();
         const ts = ev.touches;
+        if (!ts || !ts.length) return null;
         if (ts.length >= 2) {
           const x1 = ts[0].clientX, y1 = ts[0].clientY, x2 = ts[1].clientX, y2 = ts[1].clientY;
-          return { n: 2, x: (x1 + x2) / 2 - r.left, dist: Math.hypot(x2 - x1, y2 - y1), w: r.width };
+          return { n: 2, x: (x1 + x2) / 2 - r.left, dist: Math.hypot(x2 - x1, y2 - y1), w: r.width || 1 };
         }
-        return { n: 1, x: ts[0].clientX - r.left, dist: 0, w: r.width };
+        return { n: 1, x: ts[0].clientX - r.left, dist: 0, w: r.width || 1 };
       }
-      el.addEventListener("touchstart", (e) => {
-        if (!e.touches.length) return;
+      function onStart(e) {
         const p = loc(e);
+        if (!p) return;
         const v = win();
-        t0 = { n: p.n, x: p.x, dist: p.dist, wpx: p.w, a: v.a, b: v.b, ww: v.b - v.a, nBars: v.n };
+        t0 = { n: p.n, x: p.x, dist: p.dist, wpx: p.w, a: v.a, ww: v.b - v.a };
         moved = false;
-        if (e.touches.length === 2) e.preventDefault();
-      }, { passive: false });
-      el.addEventListener("touchmove", (e) => {
-        if (!t0) return;
         e.preventDefault();
+      }
+      function onMove(e) {
+        if (!t0) return;
         const p = loc(e);
-        moved = true;
-        if (p.n === 2 && t0.dist > 10) {
-          const scale = p.dist / t0.dist;
-          const frac = Math.max(0, Math.min(1, t0.x / t0.wpx));
-          const mid = t0.a + frac * t0.ww;
+        if (!p) return;
+        e.preventDefault();
+        if (Math.abs(p.x - t0.x) > 3 || (p.n === 2 && Math.abs(p.dist - t0.dist) > 4)) moved = true;
+        if (p.n === 2 && t0.dist > 8) {
+          const scale = Math.max(0.25, Math.min(8, p.dist / t0.dist));
           const w = t0.ww / scale;
-          apply(Math.round(mid - frac * w), Math.round(mid + (1 - frac) * w));
+          const barUnder = t0.a + (t0.x / t0.wpx) * t0.ww;
+          const a = barUnder - (p.x / p.w) * w;
+          apply(a, a + w);
         } else if (p.n === 1) {
-          const shift = Math.round(-(p.x - t0.x) / t0.wpx * t0.ww);
+          const shift = -(p.x - t0.x) / t0.wpx * t0.ww;
           apply(t0.a + shift, t0.a + shift + t0.ww);
         }
-      }, { passive: false });
-      el.addEventListener("touchend", (e) => {
-        if (e.touches.length) {
+      }
+      function onEnd(e) {
+        if (e.touches && e.touches.length) {
           const p = loc(e);
           const v = win();
-          t0 = { n: p.n, x: p.x, dist: p.dist, wpx: p.w, a: v.a, b: v.b, ww: v.b - v.a, nBars: v.n };
+          if (p) t0 = { n: p.n, x: p.x, dist: p.dist, wpx: p.w, a: v.a, ww: v.b - v.a };
           return;
         }
         const now = Date.now();
-        if (!moved && now - lastTap < 300) {
+        if (!moved && now - lastTap < 320) {
           state.cv = null;
           drawSpark(state.intraday);
           lastTap = 0;
         } else if (!moved) lastTap = now;
         t0 = null;
-      }, { passive: true });
+      }
+      const opt = { passive: false };
+      el.addEventListener("touchstart", onStart, opt);
+      el.addEventListener("touchmove", onMove, opt);
+      el.addEventListener("touchend", onEnd, opt);
+      el.addEventListener("touchcancel", onEnd, opt);
+      document.addEventListener("touchmove", (e) => { if (t0) onMove(e); }, opt);
     }
 
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
