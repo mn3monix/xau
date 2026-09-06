@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.34 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.35 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -252,6 +252,32 @@
       padding: 0; height: 11px; border-bottom: none;
       background: linear-gradient(to bottom, transparent 5px, rgba(212,175,55,.28) 5px, rgba(212,175,55,.28) 6px, transparent 6px);
     }
+    button.coin-name {
+      background: none; border: 0; padding: 0; margin: 0;
+      font: inherit; font-weight: 600; color: var(--gold-2);
+      text-align: left; cursor: pointer; text-decoration: underline dotted rgba(212,175,55,.45);
+      text-underline-offset: 3px;
+    }
+    .coin-modal {
+      position: fixed; inset: 0; z-index: 80;
+      background: rgba(6,7,9,.82);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 18px 16px; gap: 10px;
+    }
+    .coin-modal[hidden] { display: none; }
+    .coin-modal-img {
+      max-width: min(92vw, 420px); max-height: 56vh;
+      border-radius: 12px; background: #111; object-fit: contain;
+    }
+    .coin-modal-name { color: var(--text); font-weight: 700; font-size: 1.05rem; text-align: center; }
+    .coin-modal-hint { color: var(--muted); font-size: .78rem; margin: 0; }
+    .coin-modal-link { color: var(--gold-2); font-size: .9rem; }
+    .coin-modal-x {
+      position: absolute; top: 12px; right: 14px;
+      width: 40px; height: 40px; border-radius: 20px;
+      border: 1px solid var(--line); background: var(--bg-2); color: var(--text);
+      font-size: 1.4rem; line-height: 1;
+    }
 
     .calc18 { display: flex; flex-direction: column; gap: 8px; }
     .calc18 label { font-size: .8rem; }
@@ -335,7 +361,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.34</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.35</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -467,6 +493,13 @@
             <tbody id="coinsBody"></tbody>
           </table>
         </div>
+        <div id="coinModal" class="coin-modal" hidden>
+          <button type="button" class="coin-modal-x" id="coinModalX" aria-label="Chiudi">×</button>
+          <div class="coin-modal-name" id="coinModalName"></div>
+          <img class="coin-modal-img" id="coinModalImg" alt="Foto moneta Numista" />
+          <p class="coin-modal-hint" id="coinModalHint">Foto da Numista</p>
+          <a class="coin-modal-link" id="coinModalLink" target="_blank" rel="noopener">Apri su Numista</a>
+        </div>
       </details>
     </section>
 
@@ -474,7 +507,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.34 — 6 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.35 — 6 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -483,69 +516,69 @@
     const TROY_G = 31.1034768;
     const APART_LIST_URL = "https://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h";
     const COINS = [
-      { name: "1 Ducato (Austria)", karat: "23,6K — 986", gross: 3.49090, fine: 3.44203, cc: "AT" },
-      { name: "4 Ducati (Austria)", karat: "23,6K — 986", gross: 13.96360, fine: 13.76811, cc: "AT" },
-      { name: "10 Corone (Austria)", karat: "21,6K — 900", gross: 3.38753, fine: 3.04878, cc: "AT" },
-      { name: "20 Corone (Austria)", karat: "21,6K — 900", gross: 6.77506, fine: 6.09755, cc: "AT" },
-      { name: "100 Corone (Austria)", karat: "21,6K — 900", gross: 33.87530, fine: 30.48780, cc: "AT" },
-      { name: "25 Schilling (Austria)", karat: "21,6K — 900", gross: 5.88100, fine: 5.29290, cc: "AT" },
-      { name: "100 Schilling (Austria)", karat: "21,6K — 900", gross: 23.52400, fine: 21.17160, cc: "AT" },
-      { name: "Filarmonica di Vienna 1 oz", karat: "24K — 999,9", gross: 31.10300, fine: 31.10300, cc: "AT" },
-      { name: "100 Pesos (Cile)", karat: "21,6K — 900", gross: 20.33970, fine: 18.30573, cc: "CL" },
-      { name: "Panda 1/20 oz (fino 2015)", karat: "24K — 999", gross: 1.55517, fine: 1.55517, cc: "CN", grp: "15" },
-      { name: "Panda 1/10 oz (fino 2015)", karat: "24K — 999", gross: 3.11035, fine: 3.11035, cc: "CN", grp: "15" },
-      { name: "Panda 1/4 oz (fino 2015)", karat: "24K — 999", gross: 7.77587, fine: 7.77587, cc: "CN", grp: "15" },
-      { name: "Panda 1/2 oz (fino 2015)", karat: "24K — 999", gross: 15.55175, fine: 15.55175, cc: "CN", grp: "15" },
-      { name: "Panda 1 oz (fino 2015)", karat: "24K — 999", gross: 31.10350, fine: 31.10350, cc: "CN", grp: "15" },
-      { name: "Panda 1 g (dal 2016)", karat: "24K — 999", gross: 1.00000, fine: 1.00000, cc: "CN", grp: "16" },
-      { name: "Panda 3 g (dal 2016)", karat: "24K — 999", gross: 3.00000, fine: 3.00000, cc: "CN", grp: "16" },
-      { name: "Panda 8 g (dal 2016)", karat: "24K — 999", gross: 8.00000, fine: 8.00000, cc: "CN", grp: "16" },
-      { name: "Panda 15 g (dal 2016)", karat: "24K — 999", gross: 15.00000, fine: 15.00000, cc: "CN", grp: "16" },
-      { name: "Panda 30 g (dal 2016)", karat: "24K — 999", gross: 30.00000, fine: 30.00000, cc: "CN", grp: "16" },
-      { name: "50 Franchi (Francia)", karat: "21,6K — 900", gross: 16.12903, fine: 14.51612, cc: "FR" },
-      { name: "100 Franchi (Francia)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "FR" },
-      { name: "Luigi d’oro (Francia)", karat: "22K — 917", gross: 8.15800, fine: 7.47800, cc: "FR" },
-      { name: "Doppio Luigi (Francia)", karat: "22K — 917", gross: 16.31500, fine: 14.95700, cc: "FR" },
-      { name: "10 Marchi", karat: "21,6K — 900", gross: 3.98250, fine: 3.58425, cc: "DE" },
-      { name: "20 Marchi", karat: "21,6K — 900", gross: 7.96500, fine: 7.16850, cc: "DE" },
-      { name: "10 Lire", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "IT" },
-      { name: "20 Lire (Marengo)", karat: "21,6K — 900", gross: 6.45161, fine: 5.80645, cc: "IT" },
-      { name: "40 Lire", karat: "21,6K — 900", gross: 12.90322, fine: 11.61290, cc: "IT" },
-      { name: "80 Lire", karat: "21,6K — 900", gross: 25.80644, fine: 23.22580, cc: "IT" },
-      { name: "100 Lire", karat: "21,6K — 900", gross: 32.25805, fine: 29.03225, cc: "IT" },
-      { name: "2 Pesos (Messico)", karat: "21,6K — 900", gross: 1.66660, fine: 1.50000, cc: "MX" },
-      { name: "2,5 Pesos (Messico)", karat: "21,6K — 900", gross: 2.08330, fine: 1.87500, cc: "MX" },
-      { name: "5 Pesos (Messico)", karat: "21,6K — 900", gross: 4.16660, fine: 3.75000, cc: "MX" },
-      { name: "10 Pesos (Messico)", karat: "21,6K — 900", gross: 8.33330, fine: 7.50000, cc: "MX" },
-      { name: "20 Pesos (Messico)", karat: "21,6K — 900", gross: 16.66660, fine: 15.00000, cc: "MX" },
-      { name: "50 Pesos (Messico)", karat: "21,6K — 900", gross: 41.66660, fine: 37.50000, cc: "MX" },
-      { name: "Libertad 1 oz (Messico)", karat: "24K — 999", gross: 31.10300, fine: 31.10300, cc: "MX" },
-      { name: "10 Gulden (Olanda)", karat: "21,6K — 900", gross: 6.72900, fine: 6.05610, cc: "NL" },
-      { name: "50 Soles (Perù)", karat: "21,6K — 900", gross: 23.40560, fine: 21.06504, cc: "PE" },
-      { name: "100 Soles (Perù)", karat: "21,6K — 900", gross: 46.80710, fine: 42.12639, cc: "PE" },
-      { name: "Mezza sterlina", karat: "22K — 916,7", gross: 3.99403, fine: 3.66119, cc: "UK" },
-      { name: "Sterlina (Sovereign)", karat: "22K — 916,7", gross: 7.98805, fine: 7.32238, cc: "UK" },
-      { name: "2 Pounds", karat: "22K — 916,7", gross: 15.97610, fine: 14.64476, cc: "UK" },
-      { name: "5 Pounds", karat: "22K — 916,7", gross: 39.94025, fine: 36.61190, cc: "UK" },
-      { name: "Britannia 1 oz", karat: "24K — 999,9", gross: 31.21000, fine: 31.10350, cc: "UK" },
-      { name: "5 Rubli (Russia)", karat: "21,6K — 900", gross: 4.30128, fine: 3.87115, cc: "RU" },
-      { name: "7,5 Rubli (Russia)", karat: "21,6K — 900", gross: 6.45200, fine: 5.80680, cc: "RU" },
-      { name: "10 Rubli (Russia)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
-      { name: "15 Rubli (Russia)", karat: "21,6K — 900", gross: 12.90390, fine: 11.61351, cc: "RU" },
-      { name: "Chervonetz 10 Rubli (URSS)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
-      { name: "10 Pesetas (Spagna)", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "ES" },
-      { name: "25 Pesetas (Spagna)", karat: "21,6K — 900", gross: 8.06451, fine: 7.25806, cc: "ES" },
-      { name: "100 Pesetas (Spagna)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "ES" },
-      { name: "2,5 Dollari USA (Quarter Eagle)", karat: "21,6K — 900", gross: 4.17900, fine: 3.76110, cc: "US" },
-      { name: "5 Dollari USA (Half Eagle)", karat: "21,6K — 900", gross: 8.35900, fine: 7.52310, cc: "US" },
-      { name: "10 Dollari USA (Eagle)", karat: "21,6K — 900", gross: 16.71800, fine: 15.04620, cc: "US" },
-      { name: "20 Dollari USA (Double Eagle)", karat: "21,6K — 900", gross: 33.43600, fine: 30.09260, cc: "US" },
-      { name: "25 Dollari USA (Eagle 1/2 oz)", karat: "22K — 916,7", gross: 16.96600, fine: 15.55170, cc: "US" },
-      { name: "50 Dollari USA (Eagle 1 oz)", karat: "22K — 916,7", gross: 33.93100, fine: 31.10350, cc: "US" },
-      { name: "Krugerrand 1/10 oz", karat: "22K — 916,7", gross: 3.39300, fine: 3.11035, cc: "ZA" },
-      { name: "Krugerrand 1/4 oz", karat: "22K — 916,7", gross: 8.48250, fine: 7.77587, cc: "ZA" },
-      { name: "Krugerrand 1/2 oz", karat: "22K — 916,7", gross: 16.96500, fine: 15.55175, cc: "ZA" },
-      { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA" },
+      { name: "1 Ducato (Austria)", karat: "23,6K — 986", gross: 3.49090, fine: 3.44203, cc: "AT", nid: 26247 },
+      { name: "4 Ducati (Austria)", karat: "23,6K — 986", gross: 13.96360, fine: 13.76811, cc: "AT", nid: 15156 },
+      { name: "10 Corone (Austria)", karat: "21,6K — 900", gross: 3.38753, fine: 3.04878, cc: "AT", nid: 20870 },
+      { name: "20 Corone (Austria)", karat: "21,6K — 900", gross: 6.77506, fine: 6.09755, cc: "AT", nid: 14747 },
+      { name: "100 Corone (Austria)", karat: "21,6K — 900", gross: 33.87530, fine: 30.48780, cc: "AT", nid: 15147 },
+      { name: "25 Schilling (Austria)", karat: "21,6K — 900", gross: 5.88100, fine: 5.29290, cc: "AT", nid: 11156 },
+      { name: "100 Schilling (Austria)", karat: "21,6K — 900", gross: 23.52400, fine: 21.17160, cc: "AT", nid: 11155 },
+      { name: "Filarmonica di Vienna 1 oz", karat: "24K — 999,9", gross: 31.10300, fine: 31.10300, cc: "AT", nid: 24130 },
+      { name: "100 Pesos (Cile)", karat: "21,6K — 900", gross: 20.33970, fine: 18.30573, cc: "CL", nid: 15380 },
+      { name: "Panda 1/20 oz (fino 2015)", karat: "24K — 999", gross: 1.55517, fine: 1.55517, cc: "CN", grp: "15", nid: 68924 },
+      { name: "Panda 1/10 oz (fino 2015)", karat: "24K — 999", gross: 3.11035, fine: 3.11035, cc: "CN", grp: "15", nid: 68923 },
+      { name: "Panda 1/4 oz (fino 2015)", karat: "24K — 999", gross: 7.77587, fine: 7.77587, cc: "CN", grp: "15", nid: 68922 },
+      { name: "Panda 1/2 oz (fino 2015)", karat: "24K — 999", gross: 15.55175, fine: 15.55175, cc: "CN", grp: "15", nid: 68921 },
+      { name: "Panda 1 oz (fino 2015)", karat: "24K — 999", gross: 31.10350, fine: 31.10350, cc: "CN", grp: "15", nid: 12823 },
+      { name: "Panda 1 g (dal 2016)", karat: "24K — 999", gross: 1.00000, fine: 1.00000, cc: "CN", grp: "16", nid: 81116 },
+      { name: "Panda 3 g (dal 2016)", karat: "24K — 999", gross: 3.00000, fine: 3.00000, cc: "CN", grp: "16", nid: 81115 },
+      { name: "Panda 8 g (dal 2016)", karat: "24K — 999", gross: 8.00000, fine: 8.00000, cc: "CN", grp: "16", nid: 81114 },
+      { name: "Panda 15 g (dal 2016)", karat: "24K — 999", gross: 15.00000, fine: 15.00000, cc: "CN", grp: "16", nid: 81113 },
+      { name: "Panda 30 g (dal 2016)", karat: "24K — 999", gross: 30.00000, fine: 30.00000, cc: "CN", grp: "16", nid: 81112 },
+      { name: "50 Franchi (Francia)", karat: "21,6K — 900", gross: 16.12903, fine: 14.51612, cc: "FR", nid: 19170 },
+      { name: "100 Franchi (Francia)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "FR", nid: 13181 },
+      { name: "Luigi d’oro (Francia)", karat: "22K — 917", gross: 8.15800, fine: 7.47800, cc: "FR", nid: 10618 },
+      { name: "Doppio Luigi (Francia)", karat: "22K — 917", gross: 16.31500, fine: 14.95700, cc: "FR", nid: 10619 },
+      { name: "10 Marchi", karat: "21,6K — 900", gross: 3.98250, fine: 3.58425, cc: "DE", nid: 32030 },
+      { name: "20 Marchi", karat: "21,6K — 900", gross: 7.96500, fine: 7.16850, cc: "DE", nid: 32031 },
+      { name: "10 Lire", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "IT", nid: 18794 },
+      { name: "20 Lire (Marengo)", karat: "21,6K — 900", gross: 6.45161, fine: 5.80645, cc: "IT", nid: 18793 },
+      { name: "40 Lire", karat: "21,6K — 900", gross: 12.90322, fine: 11.61290, cc: "IT", nid: 14890 },
+      { name: "80 Lire", karat: "21,6K — 900", gross: 25.80644, fine: 23.22580, cc: "IT", nid: 18795 },
+      { name: "100 Lire", karat: "21,6K — 900", gross: 32.25805, fine: 29.03225, cc: "IT", nid: 18800 },
+      { name: "2 Pesos (Messico)", karat: "21,6K — 900", gross: 1.66660, fine: 1.50000, cc: "MX", nid: 15037 },
+      { name: "2,5 Pesos (Messico)", karat: "21,6K — 900", gross: 2.08330, fine: 1.87500, cc: "MX", nid: 15036 },
+      { name: "5 Pesos (Messico)", karat: "21,6K — 900", gross: 4.16660, fine: 3.75000, cc: "MX", nid: 15035 },
+      { name: "10 Pesos (Messico)", karat: "21,6K — 900", gross: 8.33330, fine: 7.50000, cc: "MX", nid: 15034 },
+      { name: "20 Pesos (Messico)", karat: "21,6K — 900", gross: 16.66660, fine: 15.00000, cc: "MX", nid: 15033 },
+      { name: "50 Pesos (Messico)", karat: "21,6K — 900", gross: 41.66660, fine: 37.50000, cc: "MX", nid: 15038 },
+      { name: "Libertad 1 oz (Messico)", karat: "24K — 999", gross: 31.10300, fine: 31.10300, cc: "MX", nid: 15322 },
+      { name: "10 Gulden (Olanda)", karat: "21,6K — 900", gross: 6.72900, fine: 6.05610, cc: "NL", nid: 14702 },
+      { name: "50 Soles (Perù)", karat: "21,6K — 900", gross: 23.40560, fine: 21.06504, cc: "PE", nid: 39225 },
+      { name: "100 Soles (Perù)", karat: "21,6K — 900", gross: 46.80710, fine: 42.12639, cc: "PE", nid: 39226 },
+      { name: "Mezza sterlina", karat: "22K — 916,7", gross: 3.99403, fine: 3.66119, cc: "UK", nid: 15998 },
+      { name: "Sterlina (Sovereign)", karat: "22K — 916,7", gross: 7.98805, fine: 7.32238, cc: "UK", nid: 15999 },
+      { name: "2 Pounds", karat: "22K — 916,7", gross: 15.97610, fine: 14.64476, cc: "UK", nid: 16000 },
+      { name: "5 Pounds", karat: "22K — 916,7", gross: 39.94025, fine: 36.61190, cc: "UK", nid: 16001 },
+      { name: "Britannia 1 oz", karat: "24K — 999,9", gross: 31.21000, fine: 31.10350, cc: "UK", nid: 19932 },
+      { name: "5 Rubli (Russia)", karat: "21,6K — 900", gross: 4.30128, fine: 3.87115, cc: "RU", nid: 17085 },
+      { name: "7,5 Rubli (Russia)", karat: "21,6K — 900", gross: 6.45200, fine: 5.80680, cc: "RU", nid: 17087 },
+      { name: "10 Rubli (Russia)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU", nid: 17086 },
+      { name: "15 Rubli (Russia)", karat: "21,6K — 900", gross: 12.90390, fine: 11.61351, cc: "RU", nid: 17088 },
+      { name: "Chervonetz 10 Rubli (URSS)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU", nid: 9484 },
+      { name: "10 Pesetas (Spagna)", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "ES", nid: 14750 },
+      { name: "25 Pesetas (Spagna)", karat: "21,6K — 900", gross: 8.06451, fine: 7.25806, cc: "ES", nid: 14751 },
+      { name: "100 Pesetas (Spagna)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "ES", nid: 14752 },
+      { name: "2,5 Dollari USA (Quarter Eagle)", karat: "21,6K — 900", gross: 4.17900, fine: 3.76110, cc: "US", nid: 11708 },
+      { name: "5 Dollari USA (Half Eagle)", karat: "21,6K — 900", gross: 8.35900, fine: 7.52310, cc: "US", nid: 11709 },
+      { name: "10 Dollari USA (Eagle)", karat: "21,6K — 900", gross: 16.71800, fine: 15.04620, cc: "US", nid: 11710 },
+      { name: "20 Dollari USA (Double Eagle)", karat: "21,6K — 900", gross: 33.43600, fine: 30.09260, cc: "US", nid: 2478 },
+      { name: "25 Dollari USA (Eagle 1/2 oz)", karat: "22K — 916,7", gross: 16.96600, fine: 15.55170, cc: "US", nid: 19931 },
+      { name: "50 Dollari USA (Eagle 1 oz)", karat: "22K — 916,7", gross: 33.93100, fine: 31.10350, cc: "US", nid: 19930 },
+      { name: "Krugerrand 1/10 oz", karat: "22K — 916,7", gross: 3.39300, fine: 3.11035, cc: "ZA", nid: 6005 },
+      { name: "Krugerrand 1/4 oz", karat: "22K — 916,7", gross: 8.48250, fine: 7.77587, cc: "ZA", nid: 6004 },
+      { name: "Krugerrand 1/2 oz", karat: "22K — 916,7", gross: 16.96500, fine: 15.55175, cc: "ZA", nid: 6003 },
+      { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA", nid: 6002 },
     ];
     const K22 = 22 / 24;
     const K216 = 21.6 / 24;
@@ -579,7 +612,7 @@
         last = key;
         rows.push(`
         <tr>
-          <td style="font-family:Manrope,Inter,sans-serif;font-weight:600;color:var(--gold-2)">${c.name}</td>
+          <td><button type="button" class="coin-name" data-i="${COINS.indexOf(c)}">${c.name}</button></td>
           <td class="k">${(c.karat || "").split("—")[1] ? (c.karat.split("—")[1].trim()) : (c.karat || "")}</td>
           <td class="w">${fmt(c.gross, 3)}&nbsp;g</td>
           <td class="w">${fmt(c.fine, 3)}&nbsp;g</td>
@@ -587,6 +620,43 @@
         </tr>`);
       });
       document.getElementById("coinsBody").innerHTML = rows.join("");
+    }
+    function closeCoinModal() {
+      const m = document.getElementById("coinModal");
+      if (m) m.hidden = true;
+      const img = document.getElementById("coinModalImg");
+      if (img) { img.removeAttribute("src"); img.style.display = ""; }
+    }
+    function openCoinPhoto(c) {
+      const modal = document.getElementById("coinModal");
+      const img = document.getElementById("coinModalImg");
+      const nameEl = document.getElementById("coinModalName");
+      const hint = document.getElementById("coinModalHint");
+      const link = document.getElementById("coinModalLink");
+      if (!modal || !c) return;
+      nameEl.textContent = c.name;
+      const q = encodeURIComponent(c.name.replace(/[()]/g, " ") + " gold");
+      const page = c.nid
+        ? "https://it.numista.com/" + c.nid
+        : "https://it.numista.com/catalogue/index.php?r=" + q;
+      link.href = page;
+      hint.textContent = "Foto da Numista · tocca fuori per chiudere";
+      const urls = [];
+      if (c.nid) {
+        const raw = "en.numista.com/catalogue/photo" + c.nid + ".jpeg";
+        urls.push("https://" + raw);
+        urls.push("https://wsrv.nl/?url=" + encodeURIComponent(raw) + "&output=jpg&n=-1");
+      }
+      let i = 0;
+      img.style.display = urls.length ? "block" : "none";
+      img.onload = () => { img.style.display = "block"; };
+      img.onerror = () => {
+        i += 1;
+        if (i < urls.length) img.src = urls[i];
+        else img.style.display = "none";
+      };
+      if (urls.length) img.src = urls[0];
+      modal.hidden = false;
     }
     function pln(n, d = 2) { return fmt(n, d) + " zł"; }
     function spotPlnNow() {
@@ -2182,6 +2252,16 @@
       const map = { "+": "+", "-": "-", "*": "×", "/": "÷" };
       el.value = v ? v + map[op] : (op === "-" ? "-" : "");
       el.focus();
+    });
+    document.getElementById("coinsBody")?.addEventListener("click", (e) => {
+      const btn = e.target.closest(".coin-name");
+      if (!btn) return;
+      const c = COINS[Number(btn.dataset.i)];
+      if (c) openCoinPhoto(c);
+    });
+    document.getElementById("coinModalX")?.addEventListener("click", closeCoinModal);
+    document.getElementById("coinModal")?.addEventListener("click", (e) => {
+      if (e.target.id === "coinModal") closeCoinModal();
     });
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
 
