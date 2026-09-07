@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.48 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.49 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -299,7 +299,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.48</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.49</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -481,7 +481,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.48 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.49 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1678,12 +1678,13 @@
         }
       }
       if (!body) return;
-      body.dataset.wait = "";
       const items = state.apartItems || [];
       if (!items.length) {
+        if (body.dataset.wait === "1") return;
         body.innerHTML = '<tr><td colspan="3">Listino non disponibile</td></tr>';
         return;
       }
+      body.dataset.wait = "";
       const rows = items.map(p => {
         const spr = spot > 0 ? ((p.price / spot) - 1) * 100 : null;
         const cls = spr == null ? "" : (spr < 0 ? "up" : "");
@@ -1694,6 +1695,26 @@
           "<td class=\"r " + cls + "\">" + sprTxt + "</td></tr>";
       });
       body.innerHTML = rows.join("");
+    }
+    function readApartCache() {
+      try {
+        const raw = localStorage.getItem("oroApart") || sessionStorage.getItem("oroApart");
+        const c = JSON.parse(raw || "null");
+        if (c && Array.isArray(c.items) && c.items.length) return c;
+      } catch (e) {}
+      return null;
+    }
+    function writeApartCache(items, t) {
+      const payload = JSON.stringify({ t: t || Date.now(), items: items });
+      try { localStorage.setItem("oroApart", payload); } catch (e) {}
+      try { sessionStorage.setItem("oroApart", payload); } catch (e) {}
+    }
+    function hydrateApartCache() {
+      if (state.apartItems && state.apartItems.length) return;
+      const c = readApartCache();
+      if (!c) return;
+      state.apartItems = c.items;
+      state.apartAt = Number(c.t) || 0;
     }
     function apartJsonp(url, ms) {
       return new Promise((resolve, reject) => {
@@ -1718,7 +1739,11 @@
         document.head.appendChild(s);
       });
     }
-    async function loadApartListino() {
+    async function loadApartListino(force) {
+      hydrateApartCache();
+      if (state.apartItems && state.apartItems.length) paintApartList();
+      const age = Date.now() - (state.apartAt || 0);
+      if (!force && state.apartItems && state.apartItems.length && age < 90000) return;
       const url = "https://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h";
       const body = document.getElementById("apartBody");
       if (body && !(state.apartItems && state.apartItems.length)) {
@@ -1726,40 +1751,29 @@
         body.innerHTML = '<tr><td colspan="3">Carico listino…</td></tr>';
       }
       const jobs = [
-        () => getJSONText("https://api.allorigins.win/raw?url=" + encodeURIComponent(url), 18000),
-        () => getJSONText("https://api.allorigins.win/get?url=" + encodeURIComponent(url), 18000),
-        () => getJSONText("https://corsproxy.io/?" + encodeURIComponent(url), 12000),
-        () => getJSONText("https://corsproxy.io/?" + url, 12000),
-        () => apartJsonp(url, 20000),
+        () => apartJsonp(url, 16000),
+        () => getJSONText("https://api.allorigins.win/raw?url=" + encodeURIComponent(url), 16000),
+        () => getJSONText("https://api.allorigins.win/get?url=" + encodeURIComponent(url), 16000),
+        () => getJSONText("https://corsproxy.io/?" + encodeURIComponent(url), 10000),
         () => getJSONText(url, 4000)
       ];
       let items = [];
-      try {
-        items = await Promise.any(jobs.map(async fn => {
-          const html = await fn();
-          const parsed = parseApartImpressions(html);
-          if (!parsed.length) throw new Error("empty");
-          return parsed;
-        }));
-      } catch (e) { items = []; }
-      if (!items.length) {
+      for (let i = 0; i < jobs.length; i++) {
         try {
-          const c = JSON.parse(localStorage.getItem("oroApart") || "null");
-          if (c && Array.isArray(c.items) && c.items.length) {
-            items = c.items;
-            state.apartAt = Number(c.t) || 0;
-          }
+          const html = await jobs[i]();
+          const parsed = parseApartImpressions(html);
+          if (parsed.length) { items = parsed; break; }
         } catch (e) {}
-      } else {
-        state.apartAt = Date.now();
       }
-      if (!items.length) { paintApartList(); return; }
+      if (!items.length) {
+        if (!(state.apartItems && state.apartItems.length)) paintApartList();
+        return;
+      }
       const spot = spotPlnOz(state.quote);
       items.sort((a, b) => (spot > 0 ? (a.price / spot) - (b.price / spot) : a.price - b.price));
       state.apartItems = items;
-      if (state.apartAt) {
-        try { localStorage.setItem("oroApart", JSON.stringify({ t: state.apartAt, items: items })); } catch (e) {}
-      }
+      state.apartAt = Date.now();
+      writeApartCache(items, state.apartAt);
       paintApartList();
     }
     document.querySelectorAll(".pair-tabs button").forEach(btn => {
@@ -1787,8 +1801,10 @@
         if (d.open) renderCoins(state.g24 || 0);
       });
     });
-    document.getElementById("apartFold")?.addEventListener("toggle", () => {
-      if (document.getElementById("apartFold").open) loadApartListino().catch(() => {});
+    document.getElementById("apartFold")?.addEventListener("toggle", function() {
+      if (!this.open) return;
+      if (state.apartItems && state.apartItems.length) paintApartList();
+      else loadApartListino().catch(() => {});
     });
     document.getElementById("tfRow")?.querySelectorAll("button").forEach(btn => {
       btn.addEventListener("click", async () => {
@@ -1820,6 +1836,8 @@
     });
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
 
+    hydrateApartCache();
+    paintApartList();
     boot(true);
     renderCoins(0);
     setTimeout(() => { if (!state.quote) document.getElementById("iosHint").style.display = "block"; }, 2500);
