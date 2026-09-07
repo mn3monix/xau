@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.46 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.47 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -299,7 +299,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.46</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.47</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -480,7 +480,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.46 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.47 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1617,27 +1617,51 @@
       if (txt.trim().charAt(0) === "{" && txt.indexOf('"contents"') >= 0) {
         try { txt = JSON.parse(txt).contents || txt; } catch (e) {}
       }
+      const out = [];
+      const seen = {};
+      function add(name, price, id) {
+        const px = Number(price);
+        const nm = String(name || "").replace(/\\+/g, " ").trim();
+        if (!(px > 1000) || !nm) return;
+        const key = (id || nm).toLowerCase();
+        if (seen[key]) return;
+        seen[key] = 1;
+        out.push({ id: id || "", name: nm, price: px });
+      }
       const key = '"impressions":';
       const i = txt.indexOf(key);
-      if (i < 0) return [];
-      const start = txt.indexOf("[", i);
-      if (start < 0) return [];
-      let depth = 0, end = -1;
-      for (let k = start; k < txt.length && k < start + 200000; k++) {
-        const ch = txt[k];
-        if (ch === "[") depth++;
-        else if (ch === "]") {
-          depth--;
-          if (!depth) { end = k; break; }
+      if (i >= 0) {
+        const start = txt.indexOf("[", i);
+        if (start >= 0) {
+          let depth = 0, end = -1;
+          for (let k = start; k < txt.length && k < start + 200000; k++) {
+            const ch = txt[k];
+            if (ch === "[") depth++;
+            else if (ch === "]") { depth--; if (!depth) { end = k; break; } }
+          }
+          if (end > start) {
+            try {
+              JSON.parse(txt.slice(start, end + 1)).forEach(p => add(p.name, p.price, p.id));
+            } catch (e) {}
+          }
         }
       }
-      if (end < 0) return [];
-      try {
-        const arr = JSON.parse(txt.slice(start, end + 1));
-        return (arr || []).filter(p => p && p.price > 0 && p.name).map(p => ({
-          id: p.id, name: String(p.name), price: Number(p.price)
-        }));
-      } catch (e) { return []; }
+      if (out.length < 5) {
+        const reItems = /"item_name"\s*:\s*"([^"]+)"[\s\S]{0,180}?"price"\s*:\s*(\d+)/g;
+        let m;
+        while ((m = reItems.exec(txt))) add(m[1].replace(/\\/g, ""), m[2]);
+      }
+      if (out.length < 5) {
+        const reGtm = /data-gtm-name="([^"]+)"[\s\S]{0,280}?data-gtm-price="(\d+)"/g;
+        let m;
+        while ((m = reGtm.exec(txt))) add(m[1], m[2]);
+      }
+      if (out.length < 5) {
+        const reGtm2 = /data-gtm-price="(\d+)"[\s\S]{0,280}?data-gtm-name="([^"]+)"/g;
+        let m;
+        while ((m = reGtm2.exec(txt))) add(m[2], m[1]);
+      }
+      return out;
     }
     function paintApartList() {
       const spotEl = document.getElementById("apartSpot");
@@ -1645,9 +1669,10 @@
       const spot = spotPlnOz(state.quote);
       if (spotEl) spotEl.textContent = spot > 0 ? (fmt(spot, 0) + "\u00A0zł") : "—";
       if (!body) return;
+      body.dataset.wait = "";
       const items = state.apartItems || [];
       if (!items.length) {
-        if (!body.dataset.wait) body.innerHTML = '<tr><td colspan="3">Listino non disponibile</td></tr>';
+        body.innerHTML = '<tr><td colspan="3">Listino non disponibile</td></tr>';
         return;
       }
       const rows = items.map(p => {
@@ -1659,40 +1684,69 @@
           "<td class=\"r\">" + fmt(p.price, 0) + "\u00A0zł</td>" +
           "<td class=\"r " + cls + "\">" + sprTxt + "</td></tr>";
       });
-      body.dataset.wait = "";
       body.innerHTML = rows.join("");
+    }
+    function apartJsonp(url, ms) {
+      return new Promise((resolve, reject) => {
+        const cb = "aoApart" + Math.random().toString(36).slice(2);
+        let done = false;
+        const s = document.createElement("script");
+        const t = setTimeout(() => finish(new Error("timeout")), ms);
+        function finish(err, html) {
+          if (done) return;
+          done = true;
+          clearTimeout(t);
+          try { delete window[cb]; } catch (e) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
+          if (err) reject(err); else resolve(html);
+        }
+        window[cb] = function (data) {
+          const html = data && data.contents ? data.contents : (typeof data === "string" ? data : "");
+          finish(html ? null : new Error("empty"), html);
+        };
+        s.onerror = () => finish(new Error("jsonp"));
+        s.src = "https://api.allorigins.win/get?url=" + encodeURIComponent(url) + "&callback=" + cb;
+        document.head.appendChild(s);
+      });
     }
     async function loadApartListino() {
       const url = "https://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h";
-      const tries = [
-        url,
-        "https://corsproxy.io/?" + encodeURIComponent(url),
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
-        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url)
-      ];
       const body = document.getElementById("apartBody");
       if (body && !(state.apartItems && state.apartItems.length)) {
         body.dataset.wait = "1";
         body.innerHTML = '<tr><td colspan="3">Carico listino…</td></tr>';
       }
+      const jobs = [
+        () => getJSONText("https://api.allorigins.win/raw?url=" + encodeURIComponent(url), 18000),
+        () => getJSONText("https://api.allorigins.win/get?url=" + encodeURIComponent(url), 18000),
+        () => getJSONText("https://corsproxy.io/?" + encodeURIComponent(url), 12000),
+        () => getJSONText("https://corsproxy.io/?" + url, 12000),
+        () => apartJsonp(url, 20000),
+        () => getJSONText(url, 4000)
+      ];
       let items = [];
-      for (let i = 0; i < tries.length; i++) {
+      try {
+        items = await Promise.any(jobs.map(async fn => {
+          const html = await fn();
+          const parsed = parseApartImpressions(html);
+          if (!parsed.length) throw new Error("empty");
+          return parsed;
+        }));
+      } catch (e) { items = []; }
+      if (!items.length) {
         try {
-          const html = await getJSONText(tries[i], i === 0 ? 3500 : 8000);
-          items = parseApartImpressions(html);
-          if (items.length) break;
+          const c = JSON.parse(localStorage.getItem("oroApart") || "null");
+          if (c && Array.isArray(c.items) && c.items.length) items = c.items;
         } catch (e) {}
       }
       if (!items.length) { paintApartList(); return; }
       const spot = spotPlnOz(state.quote);
-      items.sort((a, b) => {
-        if (spot > 0) return (a.price / spot) - (b.price / spot);
-        return a.price - b.price;
-      });
+      items.sort((a, b) => (spot > 0 ? (a.price / spot) - (b.price / spot) : a.price - b.price));
       state.apartItems = items;
+      try { localStorage.setItem("oroApart", JSON.stringify({ t: Date.now(), items: items })); } catch (e) {}
       paintApartList();
     }
-        document.querySelectorAll(".pair-tabs button").forEach(btn => {
+    document.querySelectorAll(".pair-tabs button").forEach(btn => {
       btn.addEventListener("click", async () => {
         document.querySelectorAll(".pair-tabs button").forEach(b => b.classList.remove("on"));
         btn.classList.add("on");
