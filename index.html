@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.39 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.41 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -156,8 +156,6 @@
     .stat.upd label { text-align: left; }
     .stat.upd b { text-align: right; }
     .stat.stack b { line-height: 1.28; }
-    .tv-embed { height: 62px; overflow: hidden; margin-top: 2px; }
-    .tv-embed iframe { transform-origin: top left; }
     .stat.k18 {
       border: 1.5px solid var(--gold);
       box-shadow: 0 0 0 1px rgba(212,175,55,.25), 0 0 18px rgba(212,175,55,.18);
@@ -165,43 +163,6 @@
     }
     .stat.k18 label { color: var(--gold-2); }
     .stat.k18 b { color: var(--gold-2); }
-    .sig-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; }
-    .sig-score { font-size:2.35rem; font-weight:700; letter-spacing:-.03em; color:var(--gold-2); font-variant-numeric:tabular-nums; line-height:1; }
-    .sig-score span { display:block; font-size:.68rem; color:var(--muted); font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin-top:6px; }
-    .sig-bar { height:8px; background:var(--bg-3); border:1px solid var(--line); border-radius:99px; overflow:hidden; margin:12px 0 8px; }
-    .sig-bar i { display:block; height:100%; width:0; background:linear-gradient(90deg,#ff6b6b,#d4af37,#3dd68c); border-radius:99px; }
-    .sig-checks { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
-    .sig-item { background:var(--bg-3); border:1px solid transparent; border-radius:12px; padding:8px 10px; }
-    .sig-item.on { border-color:rgba(61,214,140,.35); }
-    .sig-item.off { border-color:rgba(255,107,107,.28); }
-    .sig-item.warn { border-color:rgba(212,175,55,.35); }
-    .sig-item label { display:block; color:var(--muted); font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; }
-    .sig-item b { display:block; margin-top:4px; font-size:1.05rem; text-align:right; font-variant-numeric:tabular-nums; }
-    @media (max-width: 820px) {
-      .sig-checks { grid-template-columns:1fr 1fr; }
-      .sig-score { font-size:2rem; }
-    }
-    .buy-level {
-      font-size: 2rem; font-weight: 700; letter-spacing: -.03em;
-      color: var(--gold-2); font-variant-numeric: tabular-nums; margin: 8px 0 6px;
-    }
-    .badge {
-      display: inline-block; font-size: .72rem; letter-spacing: .08em;
-      text-transform: uppercase; font-weight: 600; padding: 4px 8px; border-radius: 6px;
-    }
-    .badge.ok { color: var(--up); background: rgba(61,214,140,.12); }
-    .badge.wait { color: var(--gold-2); background: rgba(212,175,55,.12); }
-    .badge.high { color: var(--down); background: rgba(255,107,107,.12); }
-    .sig-phase {
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      margin: 10px 0 4px; padding: 10px 12px; border-radius: 12px;
-      background: var(--bg-3); border: 1px solid var(--line);
-    }
-    .sig-phase b { font-size: .92rem; letter-spacing: .04em; text-transform: uppercase; }
-    .sig-phase span { color: var(--muted); font-size: .75rem; line-height: 1.35; text-align: right; }
-    .sig-phase.ok { border-color: rgba(61,214,140,.4); }
-    .sig-phase.wait { border-color: rgba(212,175,55,.4); }
-    .sig-phase.high { border-color: rgba(255,107,107,.35); }
     .apart { margin-top: 14px; }
     details.fold > summary {
       list-style: none; cursor: pointer;
@@ -240,14 +201,6 @@
     table.apart-tbl col.c-t { width: 12%; }
     table.apart-tbl col.c-g { width: 16%; }
     table.apart-tbl col.c-v { width: 22%; }
-    #apartBody tr:first-child td { color: var(--up); }
-    #apartBody tr:first-child a { color: var(--up); }
-    table.apart-tbl a {
-      color: var(--gold-2); text-decoration: none;
-      font-family: Manrope, Inter, sans-serif;
-      font-weight: 600; font-size: .92rem; line-height: 1.35;
-      display: inline-block; padding: 4px 0;
-    }
     table.apart-tbl tr.coin-sep td {
       padding: 0; height: 11px; border-bottom: none;
       background: linear-gradient(to bottom, transparent 5px, rgba(212,175,55,.28) 5px, rgba(212,175,55,.28) 6px, transparent 6px);
@@ -335,7 +288,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.39</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.41</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -483,163 +436,81 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.39 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.41 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
   <script>
     const API = "https://biquote.io/api";
     const TROY_G = 31.1034768;
-    const APART_LIST_URL = "https://mennica.apart.pl/zloto/monety?masa=1-oz&realizacja=24h";
     const COINS = [
-      { name: "1 Ducato (Austria)", karat: "23,6K — 986", gross: 3.49090, fine: 3.44203, cc: "AT",
-      _dropnid: 26247 },
-      { name: "4 Ducati (Austria)", karat: "23,6K — 986", gross: 13.96360, fine: 13.76811, cc: "AT",
-      _dropnid: 15156 },
-      { name: "10 Corone (Austria)", karat: "21,6K — 900", gross: 3.38753, fine: 3.04878, cc: "AT",
-      _dropnid: 20870 },
-      { name: "20 Corone (Austria)", karat: "21,6K — 900", gross: 6.77506, fine: 6.09755, cc: "AT",
-      _dropnid: 14747 },
-      { name: "100 Corone (Austria)", karat: "21,6K — 900", gross: 33.87530, fine: 30.48780, cc: "AT",
-      _dropnid: 15147 },
-      { name: "25 Schilling (Austria)", karat: "21,6K — 900", gross: 5.88100, fine: 5.29290, cc: "AT",
-      _dropnid: 11156 },
-      { name: "100 Schilling (Austria)", karat: "21,6K — 900", gross: 23.52400, fine: 21.17160, cc: "AT",
-      _dropnid: 11155 },
-      { name: "Filarmonica di Vienna 1 oz", karat: "24K — 999,9", gross: 31.10300, fine: 31.10300, cc: "AT",
-      _dropnid: 24130 },
-      { name: "100 Pesos (Cile)", karat: "21,6K — 900", gross: 20.33970, fine: 18.30573, cc: "CL",
-      _dropnid: 15380 },
-      { name: "Panda 1/20 oz (fino 2015)", karat: "24K — 999", gross: 1.55517, fine: 1.55517, cc: "CN", grp: "15",
-      _dropnid: 68924 },
-      { name: "Panda 1/10 oz (fino 2015)", karat: "24K — 999", gross: 3.11035, fine: 3.11035, cc: "CN", grp: "15",
-      _dropnid: 68923 },
-      { name: "Panda 1/4 oz (fino 2015)", karat: "24K — 999", gross: 7.77587, fine: 7.77587, cc: "CN", grp: "15",
-      _dropnid: 68922 },
-      { name: "Panda 1/2 oz (fino 2015)", karat: "24K — 999", gross: 15.55175, fine: 15.55175, cc: "CN", grp: "15",
-      _dropnid: 68921 },
-      { name: "Panda 1 oz (fino 2015)", karat: "24K — 999", gross: 31.10350, fine: 31.10350, cc: "CN", grp: "15",
-      _dropnid: 12823 },
-      { name: "Panda 1 g (dal 2016)", karat: "24K — 999", gross: 1.00000, fine: 1.00000, cc: "CN", grp: "16",
-      _dropnid: 81116 },
-      { name: "Panda 3 g (dal 2016)", karat: "24K — 999", gross: 3.00000, fine: 3.00000, cc: "CN", grp: "16",
-      _dropnid: 81115 },
-      { name: "Panda 8 g (dal 2016)", karat: "24K — 999", gross: 8.00000, fine: 8.00000, cc: "CN", grp: "16",
-      _dropnid: 81114 },
-      { name: "Panda 15 g (dal 2016)", karat: "24K — 999", gross: 15.00000, fine: 15.00000, cc: "CN", grp: "16",
-      _dropnid: 81113 },
-      { name: "Panda 30 g (dal 2016)", karat: "24K — 999", gross: 30.00000, fine: 30.00000, cc: "CN", grp: "16",
-      _dropnid: 81112 },
-      { name: "50 Franchi (Francia)", karat: "21,6K — 900", gross: 16.12903, fine: 14.51612, cc: "FR",
-      _dropnid: 19170 },
-      { name: "100 Franchi (Francia)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "FR",
-      _dropnid: 13181 },
-      { name: "Luigi d’oro (Francia)", karat: "22K — 917", gross: 8.15800, fine: 7.47800, cc: "FR",
-      _dropnid: 10618 },
-      { name: "Doppio Luigi (Francia)", karat: "22K — 917", gross: 16.31500, fine: 14.95700, cc: "FR",
-      _dropnid: 10619 },
-      { name: "10 Marchi", karat: "21,6K — 900", gross: 3.98250, fine: 3.58425, cc: "DE",
-      _dropnid: 32030 },
-      { name: "20 Marchi", karat: "21,6K — 900", gross: 7.96500, fine: 7.16850, cc: "DE",
-      _dropnid: 32031 },
-      { name: "10 Lire", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "IT",
-      _dropnid: 18794 },
-      { name: "20 Lire (Marengo)", karat: "21,6K — 900", gross: 6.45161, fine: 5.80645, cc: "IT",
-      _dropnid: 18793 },
-      { name: "40 Lire", karat: "21,6K — 900", gross: 12.90322, fine: 11.61290, cc: "IT",
-      _dropnid: 14890 },
-      { name: "80 Lire", karat: "21,6K — 900", gross: 25.80644, fine: 23.22580, cc: "IT",
-      _dropnid: 18795 },
-      { name: "100 Lire", karat: "21,6K — 900", gross: 32.25805, fine: 29.03225, cc: "IT",
-      _dropnid: 18800 },
-      { name: "2 Pesos (Messico)", karat: "21,6K — 900", gross: 1.66660, fine: 1.50000, cc: "MX",
-      _dropnid: 15037 },
-      { name: "2,5 Pesos (Messico)", karat: "21,6K — 900", gross: 2.08330, fine: 1.87500, cc: "MX",
-      _dropnid: 15036 },
-      { name: "5 Pesos (Messico)", karat: "21,6K — 900", gross: 4.16660, fine: 3.75000, cc: "MX",
-      _dropnid: 15035 },
-      { name: "10 Pesos (Messico)", karat: "21,6K — 900", gross: 8.33330, fine: 7.50000, cc: "MX",
-      _dropnid: 15034 },
-      { name: "20 Pesos (Messico)", karat: "21,6K — 900", gross: 16.66660, fine: 15.00000, cc: "MX",
-      _dropnid: 15033 },
-      { name: "50 Pesos (Messico)", karat: "21,6K — 900", gross: 41.66660, fine: 37.50000, cc: "MX",
-      _dropnid: 15038 },
-      { name: "Libertad 1 oz (Messico)", karat: "24K — 999", gross: 31.10300, fine: 31.10300, cc: "MX",
-      _dropnid: 15322 },
-      { name: "10 Gulden (Olanda)", karat: "21,6K — 900", gross: 6.72900, fine: 6.05610, cc: "NL",
-      _dropnid: 14702 },
-      { name: "50 Soles (Perù)", karat: "21,6K — 900", gross: 23.40560, fine: 21.06504, cc: "PE",
-      _dropnid: 39225 },
-      { name: "100 Soles (Perù)", karat: "21,6K — 900", gross: 46.80710, fine: 42.12639, cc: "PE",
-      _dropnid: 39226 },
-      { name: "Mezza sterlina", karat: "22K — 916,7", gross: 3.99403, fine: 3.66119, cc: "UK",
-      _dropnid: 15998 },
-      { name: "Sterlina (Sovereign)", karat: "22K — 916,7", gross: 7.98805, fine: 7.32238, cc: "UK",
-      _dropnid: 15999 },
-      { name: "2 Pounds", karat: "22K — 916,7", gross: 15.97610, fine: 14.64476, cc: "UK",
-      _dropnid: 16000 },
-      { name: "5 Pounds", karat: "22K — 916,7", gross: 39.94025, fine: 36.61190, cc: "UK",
-      _dropnid: 16001 },
-      { name: "Britannia 1 oz", karat: "24K — 999,9", gross: 31.21000, fine: 31.10350, cc: "UK",
-      _dropnid: 19932 },
-      { name: "5 Rubli (Russia)", karat: "21,6K — 900", gross: 4.30128, fine: 3.87115, cc: "RU",
-      _dropnid: 17085 },
-      { name: "7,5 Rubli (Russia)", karat: "21,6K — 900", gross: 6.45200, fine: 5.80680, cc: "RU",
-      _dropnid: 17087 },
-      { name: "10 Rubli (Russia)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU",
-      _dropnid: 17086 },
-      { name: "15 Rubli (Russia)", karat: "21,6K — 900", gross: 12.90390, fine: 11.61351, cc: "RU",
-      _dropnid: 17088 },
-      { name: "Chervonetz 10 Rubli (URSS)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU",
-      _dropnid: 9484 },
-      { name: "10 Pesetas (Spagna)", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "ES",
-      _dropnid: 14750 },
-      { name: "25 Pesetas (Spagna)", karat: "21,6K — 900", gross: 8.06451, fine: 7.25806, cc: "ES",
-      _dropnid: 14751 },
-      { name: "100 Pesetas (Spagna)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "ES",
-      _dropnid: 14752 },
-      { name: "2,5 Dollari USA (Quarter Eagle)", karat: "21,6K — 900", gross: 4.17900, fine: 3.76110, cc: "US",
-      _dropnid: 11708 },
-      { name: "5 Dollari USA (Half Eagle)", karat: "21,6K — 900", gross: 8.35900, fine: 7.52310, cc: "US",
-      _dropnid: 11709 },
-      { name: "10 Dollari USA (Eagle)", karat: "21,6K — 900", gross: 16.71800, fine: 15.04620, cc: "US",
-      _dropnid: 11710 },
-      { name: "20 Dollari USA (Double Eagle)", karat: "21,6K — 900", gross: 33.43600, fine: 30.09260, cc: "US",
-      _dropnid: 2478 },
-      { name: "25 Dollari USA (Eagle 1/2 oz)", karat: "22K — 916,7", gross: 16.96600, fine: 15.55170, cc: "US",
-      _dropnid: 19931 },
-      { name: "50 Dollari USA (Eagle 1 oz)", karat: "22K — 916,7", gross: 33.93100, fine: 31.10350, cc: "US",
-      _dropnid: 19930 },
-      { name: "Krugerrand 1/10 oz", karat: "22K — 916,7", gross: 3.39300, fine: 3.11035, cc: "ZA",
-      _dropnid: 6005 },
-      { name: "Krugerrand 1/4 oz", karat: "22K — 916,7", gross: 8.48250, fine: 7.77587, cc: "ZA",
-      _dropnid: 6004 },
-      { name: "Krugerrand 1/2 oz", karat: "22K — 916,7", gross: 16.96500, fine: 15.55175, cc: "ZA",
-      _dropnid: 6003 },
-      { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA",
-      _dropnid: 6002 },
+      { name: "1 Ducato (Austria)", karat: "23,6K — 986", gross: 3.49090, fine: 3.44203, cc: "AT" },
+      { name: "4 Ducati (Austria)", karat: "23,6K — 986", gross: 13.96360, fine: 13.76811, cc: "AT" },
+      { name: "10 Corone (Austria)", karat: "21,6K — 900", gross: 3.38753, fine: 3.04878, cc: "AT" },
+      { name: "20 Corone (Austria)", karat: "21,6K — 900", gross: 6.77506, fine: 6.09755, cc: "AT" },
+      { name: "100 Corone (Austria)", karat: "21,6K — 900", gross: 33.87530, fine: 30.48780, cc: "AT" },
+      { name: "25 Schilling (Austria)", karat: "21,6K — 900", gross: 5.88100, fine: 5.29290, cc: "AT" },
+      { name: "100 Schilling (Austria)", karat: "21,6K — 900", gross: 23.52400, fine: 21.17160, cc: "AT" },
+      { name: "Filarmonica di Vienna 1 oz", karat: "24K — 999,9", gross: 31.10300, fine: 31.10300, cc: "AT" },
+      { name: "100 Pesos (Cile)", karat: "21,6K — 900", gross: 20.33970, fine: 18.30573, cc: "CL" },
+      { name: "Panda 1/20 oz (fino 2015)", karat: "24K — 999", gross: 1.55517, fine: 1.55517, cc: "CN", grp: "15" },
+      { name: "Panda 1/10 oz (fino 2015)", karat: "24K — 999", gross: 3.11035, fine: 3.11035, cc: "CN", grp: "15" },
+      { name: "Panda 1/4 oz (fino 2015)", karat: "24K — 999", gross: 7.77587, fine: 7.77587, cc: "CN", grp: "15" },
+      { name: "Panda 1/2 oz (fino 2015)", karat: "24K — 999", gross: 15.55175, fine: 15.55175, cc: "CN", grp: "15" },
+      { name: "Panda 1 oz (fino 2015)", karat: "24K — 999", gross: 31.10350, fine: 31.10350, cc: "CN", grp: "15" },
+      { name: "Panda 1 g (dal 2016)", karat: "24K — 999", gross: 1.00000, fine: 1.00000, cc: "CN", grp: "16" },
+      { name: "Panda 3 g (dal 2016)", karat: "24K — 999", gross: 3.00000, fine: 3.00000, cc: "CN", grp: "16" },
+      { name: "Panda 8 g (dal 2016)", karat: "24K — 999", gross: 8.00000, fine: 8.00000, cc: "CN", grp: "16" },
+      { name: "Panda 15 g (dal 2016)", karat: "24K — 999", gross: 15.00000, fine: 15.00000, cc: "CN", grp: "16" },
+      { name: "Panda 30 g (dal 2016)", karat: "24K — 999", gross: 30.00000, fine: 30.00000, cc: "CN", grp: "16" },
+      { name: "50 Franchi (Francia)", karat: "21,6K — 900", gross: 16.12903, fine: 14.51612, cc: "FR" },
+      { name: "100 Franchi (Francia)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "FR" },
+      { name: "Luigi d’oro (Francia)", karat: "22K — 917", gross: 8.15800, fine: 7.47800, cc: "FR" },
+      { name: "Doppio Luigi (Francia)", karat: "22K — 917", gross: 16.31500, fine: 14.95700, cc: "FR" },
+      { name: "10 Marchi", karat: "21,6K — 900", gross: 3.98250, fine: 3.58425, cc: "DE" },
+      { name: "20 Marchi", karat: "21,6K — 900", gross: 7.96500, fine: 7.16850, cc: "DE" },
+      { name: "10 Lire", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "IT" },
+      { name: "20 Lire (Marengo)", karat: "21,6K — 900", gross: 6.45161, fine: 5.80645, cc: "IT" },
+      { name: "40 Lire", karat: "21,6K — 900", gross: 12.90322, fine: 11.61290, cc: "IT" },
+      { name: "80 Lire", karat: "21,6K — 900", gross: 25.80644, fine: 23.22580, cc: "IT" },
+      { name: "100 Lire", karat: "21,6K — 900", gross: 32.25805, fine: 29.03225, cc: "IT" },
+      { name: "2 Pesos (Messico)", karat: "21,6K — 900", gross: 1.66660, fine: 1.50000, cc: "MX" },
+      { name: "2,5 Pesos (Messico)", karat: "21,6K — 900", gross: 2.08330, fine: 1.87500, cc: "MX" },
+      { name: "5 Pesos (Messico)", karat: "21,6K — 900", gross: 4.16660, fine: 3.75000, cc: "MX" },
+      { name: "10 Pesos (Messico)", karat: "21,6K — 900", gross: 8.33330, fine: 7.50000, cc: "MX" },
+      { name: "20 Pesos (Messico)", karat: "21,6K — 900", gross: 16.66660, fine: 15.00000, cc: "MX" },
+      { name: "50 Pesos (Messico)", karat: "21,6K — 900", gross: 41.66660, fine: 37.50000, cc: "MX" },
+      { name: "Libertad 1 oz (Messico)", karat: "24K — 999", gross: 31.10300, fine: 31.10300, cc: "MX" },
+      { name: "10 Gulden (Olanda)", karat: "21,6K — 900", gross: 6.72900, fine: 6.05610, cc: "NL" },
+      { name: "50 Soles (Perù)", karat: "21,6K — 900", gross: 23.40560, fine: 21.06504, cc: "PE" },
+      { name: "100 Soles (Perù)", karat: "21,6K — 900", gross: 46.80710, fine: 42.12639, cc: "PE" },
+      { name: "Mezza sterlina", karat: "22K — 916,7", gross: 3.99403, fine: 3.66119, cc: "UK" },
+      { name: "Sterlina (Sovereign)", karat: "22K — 916,7", gross: 7.98805, fine: 7.32238, cc: "UK" },
+      { name: "2 Pounds", karat: "22K — 916,7", gross: 15.97610, fine: 14.64476, cc: "UK" },
+      { name: "5 Pounds", karat: "22K — 916,7", gross: 39.94025, fine: 36.61190, cc: "UK" },
+      { name: "Britannia 1 oz", karat: "24K — 999,9", gross: 31.21000, fine: 31.10350, cc: "UK" },
+      { name: "5 Rubli (Russia)", karat: "21,6K — 900", gross: 4.30128, fine: 3.87115, cc: "RU" },
+      { name: "7,5 Rubli (Russia)", karat: "21,6K — 900", gross: 6.45200, fine: 5.80680, cc: "RU" },
+      { name: "10 Rubli (Russia)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
+      { name: "15 Rubli (Russia)", karat: "21,6K — 900", gross: 12.90390, fine: 11.61351, cc: "RU" },
+      { name: "Chervonetz 10 Rubli (URSS)", karat: "21,6K — 900", gross: 8.60260, fine: 7.74234, cc: "RU" },
+      { name: "10 Pesetas (Spagna)", karat: "21,6K — 900", gross: 3.22580, fine: 2.90322, cc: "ES" },
+      { name: "25 Pesetas (Spagna)", karat: "21,6K — 900", gross: 8.06451, fine: 7.25806, cc: "ES" },
+      { name: "100 Pesetas (Spagna)", karat: "21,6K — 900", gross: 32.25806, fine: 29.03225, cc: "ES" },
+      { name: "2,5 Dollari USA (Quarter Eagle)", karat: "21,6K — 900", gross: 4.17900, fine: 3.76110, cc: "US" },
+      { name: "5 Dollari USA (Half Eagle)", karat: "21,6K — 900", gross: 8.35900, fine: 7.52310, cc: "US" },
+      { name: "10 Dollari USA (Eagle)", karat: "21,6K — 900", gross: 16.71800, fine: 15.04620, cc: "US" },
+      { name: "20 Dollari USA (Double Eagle)", karat: "21,6K — 900", gross: 33.43600, fine: 30.09260, cc: "US" },
+      { name: "25 Dollari USA (Eagle 1/2 oz)", karat: "22K — 916,7", gross: 16.96600, fine: 15.55170, cc: "US" },
+      { name: "50 Dollari USA (Eagle 1 oz)", karat: "22K — 916,7", gross: 33.93100, fine: 31.10350, cc: "US" },
+      { name: "Krugerrand 1/10 oz", karat: "22K — 916,7", gross: 3.39300, fine: 3.11035, cc: "ZA" },
+      { name: "Krugerrand 1/4 oz", karat: "22K — 916,7", gross: 8.48250, fine: 7.77587, cc: "ZA" },
+      { name: "Krugerrand 1/2 oz", karat: "22K — 916,7", gross: 16.96500, fine: 15.55175, cc: "ZA" },
+      { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA" },
     ];
-    const K22 = 22 / 24;
-    const K216 = 21.6 / 24;
     const K18 = 18 / 24;
-    const K14 = 14 / 24;
-    const K10 = 10 / 24;
-    const K9 = 9 / 24;
-    const K8 = 8 / 24;
-    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, spotPln: null, apartList: null, apartSource: "listino 01/09/2026 15:05", sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, apartLive: false };
-    const APART = [
-      { name: "Krugerrand 1oz — annate miste (24h)", price: 16730, url: APART_LIST_URL },
-      { name: "Britannia 1oz — annate miste (24h)", price: 16779, url: APART_LIST_URL },
-      { name: "Kangur australiano 1oz 2025/2026 (24h)", price: 16779, url: APART_LIST_URL },
-      { name: "Britannia 1oz 2025/2026 (24h)", price: 16796, url: APART_LIST_URL },
-      { name: "Maple Leaf 1oz — annate miste (24h)", price: 16829, url: APART_LIST_URL },
-      { name: "Filarmonica Vienna 1oz — annate miste (24h)", price: 16861, url: APART_LIST_URL },
-      { name: "Filarmonica Vienna 1oz 2025/2026 (24h)", price: 16878, url: APART_LIST_URL },
-      { name: "Maple Leaf 1oz 2025/2026 (24h)", price: 16878, url: APART_LIST_URL },
-      { name: "Krugerrand 1oz 2025/2026 (24h)", price: 16894, url: APART_LIST_URL },
-      { name: "American Eagle 1oz — annate miste (24h)", price: 17025, url: APART_LIST_URL },
-    ];
-
+    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, g24: null, tvCache: {}, ticks: {}, hub: null, lastSpark: 0 };
     function renderCoins(g24) {
       const rows = [];
       let last = null;
@@ -660,44 +531,6 @@
       });
       document.getElementById("coinsBody").innerHTML = rows.join("");
     }
-    function pln(n, d = 2) { return fmt(n, d) + " zł"; }
-    function spotPlnNow() {
-      const q = state.quote || {};
-      if (q.xauusd > 0 && q.eurpln > 0 && q.eurusd > 0) return q.xauusd * (q.eurpln / q.eurusd);
-      return state.spotPln;
-    }
-    function renderApart() { return; }
-    function renderApartRemoved() {
-      const now = new Date().toLocaleString("it-IT", {
-        day: "2-digit", month: "2-digit", year: "numeric",
-        hour: "2-digit", minute: "2-digit", second: "2-digit",
-      });
-      const catalog = (Array.isArray(state.apartList) && state.apartList.length) ? state.apartList : APART;
-      const spot = spotPlnNow();
-      state.spotPln = spot;
-      const meta = document.getElementById("apartMeta");
-      if (meta) {
-        meta.textContent = (state.apartLive ? "Listino Apart live · " : "Listino Apart (ultimo letto) · ") + (state.apartSource || "") + " · " + now;
-      }
-      const spotEl = document.getElementById("spotPln");
-      if (spotEl) spotEl.textContent = spot ? pln(spot) : "—";
-      const clean = s => String(s || "").replace(/\*+/g, "").trim();
-      const body = document.getElementById("apartBody");
-      if (!body) return;
-      const rows = catalog.slice().filter(p => p.price > 0).sort((a, b) => a.price - b.price).slice(0, 10);
-      body.innerHTML = rows.map((p, i) => {
-        const spread = spot ? (p.price - spot) : null;
-        const pct = spot ? (spread / spot) * 100 : null;
-        return `<tr>
-          <td>${i + 1}</td>
-          <td><a href="${p.url || APART_LIST_URL}" target="_blank" rel="noopener">${clean(p.name)}</a></td>
-          <td class="r"><a href="${p.url || APART_LIST_URL}" target="_blank" rel="noopener">${pln(p.price, 0)}</a></td>
-          <td class="r">${spread == null ? "—" : spreadSign(spread)}</td>
-          <td class="r">${pct == null ? "—" : ((pct >= 0 ? "+" : "") + fmt(pct, 2) + "%")}</td>
-        </tr>`;
-      }).join("");
-    }
-    function spreadSign(n) { return (n >= 0 ? "+" : "") + pln(n); }
     function goldSymbol() { return state.ccy === "EUR" ? "XAUEUR" : "XAUUSD"; }
     function fxSymbol() { return state.ccy === "PLN" ? "USDPLN" : state.ccy === "CHF" ? "USDCHF" : null; }
     function fmt(n, d = 2) {
@@ -719,10 +552,6 @@
       if (Number.isNaN(x.getTime())) return;
       elD.textContent = x.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" });
       elT.textContent = x.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    }
-    function fmtDateTime(iso) {
-      if (!iso) return "—";
-      return new Date(iso).toLocaleString("it-IT");
     }
     function showErr(msg) {
       const box = document.getElementById("errBox");
@@ -807,61 +636,6 @@
       state.sessionLow = low;
       return { open: openPx, high, low, price: mid };
     }
-    function monthRange(daily, today) {
-      const cutoff = Date.now() - 31 * 24 * 60 * 60 * 1000;
-      const mid = today?.price || today?.high || today?.low;
-      let bars = (daily || []).filter(b => {
-        const ts = new Date(b.openTime || b.time || 0).getTime();
-        return ts && !Number.isNaN(ts) && ts >= cutoff && (sameScale(b.high, mid, 0.45) || sameScale(b.low, mid, 0.45) || sameScale(b.close, mid, 0.45));
-      });
-      if (!bars.length && daily?.length) bars = daily.slice(-22).filter(b => sameScale(b.close || b.high, mid, 0.45));
-      let high = today?.high, low = today?.low;
-      bars.forEach(b => {
-        if (sameScale(b.high, mid, 0.45)) high = high == null ? b.high : Math.max(high, b.high);
-        if (sameScale(b.low, mid, 0.45)) low = low == null ? b.low : Math.min(low, b.low);
-      });
-      return { high, low };
-    }
-    function avgDayRange6m(daily, today) {
-      const cutoff = Date.now() - 183 * 24 * 60 * 60 * 1000;
-      const mid = today?.price || today?.high || today?.low;
-      const rs = [];
-      (daily || []).forEach(b => {
-        const ts = new Date(b.openTime || b.time || 0).getTime();
-        if (!ts || ts < cutoff) return;
-        const h = Number(b.high || b.close);
-        const l = Number(b.low || b.close);
-        if (h > 0 && l > 0 && h >= l) {
-          if (mid > 0 && !sameScale(h, mid, 0.45) && !sameScale(l, mid, 0.45)) return;
-          rs.push(h - l);
-        }
-      });
-      if (!rs.length) return null;
-      return rs.reduce((a, b) => a + b, 0) / rs.length;
-    }
-    function avgMonthRange6m(daily, today) {
-      const mid = today?.price || today?.high || today?.low;
-      const buckets = new Map();
-      (daily || []).forEach(b => {
-        const d = new Date(b.openTime || b.time || 0);
-        if (Number.isNaN(d.getTime())) return;
-        const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
-        const h = Number(b.high || b.close);
-        const l = Number(b.low || b.close);
-        if (!(h > 0 && l > 0)) return;
-        if (mid > 0 && !sameScale(h, mid, 0.45) && !sameScale(l, mid, 0.45)) return;
-        const cur = buckets.get(key) || { high: h, low: l };
-        cur.high = Math.max(cur.high, h);
-        cur.low = Math.min(cur.low, l);
-        buckets.set(key, cur);
-      });
-      const keys = [...buckets.keys()].sort();
-      const last = keys.slice(-6);
-      if (!last.length) return null;
-      const rs = last.map(k => buckets.get(k).high - buckets.get(k).low).filter(v => v > 0);
-      if (!rs.length) return null;
-      return rs.reduce((a, b) => a + b, 0) / rs.length;
-    }
     function yearRange(daily, today) {
       const cutoff = Date.now() - 365 * 24 * 60 * 60 * 1000;
       const mid = today?.price || today?.high || today?.low;
@@ -880,43 +654,6 @@
       });
       return { high, low };
     }
-    function supportLevels(daily, day) {
-      const month = monthRange(daily, day);
-      const closed = (daily || []).filter(b => !b.isOpen);
-      const prev = closed.length ? closed[closed.length - 1] : null;
-      const levels = [];
-      if (day?.low) levels.push({ name: "minimo di giornata", value: day.low });
-      if (month.low) levels.push({ name: "minimo del mese", value: month.low });
-      if (prev) {
-        const P = (prev.high + prev.low + prev.close) / 3;
-        levels.push({ name: "supporto S1", value: 2 * P - prev.high });
-        levels.push({ name: "supporto S2", value: P - (prev.high - prev.low) });
-        levels.push({ name: "minimo di ieri", value: prev.low });
-      }
-      if (month.high && month.low && month.high > month.low) {
-        const mr = month.high - month.low;
-        levels.push({ name: "ritracciamento 38,2% mese", value: month.high - mr * 0.382 });
-        levels.push({ name: "ritracciamento 61,8% mese", value: month.high - mr * 0.618 });
-      }
-      return levels.filter(l => l.value > 0);
-    }
-    function bestBuy(day, daily) {
-      const price = day.price;
-      const levels = supportLevels(daily, day);
-      if (!levels.length) {
-        return { level: day.low || price, status: "wait", label: "Dati insufficienti", hint: "Ancora pochi dati per calcolare i supporti." };
-      }
-      const below = levels.filter(l => l.value <= price * 1.0015).sort((a, b) => b.value - a.value);
-      const target = below[0] || levels.slice().sort((a, b) => b.value - a.value)[0];
-      const distPct = ((price - target.value) / target.value) * 100;
-      if (distPct <= 0.25 && target.value <= price * 1.0015) {
-        return { level: target.value, status: "ok", label: "Sul supporto", hint: "Il prezzo è sul supporto calcolato (" + target.name + "). Non è necessariamente il minimo assoluto." };
-      }
-      if (distPct > 1.2) {
-        return { level: target.value, status: "high", label: "Lontano dal supporto", hint: "Supporto più vicino sotto il prezzo: " + target.name + ". Non coincide col semplice minimo." };
-      }
-      return { level: target.value, status: "wait", label: "Attendi il supporto", hint: "Livello di supporto: " + target.name + ". Aspetta un rientro su quel livello, non sul minimo a tutti i costi." };
-    }
     function setSignedDist(id, pct, amount) {
       const el = document.getElementById(id);
       if (el == null || amount == null || Number.isNaN(amount)) {
@@ -930,43 +667,11 @@
       el.textContent = as;
     }
     function renderBuy(day) {
+      if (!day) return;
       document.getElementById("dayLow").textContent = money(day.low);
       document.getElementById("dayHigh").textContent = money(day.high);
-      const elDR = document.getElementById("dayRange");
-      if (elDR) elDR.textContent = money(day.high - day.low);
-      const avgD = avgDayRange6m(state.daily, day);
-      const elDA = document.getElementById("dayRangeAvg");
-      if (elDA) elDA.textContent = avgD != null ? money(avgD) : "—";
-      const fromLow = day.price - day.low;
-      const fromLowPct = day.low > 0 ? (fromLow / day.low) * 100 : 0;
-      setSignedDist("buyDist", fromLowPct, fromLow);
-      const toHigh = day.price - day.high;
-      const toHighPct = day.high > 0 ? (toHigh / day.high) * 100 : 0;
-      setSignedDist("dayHighDist", toHighPct, toHigh);
-      const month = monthRange(state.daily, day);
-      (document.getElementById("monthHigh")||{}).textContent = month.high != null ? money(month.high) : "—";
-      const _ml = document.getElementById("monthLow"); if (_ml) _ml.textContent = month.low != null ? money(month.low) : "—";
-      const elMR = document.getElementById("monthRange");
-      if (elMR) elMR.textContent = month.high != null && month.low != null ? money(month.high - month.low) : "—";
-      const avgM = avgMonthRange6m(state.daily, day);
-      const elMA = document.getElementById("monthRangeAvg");
-      if (elMA) elMA.textContent = avgM != null ? money(avgM) : "—";
-      if (month.low != null && day.price != null) {
-        const mFrom = day.price - month.low;
-        const mPct = month.low > 0 ? (mFrom / month.low) * 100 : 0;
-        setSignedDist("monthDist", mPct, mFrom);
-      } else { const _md = document.getElementById("monthDist"); if (_md) _md.textContent = "—"; }
-      if (month.high != null && day.price != null) {
-        const mTo = day.price - month.high;
-        const mToPct = month.high > 0 ? (mTo / month.high) * 100 : 0;
-        setSignedDist("monthHighDist", mToPct, mTo);
-      } else { const _mhd = document.getElementById("monthHighDist"); if (_mhd) _mhd.textContent = "—"; }
-      const s50 = sma(state.daily, 50);
-      const s200 = sma(state.daily, 200);
-      const el50 = document.getElementById("sma50");
-      const el200 = document.getElementById("sma200");
-      if (el50) el50.textContent = s50 != null ? money(s50) : "—";
-      if (el200) el200.textContent = s200 != null ? money(s200) : "—";
+      setSignedDist("buyDist", 0, day.price - day.low);
+      setSignedDist("dayHighDist", 0, day.price - day.high);
       const yr = yearRange(state.daily, day);
       const elYLo = document.getElementById("yLow");
       const elYHi = document.getElementById("yHigh");
@@ -977,53 +682,6 @@
       if (yr.high != null && day.price != null) setSignedDist("yHighDist", 0, day.price - yr.high);
       else { const el = document.getElementById("yHighDist"); if (el) el.textContent = "—"; }
       paintMetals();
-    }
-    function keySR(daily, day, s50, s200) {
-      const px = day?.price;
-      if (!(px > 0)) return { sup: null, res: null };
-      const bars = (daily || []).filter(b => sameScale(b.close || b.low || b.high, px, 0.25)).slice(-60);
-      const lows = [], highs = [];
-      for (let i = 2; i < bars.length - 2; i++) {
-        const l = Number(bars[i].low || bars[i].close);
-        const h = Number(bars[i].high || bars[i].close);
-        const pl = Number(bars[i-1].low || bars[i-1].close);
-        const nl = Number(bars[i+1].low || bars[i+1].close);
-        const ph = Number(bars[i-1].high || bars[i-1].close);
-        const nh = Number(bars[i+1].high || bars[i+1].close);
-        if (l <= pl && l <= nl && l > 0) lows.push(l);
-        if (h >= ph && h >= nh && h > 0) highs.push(h);
-      }
-      const step = px >= 5000 ? 100 : px >= 800 ? 50 : 10;
-      const roundDown = Math.floor(px / step) * step;
-      const roundUp = Math.ceil(px / step) * step;
-      const below = [];
-      const above = [];
-      lows.forEach(v => { if (v < px * 0.999) below.push(v); });
-      highs.forEach(v => { if (v > px * 1.001) above.push(v); });
-      if (day.low && day.low < px * 0.999) below.push(day.low);
-      if (day.high && day.high > px * 1.001) above.push(day.high);
-      if (s50 && s50 < px * 0.999) below.push(s50);
-      if (s50 && s50 > px * 1.001) above.push(s50);
-      if (s200 && s200 < px * 0.999) below.push(s200);
-      if (s200 && s200 > px * 1.001) above.push(s200);
-      if (roundDown > 0 && roundDown < px * 0.999) below.push(roundDown);
-      if (roundUp > px * 1.001) above.push(roundUp);
-      const month = monthRange(daily, day);
-      if (month.low && month.low < px) below.push(month.low);
-      if (month.high && month.high > px) above.push(month.high);
-      const sup = below.length ? Math.max(...below.filter(v => v > px * 0.85)) : (month.low || day.low);
-      const res = above.length ? Math.min(...above.filter(v => v < px * 1.15)) : (month.high || day.high);
-      return { sup, res };
-    }
-    function sma(daily, n) {
-      const bars = (daily || []).filter(b => !b.isOpen && Number(b.close) > 0).slice().sort((a, b) => {
-        return new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0);
-      });
-      const closes = bars.map(b => Number(b.close));
-      if (closes.length < n) return null;
-      let s = 0;
-      for (let i = closes.length - n; i < closes.length; i++) s += closes[i];
-      return s / n;
     }
     function smaSeries(daily, n) {
       const bars = (daily || []).filter(b => !b.isOpen && Number(b.close) > 0).slice().sort((a, b) => {
@@ -1050,437 +708,6 @@
         else hi = m - 1;
       }
       return ans;
-    }
-    function rsiCloses(closes, n) {
-      if (!closes || closes.length < n + 1) return null;
-      let gains = 0, losses = 0;
-      for (let i = closes.length - n; i < closes.length; i++) {
-        const d = closes[i] - closes[i - 1];
-        if (d >= 0) gains += d; else losses -= d;
-      }
-      const avgG = gains / n, avgL = losses / n;
-      if (avgL === 0) return 100;
-      return 100 - 100 / (1 + avgG / avgL);
-    }
-
-    function closedDaily(daily) {
-      return (daily || []).filter(b => !b.isOpen && Number(b.close) > 0);
-    }
-    function barTR(bar, prevClose) {
-      const h = Number(bar.high || bar.close);
-      const l = Number(bar.low || bar.close);
-      const c = Number(prevClose || bar.close);
-      return Math.max(h - l, Math.abs(h - c), Math.abs(l - c));
-    }
-    function atrN(bars, n) {
-      if (!bars || bars.length < n + 1) return null;
-      let s = 0;
-      for (let i = bars.length - n; i < bars.length; i++) s += barTR(bars[i], bars[i - 1].close);
-      return s / n;
-    }
-    function swingLowList(bars) {
-      const out = [];
-      for (let i = 2; i < bars.length - 2; i++) {
-        const l = Number(bars[i].low || bars[i].close);
-        const pl = Number(bars[i - 1].low || bars[i - 1].close);
-        const nl = Number(bars[i + 1].low || bars[i + 1].close);
-        const p2 = Number(bars[i - 2].low || bars[i - 2].close);
-        const n2 = Number(bars[i + 2].low || bars[i + 2].close);
-        if (l > 0 && l <= pl && l <= nl && l <= p2 && l <= n2) out.push({ i, v: l });
-      }
-      return out;
-    }
-    function roundSteps(px) {
-      const step = px >= 5000 ? 100 : px >= 2500 ? 50 : px >= 800 ? 50 : 10;
-      const half = step / 2;
-      const list = [];
-      const base = Math.round(px / step) * step;
-      for (let k = -6; k <= 3; k++) {
-        const v = base + k * step;
-        if (v > 0) list.push(v);
-        const h = base + k * step + half;
-        if (h > 0 && Math.abs(h - px) / px < 0.08) list.push(h);
-      }
-      return list;
-    }
-    function detectFlushPhase(daily, day, s50) {
-      const px = day && Number(day.price);
-      const bars = closedDaily(daily);
-      const empty = {
-        phase: "QUIETE", phaseCls: "wait",
-        phaseTxt: "Storico insufficiente per leggere rotture e volatilità.",
-        broken: null, flushLow: null, volRatio: null, drop5: null,
-        atr14: null, throughPct: null, daysSince: null
-      };
-      if (!(px > 0) || bars.length < 25) return empty;
-      const live = { high: Number((day && day.high) || px), low: Number((day && day.low) || px), close: px };
-      const seq = bars.slice();
-      const last = seq[seq.length - 1];
-      if (!last || Math.abs(Number(last.close) - px) / px > 0.0015) seq.push(live);
-      else {
-        last.high = Math.max(Number(last.high || last.close), live.high);
-        last.low = Math.min(Number(last.low || last.close), live.low);
-        last.close = px;
-      }
-      const atr14 = atrN(seq, 14);
-      const atr50 = atrN(seq, Math.min(50, Math.max(20, seq.length - 2)));
-      const volRatio = (atr14 > 0 && atr50 > 0) ? atr14 / atr50 : null;
-      const last3tr = seq.length >= 4
-        ? (barTR(seq[seq.length - 1], seq[seq.length - 2].close)
-          + barTR(seq[seq.length - 2], seq[seq.length - 3].close)
-          + barTR(seq[seq.length - 3], seq[seq.length - 4].close)) / 3
-        : null;
-      const burst = (last3tr > 0 && atr50 > 0) ? last3tr / atr50 : null;
-      const win5 = seq.slice(-5);
-      const win20 = seq.slice(-20);
-      const high20 = Math.max(...win20.map(b => Number(b.high || b.close)));
-      const low5 = Math.min(...win5.map(b => Number(b.low || b.close)));
-      const drop5 = high20 > 0 ? ((high20 - px) / high20) * 100 : null;
-      const prior = seq.slice(0, Math.max(0, seq.length - 5));
-      const candidates = [];
-      swingLowList(prior).forEach(s => candidates.push({ v: s.v, k: "swing" }));
-      roundSteps(px).forEach(v => candidates.push({ v, k: "tondo" }));
-      if (s50 > 0) candidates.push({ v: s50, k: "SMA50" });
-      const priorLow = prior.length ? Math.min(...prior.slice(-22).map(b => Number(b.low || b.close))) : null;
-      if (priorLow > 0) candidates.push({ v: priorLow, k: "min 20s" });
-      const monthPrior = prior.filter(b => {
-        const d = new Date(b.openTime || b.time || 0);
-        if (Number.isNaN(d.getTime())) return false;
-        const now = new Date();
-        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-      });
-      if (monthPrior.length) {
-        const ml = Math.min(...monthPrior.map(b => Number(b.low || b.close)));
-        if (ml > 0) candidates.push({ v: ml, k: "min mese" });
-      }
-      function held(level) {
-        if (!(level > 0) || prior.length < 8) return false;
-        const sample = prior.slice(-40);
-        let touches = 0, breaks = 0;
-        sample.forEach(b => {
-          const l = Number(b.low || b.close);
-          const c = Number(b.close);
-          if (l <= level * 1.006 && c >= level * 0.997) touches += 1;
-          if (c < level * 0.994) breaks += 1;
-        });
-        const priorMin = Math.min(...sample.map(b => Number(b.low || b.close)));
-        return (priorMin >= level * 0.996 && touches >= 1) || (breaks <= 1 && touches >= 2);
-      }
-      const recentLow = Math.min(low5, Number((day && day.low) || px));
-      let broken = null;
-      candidates.forEach(c => {
-        const L = c.v;
-        if (!(L > 0)) return;
-        if (recentLow > L * 0.998) return;
-        if (L < px * 0.88 || L > px * 1.03) return;
-        if (!held(L) && c.k === "tondo") {
-          // i tondi restano validi se il prezzo ci ha ruotato intorno
-          const near = prior.slice(-30).filter(b => Math.abs(Number(b.low || b.close) - L) / L < 0.008);
-          if (near.length < 2) return;
-        } else if (!held(L) && c.k !== "tondo") return;
-        const through = ((L - recentLow) / L) * 100;
-        if (through < 0.08 || through > 8) return;
-        if (!broken || Math.abs(L - px) < Math.abs(broken.v - px)) broken = { v: L, k: c.k, through };
-      });
-      const volOn = (volRatio != null && volRatio >= 1.18) || (burst != null && burst >= 1.45);
-      const volHot = (volRatio != null && volRatio >= 1.32) || (burst != null && burst >= 1.8);
-      const washed = drop5 != null && drop5 >= 3.2;
-      const deepWash = drop5 != null && drop5 >= 5;
-      let phase = "QUIETE";
-      let phaseCls = "wait";
-      let phaseTxt = "Nessuna rottura recente di un livello dove di solito si accumulano gli stop.";
-      let daysSince = null;
-      if (broken) {
-        for (let i = seq.length - 1; i >= Math.max(0, seq.length - 8); i--) {
-          if (Number(seq[i].low || seq[i].close) < broken.v * 0.998) {
-            daysSince = seq.length - 1 - i;
-            break;
-          }
-        }
-      }
-      const inPocket = broken && px <= broken.v * 1.006 && px >= recentLow * 0.999;
-      const reclaim = broken && px >= broken.v * 0.997 && px <= broken.v * 1.018;
-      const stillFalling = broken && px < broken.v * 0.975 && (drop5 != null && drop5 >= 4);
-
-      if (broken && (volOn || washed)) {
-        if (stillFalling && !reclaim) {
-          phase = "ROTTURA";
-          phaseCls = "high";
-          phaseTxt = "Il " + broken.k + " a " + broken.v.toFixed(0) + " è stato bucato e il movimento è ancora in corso. Gli stop stanno scattando: è presto per caricare il lotto intero.";
-        } else if (reclaim && (volOn || washed)) {
-          phase = "POST-SWEEP";
-          phaseCls = "ok";
-          phaseTxt = "Sweep avvenuto: il " + broken.k + " è stato preso e il prezzo è tornato sul livello. Zona classica di accumulo dopo il lavaggio degli stop.";
-        } else if (inPocket) {
-          phase = "STOP-RUN";
-          phaseCls = "ok";
-          phaseTxt = "Rottura del " + broken.k + " + volatilità alta. Siamo nella tasca sotto il livello, dove scattano gli stop: area interessante per iniziare a comprare a tranche.";
-        } else {
-          phase = "ROTTURA";
-          phaseCls = "wait";
-          phaseTxt = "Livello " + broken.k + " rotto da " + (daysSince != null ? (daysSince + " sedut" + (daysSince === 1 ? "a" : "e")) : "poco") + ", ma il prezzo è già uscito dalla tasca. Meglio il ritracciamento sul livello.";
-        }
-      } else if (!broken && volHot && deepWash) {
-        phase = "LAVAGGIO";
-        phaseCls = "ok";
-        phaseTxt = "Nessun livello singolo netto, ma la volatilità è esplosa e il calo a 5 sedute è da lavaggio. Area da iniziare a presidiare, non da inseguire al tick.";
-      } else if (volHot && drop5 != null && drop5 < 1.2) {
-        phase = "VOL ESPANSA";
-        phaseCls = "wait";
-        phaseTxt = "Volatilità alta senza rottura al ribasso: più tipico di corsa o rumor, non della fase in cui gli stop sotto un supporto vengono presi.";
-      }
-
-      return {
-        phase, phaseCls, phaseTxt, broken: broken ? broken.v : null, brokenKind: broken ? broken.k : null,
-        flushLow: recentLow, volRatio, burst, drop5, atr14, throughPct: broken ? broken.through : null,
-        daysSince, inPocket, reclaim
-      };
-    }
-
-    function computeBuySignal(daily, day) {
-      const px = day && day.price;
-      const closes = (daily || []).filter(b => !b.isOpen && Number(b.close) > 0).map(b => Number(b.close));
-      if (day && Number(day.price) > 0) {
-        if (!closes.length || Math.abs(closes[closes.length - 1] - px) / px > 0.002)
-          closes.push(px);
-      }
-      const s50 = sma(daily, 50);
-      const s200 = sma(daily, Math.min(200, Math.max(closes.length, 1)));
-      const s200Full = closes.length >= 180;
-      const rsi = rsiCloses(closes, 14);
-      const month = monthRange(daily, day);
-      const dist200 = (s200 > 0 && px > 0) ? ((px / s200) - 1) * 100 : null;
-      const dist50 = (s50 > 0 && px > 0) ? ((px / s50) - 1) * 100 : null;
-      let score = 42;
-      const checks = [];
-
-      const up200 = s200 != null && px > s200;
-      const up50 = s50 != null && px > s50;
-      const bullStack = up200 && s50 != null && s50 > s200;
-
-      if (up200) score += 16; else score -= 10;
-      checks.push({
-        k: "Trend SMA200",
-        v: s200 == null ? "storico corto" : (up200 ? "sopra — trend rialzista" : "sotto — trend debole"),
-        cls: s200 == null ? "warn" : (up200 ? "on" : "off")
-      });
-
-      if (bullStack && up50) score += 12;
-      else if (up200 && s50 != null && px <= s50) score += 10;
-      else if (!up200 && up50) score += 2;
-      else score -= 4;
-      checks.push({
-        k: "Struttura SMA50/200",
-        v: s50 == null ? "n/d" : (bullStack ? "prezzo > SMA50 > SMA200" : (up200 ? "pullback sotto SMA50" : "sotto le medie")),
-        cls: bullStack ? "on" : (up200 ? "warn" : "off")
-      });
-
-      if (rsi != null) {
-        if (up200 && rsi < 30) score += 16;
-        else if (up200 && rsi < 40) score += 12;
-        else if (up200 && rsi < 45) score += 8;
-        else if (up200 && rsi < 50) score += 4;
-        else if (rsi > 75) score -= 18;
-        else if (rsi > 70) score -= 12;
-        else if (rsi > 60) score -= 5;
-        else if (!up200 && rsi < 30) score += 8;
-        else if (!up200 && rsi < 35) score += 4;
-        checks.push({
-          k: "RSI 14 giorni",
-          v: fmt(rsi, 1),
-          cls: (up200 && rsi < 40) || (!up200 && rsi < 32) ? "on" : (rsi > 70 ? "off" : "warn")
-        });
-      } else {
-        checks.push({ k: "RSI 14 giorni", v: "n/d", cls: "warn" });
-      }
-
-      if (dist200 != null) {
-        if (dist200 < -10) score -= 8;
-        else if (dist200 < -5) score += 10;
-        else if (dist200 < 0) score += 7;
-        else if (dist200 < 8) score += 4;
-        else if (dist200 < 16) score += 1;
-        else if (dist200 < 20) score -= 6;
-        else if (dist200 < 25) score -= 14;
-        else score -= 22;
-        checks.push({
-          k: "Estensione vs SMA200",
-          v: (dist200 >= 0 ? "+" : "") + fmt(dist200, 1) + "%",
-          cls: dist200 > 20 || dist200 < -10 ? "off" : (dist200 < 0 || (up200 && dist200 < 8) ? "on" : "warn")
-        });
-      }
-
-      if (dist50 != null && up200 && Math.abs(dist50) <= 1.6) score += 8;
-      checks.push({
-        k: "Distanza SMA50",
-        v: dist50 == null ? "n/d" : ((dist50 >= 0 ? "+" : "") + fmt(dist50, 1) + "%"),
-        cls: dist50 != null && up200 && Math.abs(dist50) <= 1.6 ? "on" : "warn"
-      });
-
-      if (month.low && px) {
-        const mPos = month.high > month.low ? (px - month.low) / (month.high - month.low) : 0.5;
-        if (mPos <= 0.22) score += 6;
-        else if (mPos >= 0.88) score -= 6;
-        checks.push({
-          k: "Posizione range mese",
-          v: fmt(mPos * 100, 0) + "% dal minimo",
-          cls: mPos <= 0.25 ? "on" : (mPos >= 0.85 ? "off" : "warn")
-        });
-      }
-
-      const flush = detectFlushPhase(daily, day, s50);
-      if (flush.phase === "POST-SWEEP") score += up200 ? 16 : 10;
-      else if (flush.phase === "STOP-RUN") score += up200 ? 14 : 8;
-      else if (flush.phase === "LAVAGGIO") score += up200 ? 10 : 6;
-      else if (flush.phase === "ROTTURA") {
-        if (rsi != null && rsi < 28) score += 6;
-        else if (rsi != null && rsi > 42) score -= 6;
-        else score -= 2;
-      }
-      if (flush.volRatio != null && flush.volRatio >= 1.25 && flush.phase !== "QUIETE") score += 3;
-      checks.push({
-        k: "Fase post-rottura",
-        v: flush.phase,
-        cls: flush.phase === "STOP-RUN" || flush.phase === "POST-SWEEP" || flush.phase === "LAVAGGIO" ? "on" : (flush.phase === "ROTTURA" ? "off" : "warn")
-      });
-      checks.push({
-        k: "Livello rotto",
-        v: flush.broken ? (flush.brokenKind + " " + fmt(flush.broken, 0) + (flush.throughPct != null ? " (−" + fmt(flush.throughPct, 1) + "%)" : "")) : "nessuno recente",
-        cls: flush.broken ? "on" : "warn"
-      });
-      checks.push({
-        k: "Volatilità ATR",
-        v: flush.volRatio == null ? "n/d" : (fmt(flush.volRatio, 2) + "× media"),
-        cls: flush.volRatio != null && flush.volRatio >= 1.2 ? "on" : "warn"
-      });
-      if (flush.drop5 != null) {
-        checks.push({
-          k: "Calo da massimo 20s",
-          v: "−" + fmt(flush.drop5, 1) + "%",
-          cls: flush.drop5 >= 3.2 ? "on" : (flush.drop5 >= 1.8 ? "warn" : "off")
-        });
-      }
-
-      score = Math.max(0, Math.min(100, Math.round(score)));
-
-      const lows20 = (daily || []).filter(b => !b.isOpen && Number(b.low || b.close) > 0).slice(-20)
-        .map(b => Number(b.low || b.close));
-      const swing20 = lows20.length ? Math.min(...lows20) : null;
-      const floors = [];
-      if (s200 > 0) floors.push(s200);
-      if (month.low > 0) floors.push(month.low);
-      if (swing20 > 0) floors.push(swing20);
-      if (s50 > 0 && up200 && px > s50) floors.push(s50);
-      if (flush.flushLow > 0) floors.push(flush.flushLow);
-      if (flush.broken > 0 && flush.broken <= px * 1.01) floors.push(flush.broken);
-      const under = floors.filter(v => v > 0 && v <= px * 1.002);
-      const nearFloor = under.length ? Math.max(...under) : (floors.length ? Math.max(...floors) : (day && day.low) || px);
-      const farFloor = floors.length ? Math.min(...floors.filter(v => v > 0)) : nearFloor;
-      const residual = (px > 0 && nearFloor > 0) ? ((px - nearFloor) / px) * 100 : null;
-      const deepResidual = (px > 0 && farFloor > 0) ? ((px - farFloor) / px) * 100 : residual;
-      const limited = residual != null && residual <= 3.2;
-      const moderate = residual != null && residual <= 6.5;
-
-      const sweepHi = flush.broken || nearFloor;
-      const sweepLo = flush.flushLow || farFloor || nearFloor;
-      const inSweep = flush.phase === "STOP-RUN" || flush.phase === "POST-SWEEP" || flush.phase === "LAVAGGIO";
-      const earlyBreak = flush.phase === "ROTTURA";
-
-      let zone, bcls, action, buyPx, buyLab;
-      if (inSweep && score >= 58) {
-        zone = score >= 75 ? "FORTE ACQUISTO" : "ACQUISTO";
-        bcls = "ok";
-        action = flush.phaseTxt + " Per l’oro fisico: prima tranche qui, seconda se il prezzo rivede il low dello sweep. Non aspettare il tick perfetto: lo spread delle monete è già più largo di un’oscillazione fine.";
-        buyPx = flush.reclaim ? px : (limited ? px : (sweepHi && px > sweepHi ? sweepHi : px));
-        buyLab = flush.phase === "POST-SWEEP" ? "rientro sul livello rotto" : (limited ? "zona stop-run: ora" : "zona stop-run");
-      } else if (earlyBreak && score < 70) {
-        zone = "ATTENDERE FINE FLUSH";
-        bcls = "wait";
-        action = flush.phaseTxt + " Il lotto intero si carica quando la volatilità resta alta ma il prezzo smette di fare nuovi minimi sotto il livello rotto.";
-        buyPx = sweepLo;
-        buyLab = "attendi fine stop-run";
-      } else if (score >= 75 && (limited || moderate)) {
-        zone = "FORTE ACQUISTO"; bcls = "ok";
-        action = (flush.phaseTxt && flush.phase !== "QUIETE" ? flush.phaseTxt + " " : "") + "Sei vicino al supporto strutturale. Per l’oro fisico è la zona in cui i ribassi residui sono più contenuti. Carica il lotto pianificato, non inseguire un rimbalzo già partito.";
-        buyPx = limited ? px : nearFloor;
-        buyLab = limited ? "ingresso prudente: ora" : "ingresso prudente sul supporto";
-      } else if (score >= 60) {
-        zone = "ACQUISTO"; bcls = "ok";
-        action = "Quadro costruttivo, ma il prezzo non è ancora sul pavimento. Meglio accumulare a tranche e privilegiare il livello prudente sotto, non il tick corrente se è distante.";
-        buyPx = nearFloor;
-        buyLab = "ingresso prudente (tranche)";
-      } else if (score >= 45) {
-        zone = "NEUTRO / DCA"; bcls = "wait";
-        action = "Niente edge forte. Tieni solo il piano periodico. Il prezzo prudente è il supporto (SMA200 / minimi): sopra quel livello i ribassi possibili restano aperti.";
-        buyPx = s200 || nearFloor || px;
-        buyLab = "riferimento prudente SMA200";
-      } else if (score >= 30) {
-        zone = "ATTENDERE"; bcls = "wait";
-        action = "Ritracciamento incompleto o trend debole. Per limitare i ribassi aspetta il test del supporto, non anticipare.";
-        buyPx = nearFloor;
-        buyLab = "attendi il supporto prudente";
-      } else {
-        zone = "NON ACCUMULARE EXTRA"; bcls = "high";
-        action = "Estensione elevata: dal 2010 queste zone hanno spesso visto correzioni dell’8–15% verso SMA200. Tieni il DCA minimo e non aumentare la taglia finché il prezzo non torna sul livello prudente.";
-        buyPx = s200 || farFloor || px;
-        buyLab = "niente extra sopra il supporto";
-      }
-
-      if (residual != null) {
-        checks.push({
-          k: "Ribasso residuo al supporto",
-          v: (residual <= 0.15 ? "già sul supporto" : ("≈ " + fmt(residual, 1) + "%")),
-          cls: limited ? "on" : (moderate ? "warn" : "off")
-        });
-        checks.push({
-          k: "Pavimento strutturale",
-          v: (s200 ? "SMA200 " : "") + (nearFloor ? fmt(nearFloor, 2) : "n/d"),
-          cls: limited ? "on" : "warn"
-        });
-      }
-
-      if (!s200Full) {
-        action = "Storico ancora parziale per la SMA200. Il livello prudente è indicativo finché non arrivano ~200 sedute. " + action;
-      }
-
-      let riskTxt = residual == null
-        ? "Mancano i dati per stimare un pavimento."
-        : (limited
-          ? "Ribasso residuo limitato: sei entro circa " + fmt(Math.max(residual, 0), 1) + "% dal supporto. È la zona più difensiva disponibile, non un prezzo infallibile."
-          : ("Se compri ora, il ribasso tipico verso il supporto è circa " + fmt(residual, 1) + "%. Il prezzo prudente è " + fmt(nearFloor, 2) + ". Un caso più profondo (minimo mese / SMA200 più bassa) può arrivare a circa " + fmt(Math.max(deepResidual || residual, residual), 1) + "%."));
-      if (flush.broken && flush.flushLow) {
-        riskTxt += " Sweep: livello " + fmt(flush.broken, 2) + ", low del lavaggio " + fmt(flush.flushLow, 2) + ".";
-      }
-
-      return { score, zone, bcls, action, buyPx, buyLab, checks, s50, s200, rsi, dist200, s200Full, residual, riskTxt, nearFloor, flush, sweepLo, sweepHi };
-    }
-    function renderSignal(day) { return; }
-    function renderSignalRemoved(day) {
-      const box = document.getElementById("sigChecks");
-      if (!box) return;
-      const sig = computeBuySignal(state.daily, day);
-      const sc = document.getElementById("sigScore");
-      sc.innerHTML = sig.score + '<span>punteggio 0–100</span>';
-      const badge = document.getElementById("sigBadge");
-      badge.className = "badge " + sig.bcls;
-      badge.textContent = sig.zone;
-      document.getElementById("sigZonePx").textContent = sig.buyPx != null ? money(sig.buyPx) : "—";
-      document.getElementById("sigZoneLab").textContent = sig.buyLab;
-      document.getElementById("sigHint").textContent = sig.action;
-      const riskEl = document.getElementById("sigRisk");
-      if (riskEl) riskEl.textContent = sig.riskTxt || "";
-      document.getElementById("sigBar").style.width = sig.score + "%";
-      const ph = document.getElementById("sigPhase");
-      if (ph && sig.flush) {
-        ph.className = "sig-phase " + (sig.flush.phaseCls || "wait");
-        const band = (sig.sweepLo && sig.sweepHi && sig.flush.broken)
-          ? " Zona " + money(Math.min(sig.sweepLo, sig.sweepHi)) + " – " + money(Math.max(sig.sweepLo, sig.sweepHi)) + "."
-          : "";
-        ph.innerHTML = "<b>Fase " + sig.flush.phase + "</b><span>" + sig.flush.phaseTxt + band + "</span>";
-      }
-      box.innerHTML = sig.checks.map(c =>
-        '<div class="sig-item ' + c.cls + '"><label>' + c.k + "</label><b>" + c.v + "</b></div>"
-      ).join("");
     }
     function paintMetalCell(id, px, diff, dec) {
       const el = document.getElementById(id);
@@ -1646,7 +873,7 @@
       }
       box.innerHTML = rows.join("");
     }
-    function applyQuote(q) {
+    function applyQuote(q, opts) {
       state.quote = q;
       const mid = q.mid;
       const g24 = mid / TROY_G;
@@ -1670,14 +897,8 @@
       document.getElementById("g24").textContent = money(g24);
       document.getElementById("g18").textContent = money(g24 * K18);
       renderCalc18(g24);
-      const g14 = document.getElementById("g14"); if (g14) g14.textContent = money(g24 * K14);
-      const g10 = document.getElementById("g10");
-      if (g10) g10.textContent = money(g24 * K10);
-      const g9 = document.getElementById("g9");
-      if (g9) g9.textContent = money(g24 * K9);
-      const g8 = document.getElementById("g8");
-      if (g8) g8.textContent = money(g24 * K8);
-      renderCoins(g24);
+      if (!state.g24 || Math.abs(state.g24 - g24) / g24 > 0.0002) renderCoins(g24);
+      state.g24 = g24;
       paintFx("eurusd", q.eurusd, 4, q.eurusdDiff);
       paintFx("eurpln", q.eurpln, 4, q.eurplnDiff);
       paintFx("eurchf", q.eurchf, 4, q.eurchfDiff);
@@ -1689,10 +910,14 @@
       document.getElementById("liveLabel").textContent = open ? (q.stale ? "Ritardo" : "Live") : "Closed";
       document.getElementById("liveDot").classList.toggle("off", !open || !!q.stale);
       renderBuy(todayBar(state.daily, q));
-      if (state.intraday?.length && q.mid) {
+      const sparkOk = !opts || opts.spark !== false;
+      if (sparkOk && state.intraday?.length && q.mid) {
         const last = state.intraday[state.intraday.length - 1];
         if (last) last.close = q.mid;
-        drawSpark(state.intraday);
+        if (Date.now() - (state.lastSpark || 0) > 800) {
+          state.lastSpark = Date.now();
+          drawSpark(state.intraday);
+        }
       }
     }
     function multiplyBars(goldBars, fxBars) {
@@ -1917,7 +1142,94 @@
       const q = await firstOk([loadQuoteBiquote, loadQuoteFallback]);
       applyQuote(q);
       document.getElementById("iosHint").style.display = "none";
-      loadMetals().catch(() => {});
+      if (!state.metalsAt || Date.now() - state.metalsAt > 12000) {
+        state.metalsAt = Date.now();
+        loadMetals().catch(() => {});
+      }
+      startGoldStream();
+    }
+    function goldStreamSymbols() {
+      return ["XAUEUR", "XAUUSD", "EURUSD", "EURPLN", "EURCHF", "EURJPY", "USDPLN", "USDCHF"];
+    }
+    function tickMid(sym) {
+      const t = state.ticks[sym];
+      return t && t.mid > 0 ? t.mid : null;
+    }
+    function composeLiveQuote() {
+      const base = state.quote || {};
+      const gEur = tickMid("XAUEUR");
+      const gUsd = tickMid("XAUUSD");
+      const eurusd = tickMid("EURUSD") || base.eurusd;
+      const eurpln = tickMid("EURPLN") || base.eurpln;
+      const eurchf = tickMid("EURCHF") || base.eurchf;
+      const eurjpy = tickMid("EURJPY") || base.eurjpy;
+      const usdpln = tickMid("USDPLN");
+      const usdchf = tickMid("USDCHF");
+      let mid = null, high = null, low = null, ts = null, gold = null;
+      if (state.ccy === "USD" && gUsd) gold = state.ticks.XAUUSD;
+      else if (state.ccy === "EUR" && gEur) gold = state.ticks.XAUEUR;
+      else if (state.ccy === "PLN") {
+        if (gUsd && usdpln) mid = gUsd * usdpln;
+        else if (gEur && eurpln) mid = gEur * eurpln;
+        gold = state.ticks.XAUUSD || state.ticks.XAUEUR;
+      } else if (state.ccy === "CHF") {
+        if (gEur && eurchf) mid = gEur * eurchf;
+        else if (gUsd && usdchf) mid = gUsd * usdchf;
+        gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
+      } else gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
+      if (gold && gold.mid > 0 && mid == null) {
+        mid = gold.mid;
+        high = gold.high;
+        low = gold.low;
+        ts = gold.timestamp || gold.lastQuoteAt;
+      } else if (gold && mid > 0) {
+        const fx = mid / gold.mid;
+        high = gold.high > 0 ? gold.high * fx : mid;
+        low = gold.low > 0 ? gold.low * fx : mid;
+        ts = gold.timestamp || gold.lastQuoteAt;
+      }
+      if (!(mid > 0)) return null;
+      return {
+        ...base,
+        mid, high: high || mid, low: low || mid,
+        lastQuoteAt: ts || Date.now(), timestamp: ts || Date.now(),
+        stale: false, marketState: "open",
+        eurusd, eurpln, eurchf, eurjpy, xauusd: gUsd || base.xauusd,
+        eurusdDiff: state.ticks.EURUSD && state.ticks.EURUSD.dayDiffPercent,
+        eurplnDiff: state.ticks.EURPLN && state.ticks.EURPLN.dayDiffPercent,
+        eurchfDiff: state.ticks.EURCHF && state.ticks.EURCHF.dayDiffPercent,
+        eurjpyDiff: state.ticks.EURJPY && state.ticks.EURJPY.dayDiffPercent,
+        dayDiffPercent: gold && Number.isFinite(gold.dayDiffPercent) ? gold.dayDiffPercent : base.dayDiffPercent
+      };
+    }
+    function onGoldTick(msg) {
+      const list = Array.isArray(msg) ? msg : [msg];
+      for (const t of list) {
+        if (t && t.symbol && t.mid > 0) state.ticks[t.symbol] = t;
+      }
+      if (state.tickRaf) return;
+      state.tickRaf = requestAnimationFrame(() => {
+        state.tickRaf = 0;
+        const q = composeLiveQuote();
+        if (q) applyQuote(q);
+      });
+    }
+    async function startGoldStream() {
+      if (state.hub && (state.hub.state === "Connected" || state.hub.state === "Connecting")) return;
+      if (!window.signalR || !signalR.HubConnectionBuilder) return;
+      try {
+        const hub = new signalR.HubConnectionBuilder()
+          .withUrl("https://biquote.io/hubs/tick")
+          .withAutomaticReconnect([0, 1000, 2000, 5000, 15000])
+          .build();
+        hub.on("ReceiveTick", onGoldTick);
+        hub.onreconnected(() => hub.invoke("Subscribe", goldStreamSymbols()).catch(() => {}));
+        await hub.start();
+        await hub.invoke("Subscribe", goldStreamSymbols());
+        state.hub = hub;
+      } catch (e) {
+        state.hub = null;
+      }
     }
     async function boot(full = true) {
       try {
@@ -1930,8 +1242,10 @@
           drawSpark(state.intraday);
         }
         await quoteP;
-        loadUsTreasuries().catch(e => console.warn("treasury", e));
-        loadIndices().catch(e => console.warn("indici", e));
+        if (full) {
+          loadUsTreasuries().catch(e => console.warn("treasury", e));
+          loadIndices().catch(e => console.warn("indici", e));
+        }
         if (full || !state.fxPrev) {
           loadFxPrev().then(() => {
             if (!state.quote) return;
@@ -1940,12 +1254,6 @@
             paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
             paintFx("eurjpy", state.quote.eurjpy, 2, state.quote.eurjpyDiff);
           }).catch(() => {});
-          if (state.quote) {
-            paintFx("eurusd", state.quote.eurusd, 4, state.quote.eurusdDiff);
-            paintFx("eurpln", state.quote.eurpln, 4, state.quote.eurplnDiff);
-            paintFx("eurchf", state.quote.eurchf, 4, state.quote.eurchfDiff);
-            paintFx("eurjpy", state.quote.eurjpy, 2, state.quote.eurjpyDiff);
-          }
         }
       } catch (e) {
         console.error(e);
@@ -1963,13 +1271,6 @@
         if (!res.ok) throw new Error("HTTP " + res.status);
         return await res.text();
       } finally { clearTimeout(t); }
-    }
-    function toneEl(el, cur, prev) {
-      if (!el) return;
-      el.classList.remove("up", "down");
-      if (prev == null || cur == null || !Number.isFinite(prev) || !Number.isFinite(cur)) return;
-      if (cur > prev + 1e-8) el.classList.add("up");
-      else if (cur < prev - 1e-8) el.classList.add("down");
     }
     function fxBag() {
       const day = sessionDayKey(new Date());
@@ -2009,51 +1310,8 @@
         const j = await getJSON("https://api.frankfurter.app/" + iso + "?from=EUR&to=USD,PLN,CHF,JPY");
         if (j && j.rates) {
           state.fxPrev = { eurusd: Number(j.rates.USD), eurpln: Number(j.rates.PLN), eurchf: Number(j.rates.CHF), eurjpy: Number(j.rates.JPY) };
-          return;
         }
       } catch (e) {}
-      try {
-        const [u, p, c] = await Promise.all([
-          yahooYield("EURUSD=X"),
-          yahooYield("EURPLN=X"),
-          yahooYield("EURCHF=X"),
-        ]);
-        state.fxPrev = {
-          eurusd: u && u.prev,
-          eurpln: p && p.prev,
-          eurchf: c && c.prev,
-        };
-      } catch (e) {}
-    }
-    function setPct(id, n, prev) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (n == null || !Number.isFinite(n)) { el.textContent = "—"; return; }
-      let v = n;
-      if (v > 20) v = v / 10;
-      el.textContent = fmt(v, 2) + " %";
-      toneEl(el, v, prev);
-    }
-    async function yahooYield(symbol) {
-      const url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(symbol) + "?interval=1m&range=1d";
-      const tries = [url, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)];
-      let raw = "";
-      for (const u of tries) {
-        try { raw = await getJSONText(u); if (raw && raw.includes("regularMarketPrice")) break; } catch (e) {}
-      }
-      if (!raw) return null;
-      const m = raw.match(/"regularMarketPrice":([0-9.]+)/);
-      if (!m) return null;
-      let v = Number(m[1]);
-      if (v > 20) v = v / 10;
-      if (!(v > 1 && v < 12)) return null;
-      let prev = null;
-      const p = raw.match(/"chartPreviousClose":([0-9.]+)/) || raw.match(/"previousClose":([0-9.]+)/);
-      if (p) {
-        prev = Number(p[1]);
-        if (prev > 20) prev = prev / 10;
-      }
-      return { v, prev };
     }
     function paintYield(id, yld, chg) {
       const el = document.getElementById(id);
@@ -2083,20 +1341,27 @@
       return null;
     }
     async function fetchTvSymbol(sym) {
+      const hit = state.tvCache[sym];
+      if (hit && Date.now() - hit.t < 15000) return hit.q;
       const url = "https://scanner.tradingview.com/symbol?symbol=" + encodeURIComponent(sym) + "&fields=close,change,change_abs";
       const tries = [
         url,
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
         "https://corsproxy.io/?" + encodeURIComponent(url),
-        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url)
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)
       ];
       for (let i = 0; i < tries.length; i++) {
         try {
-          const raw = await getJSONText(tries[i], i === 0 ? 2800 : 7000);
+          const raw = await getJSONText(tries[i], i === 0 ? 2200 : 5500);
           const q = parseTvQuote(raw);
-          if (q && q.close > 0) return q;
+          if (q && q.close > 0) {
+            state.tvCache[sym] = { t: Date.now(), q };
+            return q;
+          }
         } catch (e) {
-          if (i === 0 && String(e && e.message).indexOf("404") >= 0) return null;
+          if (i === 0 && String(e && e.message).indexOf("404") >= 0) {
+            state.tvCache[sym] = { t: Date.now(), q: null };
+            return null;
+          }
         }
       }
       return null;
@@ -2139,9 +1404,7 @@
     async function loadTtfQuote() {
       const q = await fetchTvAny(["ICEENDEX:TFM1!", "NYMEX:TTF1!"]);
       if (q && q.close > 0) return q;
-      const y = await fetchYahooAny(["TTF=F"]);
-      if (y && y.close > 0) return y;
-      try { return await fetchInvestingTtf(); } catch (e) { return null; }
+      return fetchYahooAny(["TTF=F"]);
     }
     async function fetchYahooQuote(sym) {
       const url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
@@ -2167,63 +1430,6 @@
         } catch (e) {}
       }
       return null;
-    }
-    async function fetchTextLong(url) {
-      const tries = [
-        url,
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
-        "https://corsproxy.io/?" + encodeURIComponent(url),
-        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url)
-      ];
-      for (const u of tries) {
-        try {
-          const ctrl = new AbortController();
-          const tmo = setTimeout(() => ctrl.abort(), 12000);
-          const r = await fetch(u, { signal: ctrl.signal, cache: "no-store" });
-          clearTimeout(tmo);
-          if (!r.ok) continue;
-          const txt = await r.text();
-          if (txt && txt.length > 20) return txt;
-        } catch (e) {}
-      }
-      return "";
-    }
-    async function fetchInvestingTtf() {
-      const pages = [
-        "https://www.investing.com/commodities/dutch-ttf-gas-c1",
-        "https://it.investing.com/commodities/dutch-ttf-gas-c1",
-        "https://www.investing.com/commodities/ice-dutch-ttf-gas-c1-futures",
-        "https://www.investing.com/commodities/dutch-ttf-gas-c1-futures"
-      ];
-      for (const page of pages) {
-        const txt = await fetchTextLong(page);
-        if (!txt || txt.length < 200) continue;
-        let last = null, chg = null, prev = null;
-        let m = txt.match(/data-test="instrument-price-last"[^>]*>\s*([0-9][0-9.,]*)/);
-        if (m) last = Number(m[1].replace(/\./g, "").replace(",", ".").replace(/,(?=[0-9]{3}\b)/g, ""));
-        if (!(last > 0)) {
-          m = txt.match(/instrument-price-last[^>]*>\s*([0-9]+[.,][0-9]+)/);
-          if (m) last = Number(String(m[1]).replace(",", "."));
-        }
-        if (!(last > 0)) {
-          m = txt.match(/The Dutch TTF Natural Gas price today is ([0-9.]+)/i) || txt.match(/price today is ([0-9.]+)/i);
-          if (m) last = Number(m[1]);
-        }
-        const pc = txt.match(/previous close of ([0-9.]+)/i) || txt.match(/Prev\.?\s*Close[:\s]*([0-9.]+)/i);
-        if (pc) prev = Number(pc[1]);
-        const cp = txt.match(/data-test="instrument-price-change-percent"[^>]*>\s*\(?([+\-]?[0-9][0-9.,]*)%/) || txt.match(/\(([+\-][0-9]+[.,][0-9]+)%\)/);
-        if (cp) chg = Number(String(cp[1]).replace(",", "."));
-        if (last > 0 && prev > 0) chg = ((last - prev) / prev) * 100;
-        if (last > 5 && last < 400) return { close: last, change: chg };
-      }
-      return null;
-    }
-    function parseInvNum(s) {
-      s = String(s || "").trim().replace(/\s/g, "");
-      if (!s) return NaN;
-      if (s.indexOf(",") >= 0 && s.indexOf(".") >= 0) s = s.replace(/\./g, "").replace(",", ".");
-      else s = s.replace(",", ".");
-      return Number(s);
     }
     async function loadUsTreasuries() {
       function asYld(v) {
@@ -2338,9 +1544,15 @@
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
 
     boot(true);
-    /* treasuries/indices removed */
     setTimeout(() => { if (!state.quote) document.getElementById("iosHint").style.display = "block"; }, 2500);
-    setInterval(() => boot(false), 8000);
+    setInterval(() => {
+      if (state.hub && state.hub.state === "Connected") return;
+      boot(false);
+    }, 8000);
+    setInterval(() => {
+      loadUsTreasuries().catch(() => {});
+      loadIndices().catch(() => {});
+    }, 25000);
     setInterval(() => paintClock(new Date()), 1000);
     setInterval(() => boot(true), 180000);
   </script>
