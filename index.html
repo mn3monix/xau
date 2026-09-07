@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.43 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.44 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -156,6 +156,17 @@
     .stat.upd label { text-align: left; }
     .stat.upd b { text-align: right; }
     .stat.stack b { line-height: 1.28; }
+    .buy-grid .stat label {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    }
+    .buy-grid .mkt {
+      width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto;
+      background: var(--down);
+    }
+    .buy-grid .mkt.on {
+      background: var(--up);
+      box-shadow: 0 0 8px var(--up);
+    }
     .stat.k18 {
       border: 1.5px solid var(--gold);
       box-shadow: 0 0 0 1px rgba(212,175,55,.25), 0 0 18px rgba(212,175,55,.18);
@@ -288,7 +299,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.43</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.44</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -350,29 +361,29 @@
           </summary>
           <p class="hint" style="margin-top:6px">Prezzi live. Variazione % rispetto alla chiusura di ieri.</p>
           <div class="buy-grid">
-            <div class="stat stack"><label>EUR / USD</label><b id="eurusd">—</b></div>
-            <div class="stat stack"><label>EUR / PLN</label><b id="eurpln">—</b></div>
-            <div class="stat stack"><label>EUR / CHF</label><b id="eurchf">—</b></div>
-            <div class="stat stack"><label>EUR / JPY</label><b id="eurjpy">—</b></div>
+            <div class="stat stack"><label>EUR / USD <i class="mkt" data-mkt="fx"></i></label><b id="eurusd">—</b></div>
+            <div class="stat stack"><label>EUR / PLN <i class="mkt" data-mkt="fx"></i></label><b id="eurpln">—</b></div>
+            <div class="stat stack"><label>EUR / CHF <i class="mkt" data-mkt="fx"></i></label><b id="eurchf">—</b></div>
+            <div class="stat stack"><label>EUR / JPY <i class="mkt" data-mkt="fx"></i></label><b id="eurjpy">—</b></div>
             <div class="stat-sep" role="separator"></div>
-            <div class="stat stack"><label>Argento — kg</label><b id="xagKg">—</b></div>
-            <div class="stat stack"><label>Platino — oncia</label><b id="xptPx">—</b></div>
-            <div class="stat stack"><label>Brent — barile</label><b id="brentPx">—</b></div>
-            <div class="stat stack"><label>Gas TTF — MWh</label><b id="ttfPx">—</b></div>
+            <div class="stat stack"><label>Argento — kg <i class="mkt" data-mkt="metals"></i></label><b id="xagKg">—</b></div>
+            <div class="stat stack"><label>Platino — oncia <i class="mkt" data-mkt="metals"></i></label><b id="xptPx">—</b></div>
+            <div class="stat stack"><label>Brent — barile <i class="mkt" data-mkt="brent"></i></label><b id="brentPx">—</b></div>
+            <div class="stat stack"><label>Gas TTF — MWh <i class="mkt" data-mkt="ttf"></i></label><b id="ttfPx">—</b></div>
             <div class="stat-sep" role="separator"></div>
-            <div class="stat stack"><label>Treasury 2 anni</label><b id="ust2">—</b></div>
-            <div class="stat stack"><label>Treasury 10 anni</label><b id="ust10">—</b></div>
-            <div class="stat stack"><label>Treasury 30 anni</label><b id="ust30">—</b></div>
-            <div class="stat stack"><label>Bund 10 anni</label><b id="de10">—</b></div>
+            <div class="stat stack"><label>Treasury 2 anni <i class="mkt" data-mkt="ust"></i></label><b id="ust2">—</b></div>
+            <div class="stat stack"><label>Treasury 10 anni <i class="mkt" data-mkt="ust"></i></label><b id="ust10">—</b></div>
+            <div class="stat stack"><label>Treasury 30 anni <i class="mkt" data-mkt="ust"></i></label><b id="ust30">—</b></div>
+            <div class="stat stack"><label>Bund 10 anni <i class="mkt" data-mkt="bund"></i></label><b id="de10">—</b></div>
             <div class="stat-sep" role="separator"></div>
-            <div class="stat stack"><label>DAX</label><b id="idxDax">—</b></div>
-            <div class="stat stack"><label>Euro Stoxx 50</label><b id="idxSx5e">—</b></div>
-            <div class="stat stack"><label>Dow Jones</label><b id="idxDji">—</b></div>
-            <div class="stat stack"><label>S&P 500</label><b id="idxSpx">—</b></div>
-            <div class="stat stack"><label>NASDAQ Composite</label><b id="idxIxic">—</b></div>
-            <div class="stat stack"><label>MOEX</label><b id="idxMoex">—</b></div>
-            <div class="stat stack"><label>Nikkei 225</label><b id="idxN225">—</b></div>
-            <div class="stat stack"><label>SSE Composite</label><b id="idxSse">—</b></div>
+            <div class="stat stack"><label>DAX <i class="mkt" data-mkt="eu"></i></label><b id="idxDax">—</b></div>
+            <div class="stat stack"><label>Euro Stoxx 50 <i class="mkt" data-mkt="eu"></i></label><b id="idxSx5e">—</b></div>
+            <div class="stat stack"><label>Dow Jones <i class="mkt" data-mkt="us"></i></label><b id="idxDji">—</b></div>
+            <div class="stat stack"><label>S&P 500 <i class="mkt" data-mkt="us"></i></label><b id="idxSpx">—</b></div>
+            <div class="stat stack"><label>NASDAQ Composite <i class="mkt" data-mkt="us"></i></label><b id="idxIxic">—</b></div>
+            <div class="stat stack"><label>MOEX <i class="mkt" data-mkt="moex"></i></label><b id="idxMoex">—</b></div>
+            <div class="stat stack"><label>Nikkei 225 <i class="mkt" data-mkt="jp"></i></label><b id="idxN225">—</b></div>
+            <div class="stat stack"><label>SSE Composite <i class="mkt" data-mkt="cn"></i></label><b id="idxSse">—</b></div>
           </div>
         </details>
       </section>
@@ -436,7 +447,7 @@
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
       1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.43 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      App v2.18.44 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -595,6 +606,58 @@
       if (day === 0 && mins < 18 * 60) return false;
       if (s.includes("open") || s.includes("trade")) return true;
       return true;
+    }
+    function tzClock(tz) {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: tz, weekday: "short", hour: "numeric", minute: "numeric", hourCycle: "h23"
+      }).formatToParts(new Date());
+      const v = t => parts.find(p => p.type === t)?.value;
+      const wd = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[v("weekday")];
+      return { wd, min: Number(v("hour")) * 60 + Number(v("minute")) };
+    }
+    function between(min, a, b) { return min >= a && min < b; }
+    function isCmeHours() {
+      const c = tzClock("America/New_York");
+      if (c.wd === 6) return false;
+      if (c.wd === 0) return c.min >= 18 * 60;
+      if (c.wd === 5) return c.min < 17 * 60;
+      return c.min < 17 * 60 || c.min >= 18 * 60;
+    }
+    function isMktOpen(kind) {
+      if (kind === "fx" || kind === "metals" || kind === "brent" || kind === "ust") return isCmeHours();
+      if (kind === "ttf") {
+        const c = tzClock("Europe/Amsterdam");
+        return c.wd >= 1 && c.wd <= 5 && between(c.min, 7 * 60, 18 * 60);
+      }
+      if (kind === "bund" || kind === "eu") {
+        const c = tzClock("Europe/Berlin");
+        if (c.wd < 1 || c.wd > 5) return false;
+        return kind === "eu" ? between(c.min, 9 * 60, 17 * 60 + 30) : between(c.min, 8 * 60, 22 * 60);
+      }
+      if (kind === "us") {
+        const c = tzClock("America/New_York");
+        return c.wd >= 1 && c.wd <= 5 && between(c.min, 9 * 60 + 30, 16 * 60);
+      }
+      if (kind === "moex") {
+        const c = tzClock("Europe/Moscow");
+        return c.wd >= 1 && c.wd <= 5 && between(c.min, 10 * 60, 18 * 60 + 50);
+      }
+      if (kind === "jp") {
+        const c = tzClock("Asia/Tokyo");
+        if (c.wd < 1 || c.wd > 5) return false;
+        return between(c.min, 9 * 60, 11 * 60 + 30) || between(c.min, 12 * 60 + 30, 15 * 60);
+      }
+      if (kind === "cn") {
+        const c = tzClock("Asia/Shanghai");
+        if (c.wd < 1 || c.wd > 5) return false;
+        return between(c.min, 9 * 60 + 30, 11 * 60 + 30) || between(c.min, 13 * 60, 15 * 60);
+      }
+      return false;
+    }
+    function paintMktDots() {
+      document.querySelectorAll(".buy-grid .mkt[data-mkt]").forEach(el => {
+        el.classList.toggle("on", isMktOpen(el.dataset.mkt));
+      });
     }
     function sameScale(v, mid, band) {
       if (v == null || mid == null || !(mid > 0)) return false;
@@ -1247,6 +1310,7 @@
           drawSpark(state.intraday);
         }
         await quoteP;
+        paintMktDots();
         if (full) {
           loadUsTreasuries().catch(e => console.warn("treasury", e));
           loadIndices().catch(e => console.warn("indici", e));
@@ -1564,7 +1628,7 @@
       loadUsTreasuries().catch(() => {});
       loadIndices().catch(() => {});
     }, 25000);
-    setInterval(() => paintClock(new Date()), 1000);
+    setInterval(() => { paintClock(new Date()); paintMktDots(); }, 1000);
     setInterval(() => boot(true), 180000);
   </script>
 </body>
