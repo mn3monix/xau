@@ -7,11 +7,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.51 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.52 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://biquote.io" />
+  <link rel="preconnect" href="https://scanner.tradingview.com" />
+  <link rel="dns-prefetch" href="https://query1.finance.yahoo.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -53,10 +56,6 @@
     .hero > .card { display: flex; flex-direction: column; }
     @media (max-width: 820px) {
       .hero { grid-template-columns: 1fr; }
-      .tools.hero { grid-template-columns: 1fr !important; }
-      .tools details[open] .calc18,
-      .tools details[open] .chart-box { min-height: 0; height: auto; }
-      .tools .calc18 { max-height: none; overflow: visible; }
       .price-chart .spark { width: 100%; height: auto; aspect-ratio: 3 / 2; }
     }
     .card {
@@ -104,36 +103,6 @@
       margin: 6px 2px; padding: 0; border: 0;
       background: rgba(212,175,55,.28);
     }
-    .grams, .grams.side, .grams.comm {
-      display: grid;
-      grid-template-rows: none;
-      grid-auto-rows: 78px;
-      gap: 8px; align-self: stretch; min-height: 0;
-    }
-    .grams.side { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
-    .grams > .stat, .grams.side > .stat, .grams.comm > .stat {
-      display: flex; flex-direction: column; justify-content: space-between;
-      width: 100%;
-      min-height: 78px; height: 78px; max-height: 78px;
-      padding: 8px 10px; box-sizing: border-box;
-      overflow: hidden;
-    }
-    .grams > .stat b, .grams.side > .stat b, .grams.comm > .stat b {
-      margin-top: auto;
-      font-size: 1.02rem;
-      letter-spacing: -.035em;
-      white-space: nowrap;
-    }
-    @media (max-width: 430px) {
-      .grams > .stat, .grams.side > .stat {
-        padding-left: 6px;
-        padding-right: 6px;
-      }
-      .grams > .stat b, .grams.side > .stat b {
-        font-size: 15px;
-        letter-spacing: -.04em;
-      }
-    }
     .hero > .card .buy-grid { flex: 1; grid-auto-rows: minmax(0, auto); }
     .buy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; align-items: stretch; }
     .buy-grid .stat { min-height: 78px; height: 78px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; box-sizing: border-box; }
@@ -152,9 +121,6 @@
     .stat b { display: block; margin-top: 2px; font-size: 1.18rem; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
     .stat b.up, .stat b .up { color: var(--up); }
     .stat b.down, .stat b .down { color: var(--down); }
-    .stat.upd { text-align: left; }
-    .stat.upd label { text-align: left; }
-    .stat.upd b { text-align: right; }
     .stat.stack b { line-height: 1.28; }
     .buy-grid .stat label {
       display: flex; align-items: center; justify-content: space-between; gap: 6px;
@@ -236,18 +202,6 @@
     .calc18 .plus {
       font-size: 1.4rem; font-weight: 700; cursor: pointer;
     }
-    .tools.hero {
-      margin-top: 18px;
-      grid-template-columns: .8fr 1.2fr;
-      align-items: start;
-    }
-    .tools > .card { min-height: 0; padding: 12px 14px; }
-    .tools details.fold > summary { gap: 8px; }
-    .tools .hint { margin-top: 4px !important; }
-    .tools .calc-row { margin-top: 8px !important; }
-    .tools details[open] .calc18,
-    .tools details[open] .chart-box { min-height: 420px; height: 420px; }
-    .tools .calc18 { overflow: auto; max-height: 420px; }
     .price-chart { margin: 10px 0 10px; }
     .price-chart .tf-row { margin: 0 0 8px; }
     .price-chart .chart-box { display: block; width: 100%; height: auto; }
@@ -276,7 +230,6 @@
       border-top: 1px solid rgba(212,175,55,.28);
     }
     .calc-steps li.eq span:last-child { color: var(--gold-2); font-size: 1.38rem; font-weight: 700; }
-    .tools .spark { flex: 1; width: 100%; min-height: 0; height: 100%; margin: 8px 0 0; }
     .spark {
       margin-top: 8px; height: auto; min-height: 88px; width: 100%; display: block;
       background: rgba(0,0,0,.18); border-radius: 8px;
@@ -290,7 +243,6 @@
     footer { color: var(--muted); font-size: .75rem; line-height: 1.5; margin-top: 18px; }
     @media (max-width: 820px) {
       .px { font-size: 2.75rem; }
-      .buy-level { font-size: 1.55rem; }
       .stat b { font-size: 1.42rem; }
     }
   </style>
@@ -299,7 +251,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.51</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.52</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -448,9 +400,8 @@
 
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
-      Carati sul grammo: 22k = 916,7, 21,6k = 900, 18k = 750, 14k = 585, 10k = 416,7, 9k = 375, 8k = 333,3.
-      1 oncia troy = 31,1034768 g. Il statistiche non è il prezzo più basso: usa minimo di giornata, minimo del mese, S1/S2 di ieri e ritracciamenti del mese.
-      App v2.18.51 — 7 settembre 2026. La fase stop-run non è un timing infallibile: segnala quando un livello noto è stato rotto e la volatilità ha già fatto scattare gli stop. Non è un consiglio personalizzato.
+      Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
+      App v2.18.52 — 8 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -947,11 +898,6 @@
       const mid = q.mid;
       const g24 = mid / TROY_G;
       document.getElementById("price").textContent = money(mid);
-      const unitEl = document.getElementById("priceUnit");
-      if (unitEl) {
-        unitEl.textContent =
-          "Oncia troy · oro puro 24k · " + (state.ccy === "PLN" ? "złoty polacchi" : state.ccy === "USD" ? "dollari USA" : state.ccy === "CHF" ? "franchi svizzeri" : "euro");
-      }
       const chgEl = document.getElementById("chg");
       const today = sessionDayKey(new Date());
       const prevBar = (state.daily || []).filter(b => {
@@ -1194,7 +1140,7 @@
       const [eur, usd, fx] = await Promise.all([
         getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-EUR-SPOT"),
         getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT"),
-        getJSON("https://api.frankfurter.app/latest?from=EUR&to=PLN,USD,CHF"),
+        getJSON("https://api.frankfurter.app/latest?from=EUR&to=PLN,USD,CHF,JPY"),
       ]);
       const xauEur = Number(eur.symbols[0].price);
       const xauUsd = Number(usd.symbols[0].price);
@@ -1210,6 +1156,7 @@
       };
     }
     async function loadQuote() {
+      startGoldStream();
       const q = await firstOk([loadQuoteBiquote, loadQuoteFallback]);
       applyQuote(q);
       document.getElementById("iosHint").style.display = "none";
@@ -1305,6 +1252,7 @@
     async function boot(full = true) {
       try {
         showErr("");
+        startGoldStream();
         const quoteP = loadQuote();
         if (full) {
           Promise.all([loadDaily().catch(e => console.warn("storico", e)), loadIntraday().catch(e => console.warn("intraday", e))])
@@ -1343,6 +1291,21 @@
         if (!res.ok) throw new Error("HTTP " + res.status);
         return await res.text();
       } finally { clearTimeout(t); }
+    }
+    function proxyUrls(url) {
+      return [
+        url,
+        "https://corsproxy.io/?" + encodeURIComponent(url),
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)
+      ];
+    }
+    async function raceParsed(urls, parse, msDirect, msProxy) {
+      return await Promise.any((urls || []).map((u, i) => (async () => {
+        const raw = await getJSONText(u, i === 0 ? msDirect : msProxy);
+        const v = parse(raw);
+        if (v == null) throw new Error("empty");
+        return v;
+      })()));
     }
     function fxBag() {
       const day = sessionDayKey(new Date());
@@ -1416,27 +1379,11 @@
       const hit = state.tvCache[sym];
       if (hit && Date.now() - hit.t < 15000) return hit.q;
       const url = "https://scanner.tradingview.com/symbol?symbol=" + encodeURIComponent(sym) + "&fields=close,change,change_abs";
-      const tries = [
-        url,
-        "https://corsproxy.io/?" + encodeURIComponent(url),
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)
-      ];
-      for (let i = 0; i < tries.length; i++) {
-        try {
-          const raw = await getJSONText(tries[i], i === 0 ? 2200 : 5500);
-          const q = parseTvQuote(raw);
-          if (q && q.close > 0) {
-            state.tvCache[sym] = { t: Date.now(), q };
-            return q;
-          }
-        } catch (e) {
-          if (i === 0 && String(e && e.message).indexOf("404") >= 0) {
-            state.tvCache[sym] = { t: Date.now(), q: null };
-            return null;
-          }
-        }
-      }
-      return null;
+      let q = null;
+      try { q = await raceParsed(proxyUrls(url), parseTvQuote, 2200, 5000); }
+      catch (e) { q = null; }
+      state.tvCache[sym] = { t: Date.now(), q };
+      return q;
     }
     async function fetchTvAny(syms) {
       const list = (syms || []).filter(Boolean);
@@ -1456,52 +1403,56 @@
     }
     async function fetchMoexImoex() {
       const url = "https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX.json?iss.meta=off&iss.only=marketdata";
-      const tries = [url, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + encodeURIComponent(url)];
-      for (const u of tries) {
-        try {
-          const raw = await getJSONText(u, 5000);
-          if (!raw || raw.indexOf("CURRENTVALUE") < 0) continue;
-          const j = JSON.parse(raw);
-          const md = j.marketdata || {};
-          const cols = md.columns || [];
-          const row = (md.data || [])[0];
-          if (!row) continue;
-          const cur = Number(row[cols.indexOf("CURRENTVALUE")]);
-          const chg = Number(row[cols.indexOf("LASTCHANGEPRC")]);
-          if (cur > 0) return { close: cur, change: Number.isFinite(chg) ? chg : null };
-        } catch (e) {}
-      }
-      return null;
+      const parse = raw => {
+        if (!raw || raw.indexOf("CURRENTVALUE") < 0) return null;
+        const j = JSON.parse(raw);
+        const md = j.marketdata || {};
+        const cols = md.columns || [];
+        const row = (md.data && md.data[0]) || [];
+        const idx = cols.indexOf("CURRENTVALUE");
+        const cidx = cols.indexOf("LASTCHANGEPRC");
+        const close = Number(idx >= 0 ? row[idx] : 0);
+        if (!(close > 0)) return null;
+        return { close, change: Number(cidx >= 0 ? row[cidx] : 0) };
+      };
+      try { return await raceParsed(proxyUrls(url), parse, 4000, 5000); }
+      catch (e) { return null; }
     }
     async function loadTtfQuote() {
       const q = await fetchTvAny(["ICEENDEX:TFM1!", "NYMEX:TTF1!"]);
       if (q && q.close > 0) return q;
       return fetchYahooAny(["TTF=F"]);
     }
+    function parseYahooQuote(raw) {
+      if (!raw) return null;
+      let txt = String(raw);
+      if (txt.trim().charAt(0) === "{" && txt.indexOf('"contents"') >= 0) {
+        try { txt = JSON.parse(txt).contents || txt; } catch (e) {}
+      }
+      if (txt.indexOf("regularMarketPrice") < 0) return null;
+      const j = JSON.parse(txt);
+      const res = j.chart && j.chart.result && j.chart.result[0];
+      if (!res || !res.meta) return null;
+      const close = Number(res.meta.regularMarketPrice);
+      if (!(close > 0)) return null;
+      const series = (((res.indicators || {}).quote || [])[0] || {}).close || [];
+      const prevs = series.map(Number).filter(v => v > 0);
+      let prev = null;
+      for (let i = prevs.length - 1; i >= 0; i--) {
+        if (Math.abs(prevs[i] - close) / close > 0.00015) { prev = prevs[i]; break; }
+      }
+      const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(res.meta.regularMarketChangePercent);
+      return { close, change };
+    }
     async function fetchYahooQuote(sym) {
       const url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
       const url2 = "https://query2.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=5d";
-      const tries = [url, url2, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + encodeURIComponent(url)];
-      for (const u of tries) {
-        try {
-          const raw = await getJSONText(u);
-          if (!raw || raw.indexOf("regularMarketPrice") < 0) continue;
-          const j = JSON.parse(raw);
-          const res = j.chart && j.chart.result && j.chart.result[0];
-          if (!res || !res.meta) continue;
-          const close = Number(res.meta.regularMarketPrice);
-          if (!(close > 0)) continue;
-          const series = (((res.indicators || {}).quote || [])[0] || {}).close || [];
-          const prevs = series.map(Number).filter(v => v > 0);
-          let prev = null;
-          for (let i = prevs.length - 1; i >= 0; i--) {
-            if (Math.abs(prevs[i] - close) / close > 0.00015) { prev = prevs[i]; break; }
-          }
-          const change = prev > 0 ? ((close - prev) / prev) * 100 : Number(res.meta.regularMarketChangePercent);
-          return { close, change };
-        } catch (e) {}
-      }
-      return null;
+      try {
+        return await raceParsed(
+          [url, url2, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + encodeURIComponent(url)],
+          parseYahooQuote, 4500, 6000
+        );
+      } catch (e) { return null; }
     }
     async function loadUsTreasuries() {
       function asYld(v) {
@@ -1516,22 +1467,12 @@
       ];
       await Promise.all(specs.map(async it => {
         let close = null, change = null;
-        try {
-          const tv = await fetchTvSymbol(it.tv);
-          if (tv && tv.close > 0) {
-            close = asYld(tv.close);
-            change = tv.change;
-          }
-        } catch (e) {}
-        if (!(close > 0) && it.y) {
-          try {
-            const yq = await fetchYahooQuote(it.y);
-            if (yq && yq.close > 0) {
-              close = asYld(yq.close);
-              change = yq.change;
-            }
-          } catch (e) {}
-        }
+        const [tv, yq] = await Promise.all([
+          fetchTvSymbol(it.tv).catch(() => null),
+          it.y ? fetchYahooQuote(it.y).catch(() => null) : Promise.resolve(null)
+        ]);
+        if (tv && tv.close > 0) { close = asYld(tv.close); change = tv.change; }
+        else if (yq && yq.close > 0) { close = asYld(yq.close); change = yq.change; }
         if (close > 0) paintYield(it.id, close, change);
       }));
     }
@@ -1562,8 +1503,13 @@
       await Promise.all(specs.map(async it => {
         let q = null;
         if (it.moex) q = await fetchMoexImoex().catch(() => null);
-        if (!(q && q.close > 0)) q = await fetchTvAny(it.tv);
-        if (!(q && q.close > 0)) q = await fetchYahooAny(it.y);
+        if (!(q && q.close > 0)) {
+          const [tv, y] = await Promise.all([
+            fetchTvAny(it.tv).catch(() => null),
+            fetchYahooAny(it.y).catch(() => null)
+          ]);
+          q = (tv && tv.close > 0) ? tv : y;
+        }
         if (q && q.close > 0) paintIndex(it.id, q.close, q.change, it.dec);
       }));
     }
@@ -1577,14 +1523,6 @@
         state.sessionLow = null;
         state.sessionOpen = null;
         await boot(true);
-      });
-    });
-    document.querySelectorAll(".tools details.fold").forEach(d => {
-      d.addEventListener("toggle", () => {
-        if (d.open && d.querySelector("#spark")) {
-          if (state.intraday?.length) drawSpark(state.intraday);
-          else loadChart().catch(() => {});
-        }
       });
     });
     document.querySelectorAll("section.apart details.fold").forEach(d => {
@@ -1634,7 +1572,16 @@
       loadIndices().catch(() => {});
     }, 25000);
     setInterval(() => { paintClock(new Date()); paintMktDots(); }, 1000);
-    setInterval(() => boot(true), 180000);
+    setInterval(() => {
+      if (state.hub && state.hub.state === "Connected") {
+        loadDaily().catch(() => {});
+        loadMetals().catch(() => {});
+        loadUsTreasuries().catch(() => {});
+        loadIndices().catch(() => {});
+        return;
+      }
+      boot(true);
+    }, 180000);
   </script>
 </body>
 </html>
