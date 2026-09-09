@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.60 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.61 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -62,7 +62,7 @@
       background: var(--bg-2); border: 1px solid var(--line);
       border-radius: 18px; padding: 16px;
     }
-    .pair-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .pair-tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: nowrap; }
     .pair-tabs button, .refresh-btn {
       background: transparent; color: var(--muted);
       border: 1px solid var(--line); border-radius: 999px;
@@ -70,8 +70,8 @@
       min-height: 44px; touch-action: manipulation;
     }
     .pair-tabs button {
-      flex: 1 1 calc(33.33% - 6px); min-width: 0; padding: 8px 4px; font-size: .68rem;
-      white-space: nowrap; letter-spacing: 0;
+      flex: 1 1 0; min-width: 0; padding: 6px 0; font-size: .78rem;
+      font-weight: 600; white-space: nowrap; letter-spacing: 0; min-height: 36px;
     }
     .pair-tabs button.dim { opacity: .38; pointer-events: none; }
     .pair-tabs button.on, .tf-row button.on {
@@ -82,12 +82,12 @@
       color: var(--muted); font-size: .62rem; letter-spacing: .06em;
       text-transform: uppercase; margin: 10px 0 4px;
     }
-    .tf-row { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: space-between; margin: 8px 0 0; width: 100%; }
+    .tf-row { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: space-between; margin: 8px 0 0; width: 100%; }
     .tf-row button {
       flex: 1; background: transparent; color: var(--muted);
       border: 1px solid var(--line); border-radius: 999px;
-      padding: 6px 0; cursor: pointer; font: inherit; font-size: .72rem;
-      font-weight: 600; letter-spacing: .04em; min-height: 32px;
+      padding: 6px 0; cursor: pointer; font: inherit; font-size: .78rem;
+      font-weight: 600; letter-spacing: 0; min-height: 36px;
     }
 
     .price-row {
@@ -274,7 +274,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.60</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.61</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -290,12 +290,12 @@
     <div class="hero">
       <section class="card">
         <div class="pair-tabs" id="goldPair">
-          <button class="on" data-ccy="EUR">XAU / EUR</button>
-          <button data-ccy="USD">XAU / USD</button>
-          <button data-ccy="CHF">XAU / CHF</button>
-          <button data-ccy="PLN">XAU / PLN</button>
-          <button data-ccy="GBP">XAU / GBP</button>
-          <button data-ccy="JPY">XAU / JPY</button>
+          <button class="on" data-ccy="EUR">EUR</button>
+          <button data-ccy="USD">USD</button>
+          <button data-ccy="CHF">CHF</button>
+          <button data-ccy="PLN">PLN</button>
+          <button data-ccy="GBP">GBP</button>
+          <button data-ccy="JPY">JPY</button>
         </div>
         <div class="price-row">
           <div class="px" id="price">—</div>
@@ -461,7 +461,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.60 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.61 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
