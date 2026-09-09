@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.56 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.57 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -81,6 +81,25 @@
     .fx-lab {
       color: var(--muted); font-size: .62rem; letter-spacing: .06em;
       text-transform: uppercase; margin: 10px 0 4px;
+    }
+    .fx-xe { display: flex; flex-direction: column; gap: 0; }
+    .fx-swap {
+      align-self: center;
+      width: 40px; height: 40px; margin: 8px 0;
+      border-radius: 50%; border: 1px solid var(--gold);
+      background: rgba(212,175,55,.16); color: var(--gold-2);
+      font: inherit; font-size: 1.15rem; font-weight: 700;
+      cursor: pointer; line-height: 1;
+    }
+    .fx-name { color: var(--muted); font-size: .78rem; margin: 4px 2px 0; }
+    .fx-xe-res { margin-top: 12px; }
+    .fx-from-eq {
+      color: var(--muted); font-size: .92rem; margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .fx-rates {
+      margin-top: 10px; color: var(--muted); font-size: .78rem;
+      line-height: 1.45; font-variant-numeric: tabular-nums;
     }
     .tf-row { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: space-between; margin: 8px 0 0; width: 100%; }
     .tf-row button {
@@ -197,16 +216,16 @@
       padding: 12px 12px; font: inherit; font-size: 1.35rem;
       font-weight: 600; text-align: right; font-variant-numeric: tabular-nums;
     }
-    #fxAmt, .fx-out {
+    #fxAmt {
       height: 52px; min-height: 52px; max-height: 52px; box-sizing: border-box;
     }
     .fx-out {
-      display: flex; align-items: center; justify-content: flex-end;
-      width: 100%; margin-top: 8px; padding: 0 12px;
-      background: #0e1014; color: var(--gold-2);
-      border: 1px solid var(--line); border-radius: 10px;
-      font: inherit; font-size: 1.35rem; font-weight: 600;
-      text-align: right; font-variant-numeric: tabular-nums; line-height: 1;
+      display: block;
+      width: 100%; padding: 10px 0 2px;
+      color: var(--gold-2);
+      font: inherit; font-size: 1.7rem; font-weight: 700;
+      text-align: left; font-variant-numeric: tabular-nums; line-height: 1.15;
+      letter-spacing: -.03em;
     }
     .calc-keys { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; }
     .calc18 .plus, .calc-keys button {
@@ -267,7 +286,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.56</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.57</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -364,26 +383,42 @@
             <strong class="fold-title" style="color:var(--gold-2)">Cambio valuta</strong>
             <span class="fold-actions"><span class="fold-btn"></span></span>
           </summary>
-          <p class="hint" style="margin-top:6px">Importo in alto, risultato sotto. Tasso live EUR / USD / CHF / PLN.</p>
-          <div class="fx-lab">Da</div>
-          <div class="pair-tabs" id="fxFromRow">
-            <button type="button" data-fx="EUR">EUR</button>
-            <button type="button" data-fx="USD">USD</button>
-            <button type="button" data-fx="CHF" class="on">CHF</button>
-            <button type="button" data-fx="PLN">PLN</button>
+          <p class="hint" style="margin-top:6px">Tasso mid-market live. EUR, USD, CHF, PLN.</p>
+          <div class="fx-lab">Importo</div>
+          <div class="calc-row">
+            <input id="fxAmt" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" />
           </div>
-          <div class="fx-lab">A</div>
-          <div class="pair-tabs" id="fxToRow">
-            <button type="button" data-fx="EUR" class="on">EUR</button>
-            <button type="button" data-fx="USD">USD</button>
-            <button type="button" data-fx="CHF">CHF</button>
-            <button type="button" data-fx="PLN">PLN</button>
+          <div class="fx-xe">
+            <div>
+              <div class="fx-lab">Da</div>
+              <div class="pair-tabs" id="fxFromRow">
+                <button type="button" data-fx="EUR">EUR</button>
+                <button type="button" data-fx="USD">USD</button>
+                <button type="button" data-fx="CHF" class="on">CHF</button>
+                <button type="button" data-fx="PLN">PLN</button>
+              </div>
+              <div class="fx-name" id="fxFromName">Franco svizzero</div>
+            </div>
+            <button type="button" class="fx-swap" id="fxSwap" aria-label="Inverti valute">⇅</button>
+            <div>
+              <div class="fx-lab">A</div>
+              <div class="pair-tabs" id="fxToRow">
+                <button type="button" data-fx="EUR" class="on">EUR</button>
+                <button type="button" data-fx="USD">USD</button>
+                <button type="button" data-fx="CHF">CHF</button>
+                <button type="button" data-fx="PLN">PLN</button>
+              </div>
+              <div class="fx-name" id="fxToName">Euro</div>
+            </div>
           </div>
-          <div class="calc-row" style="margin-top:10px">
-            <input id="fxAmt" type="text" inputmode="decimal" placeholder="importo" autocomplete="off" />
+          <div class="fx-xe-res">
+            <div class="fx-from-eq" id="fxFromEq">—</div>
+            <div class="fx-out" id="fxOut">—</div>
+            <div class="fx-rates">
+              <div id="fxRateLab">1 CHF = — EUR</div>
+              <div id="fxRateInv">1 EUR = — CHF</div>
+            </div>
           </div>
-          <div class="fx-lab" id="fxRateLab" style="margin-top:10px">1 CHF → EUR</div>
-          <div class="fx-out" id="fxOut">—</div>
         </details>
       </section>
       <section class="card">
@@ -445,7 +480,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.56 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.57 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1363,9 +1398,13 @@
       }
       return bag;
     }
-    function fxUnit(ccy) {
-      return ccy === "PLN" ? "zł" : ccy === "USD" ? "$" : ccy === "CHF" ? "CHF" : "€";
-    }
+    const FX_META = {
+      EUR: { name: "Euro", names: "Euro", unit: "€" },
+      USD: { name: "Dollaro USA", names: "Dollari USA", unit: "$" },
+      CHF: { name: "Franco svizzero", names: "Franchi svizzeri", unit: "CHF" },
+      PLN: { name: "Zloty polacco", names: "Zloty polacchi", unit: "zł" }
+    };
+    function fxMeta(ccy) { return FX_META[ccy] || FX_META.EUR; }
     function eurPerUnit(ccy, q) {
       if (!q) return null;
       if (ccy === "EUR") return 1;
@@ -1384,20 +1423,36 @@
       });
     }
     function paintFxConv() {
-      const lab = document.getElementById("fxRateLab");
-      const out = document.getElementById("fxOut");
-      if (!lab || !out) return;
       const from = state.fxFrom || "CHF";
       const to = state.fxTo || "EUR";
+      const fm = fxMeta(from);
+      const tm = fxMeta(to);
+      const fromName = document.getElementById("fxFromName");
+      const toName = document.getElementById("fxToName");
+      if (fromName) fromName.textContent = fm.name;
+      if (toName) toName.textContent = tm.name;
+      const lab = document.getElementById("fxRateLab");
+      const inv = document.getElementById("fxRateInv");
+      const out = document.getElementById("fxOut");
+      const eq = document.getElementById("fxFromEq");
+      if (!out) return;
       const q = state.quote;
       const a = eurPerUnit(from, q);
       const b = eurPerUnit(to, q);
       const rate = (a > 0 && b > 0) ? (a / b) : null;
-      lab.textContent = "1 " + from + " → " + to + (rate ? "  ·  " + fmt(rate, 4) : "");
+      const invRate = rate > 0 ? 1 / rate : null;
+      if (lab) lab.textContent = rate ? ("1 " + from + " = " + fmt(rate, 5) + " " + to) : ("1 " + from + " = — " + to);
+      if (inv) inv.textContent = invRate ? ("1 " + to + " = " + fmt(invRate, 5) + " " + from) : ("1 " + to + " = — " + from);
       const raw = String(document.getElementById("fxAmt")?.value || "").replace(/\s/g, "").replace(",", ".");
       const amt = Number(raw);
-      if (!(amt > 0) || !rate) { out.textContent = "—"; return; }
-      out.textContent = fmt(amt * rate, 2) + "\u00A0" + fxUnit(to);
+      if (!(amt > 0) || !rate) {
+        if (eq) eq.textContent = "—";
+        out.textContent = "—";
+        return;
+      }
+      const word = amt === 1 ? fm.name : fm.names;
+      if (eq) eq.textContent = fmt(amt, 2) + " " + word + " =";
+      out.textContent = fmt(amt * rate, 2) + " " + (amt * rate === 1 ? tm.name : tm.names);
     }
     function setFxSide(side, ccy) {
       if (side === "from") {
@@ -1658,6 +1713,13 @@
     document.getElementById("fxToRow")?.addEventListener("click", e => {
       const b = e.target.closest("button[data-fx]");
       if (b) setFxSide("to", b.dataset.fx);
+    });
+    document.getElementById("fxSwap")?.addEventListener("click", () => {
+      const a = state.fxFrom;
+      state.fxFrom = state.fxTo;
+      state.fxTo = a;
+      paintFxTabs();
+      paintFxConv();
     });
     paintFxTabs();
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
