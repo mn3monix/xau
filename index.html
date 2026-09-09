@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.52 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.53 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -73,10 +73,16 @@
       flex: 1 1 0; min-width: 0; padding: 8px 6px; font-size: .72rem;
       white-space: nowrap; letter-spacing: 0;
     }
+    .pair-tabs button.dim { opacity: .38; pointer-events: none; }
     .pair-tabs button.on, .tf-row button.on {
       color: #1a1404; background: linear-gradient(180deg, var(--gold-2), var(--gold));
       border-color: transparent; font-weight: 600;
     }
+    .fx-lab {
+      color: var(--muted); font-size: .62rem; letter-spacing: .06em;
+      text-transform: uppercase; margin: 10px 0 4px;
+    }
+    .fx-out b { font-size: 1.45rem; }
     .tf-row { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: space-between; margin: 8px 0 0; width: 100%; }
     .tf-row button {
       flex: 1; background: transparent; color: var(--muted);
@@ -186,7 +192,7 @@
     .calc18 { display: flex; flex-direction: column; gap: 8px; }
     .calc18 label { font-size: .8rem; }
     .calc-row { display: flex; gap: 6px; }
-    .calc18 input {
+    .calc18 input, #fxAmt {
       flex: 1; width: 100%; background: #0e1014; color: var(--text);
       border: 1px solid var(--line); border-radius: 10px;
       padding: 12px 12px; font: inherit; font-size: 1.35rem;
@@ -251,7 +257,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.52</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.53</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -266,7 +272,7 @@
 
     <div class="hero">
       <section class="card">
-        <div class="pair-tabs">
+        <div class="pair-tabs" id="goldPair">
           <button class="on" data-ccy="EUR">XAU / EUR</button>
           <button data-ccy="USD">XAU / USD</button>
           <button data-ccy="CHF">XAU / CHF</button>
@@ -343,6 +349,36 @@
         </details>
       </section>
       <section class="card">
+        <details class="fold" open>
+          <summary>
+            <strong class="fold-title" style="color:var(--gold-2)">Cambio valuta</strong>
+            <span class="fold-actions"><span class="fold-btn"></span></span>
+          </summary>
+          <p class="hint" style="margin-top:6px">Importo in alto, risultato sotto. Tasso live EUR / USD / CHF / PLN.</p>
+          <div class="fx-lab">Da</div>
+          <div class="pair-tabs" id="fxFromRow">
+            <button type="button" data-fx="EUR">EUR</button>
+            <button type="button" data-fx="USD">USD</button>
+            <button type="button" data-fx="CHF" class="on">CHF</button>
+            <button type="button" data-fx="PLN">PLN</button>
+          </div>
+          <div class="fx-lab">A</div>
+          <div class="pair-tabs" id="fxToRow">
+            <button type="button" data-fx="EUR" class="on">EUR</button>
+            <button type="button" data-fx="USD">USD</button>
+            <button type="button" data-fx="CHF">CHF</button>
+            <button type="button" data-fx="PLN">PLN</button>
+          </div>
+          <div class="calc-row" style="margin-top:10px">
+            <input id="fxAmt" type="text" inputmode="decimal" placeholder="importo" autocomplete="off" />
+          </div>
+          <div class="stat stack fx-out" style="margin-top:8px">
+            <label id="fxRateLab">1 CHF → EUR</label>
+            <b id="fxOut">—</b>
+          </div>
+        </details>
+      </section>
+      <section class="card">
         <details class="fold">
           <summary>
             <strong class="fold-title" style="color:var(--gold-2)">Calcolatrice 18K</strong>
@@ -401,7 +437,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.52 — 8 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.53 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -475,7 +511,7 @@
       { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA" },
     ];
     const K18 = 18 / 24;
-    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, g24: null, tvCache: {}, ticks: {}, hub: null, lastSpark: 0 };
+    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, g24: null, tvCache: {}, ticks: {}, hub: null, lastSpark: 0, fxFrom: "CHF", fxTo: "EUR" };
     function renderCoins(g24) {
       const body = document.getElementById("coinsBody");
       if (!body) return;
@@ -920,6 +956,7 @@
       paintFx("eurpln", q.eurpln, 4, q.eurplnDiff);
       paintFx("eurchf", q.eurchf, 4, q.eurchfDiff);
       paintFx("eurjpy", q.eurjpy, 2, q.eurjpyDiff);
+      paintFxConv();
       const when = new Date(q.lastQuoteAt || q.timestamp || Date.now());
       state.lastTick = when;
       paintClock(when);
@@ -1318,6 +1355,53 @@
       }
       return bag;
     }
+    function fxUnit(ccy) {
+      return ccy === "PLN" ? "zł" : ccy === "USD" ? "$" : ccy === "CHF" ? "CHF" : "€";
+    }
+    function eurPerUnit(ccy, q) {
+      if (!q) return null;
+      if (ccy === "EUR") return 1;
+      if (ccy === "USD") return q.eurusd > 0 ? 1 / q.eurusd : null;
+      if (ccy === "CHF") return q.eurchf > 0 ? 1 / q.eurchf : null;
+      if (ccy === "PLN") return q.eurpln > 0 ? 1 / q.eurpln : null;
+      return null;
+    }
+    function paintFxTabs() {
+      [["fxFromRow", state.fxFrom, state.fxTo], ["fxToRow", state.fxTo, state.fxFrom]].forEach(([id, on, other]) => {
+        document.querySelectorAll("#" + id + " button").forEach(b => {
+          const c = b.dataset.fx;
+          b.classList.toggle("on", c === on);
+          b.classList.toggle("dim", c === other);
+        });
+      });
+    }
+    function paintFxConv() {
+      const lab = document.getElementById("fxRateLab");
+      const out = document.getElementById("fxOut");
+      if (!lab || !out) return;
+      const from = state.fxFrom || "CHF";
+      const to = state.fxTo || "EUR";
+      const q = state.quote;
+      const a = eurPerUnit(from, q);
+      const b = eurPerUnit(to, q);
+      const rate = (a > 0 && b > 0) ? (a / b) : null;
+      lab.textContent = "1 " + from + " → " + to + (rate ? "  ·  " + fmt(rate, 4) : "");
+      const raw = String(document.getElementById("fxAmt")?.value || "").replace(/\s/g, "").replace(",", ".");
+      const amt = Number(raw);
+      if (!(amt > 0) || !rate) { out.textContent = "—"; return; }
+      out.textContent = fmt(amt * rate, 2) + "\u00A0" + fxUnit(to);
+    }
+    function setFxSide(side, ccy) {
+      if (side === "from") {
+        if (ccy === state.fxTo) state.fxTo = state.fxFrom;
+        state.fxFrom = ccy;
+      } else {
+        if (ccy === state.fxFrom) state.fxFrom = state.fxTo;
+        state.fxTo = ccy;
+      }
+      paintFxTabs();
+      paintFxConv();
+    }
     function paintFx(id, cur, dec, diff) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -1513,9 +1597,9 @@
         if (q && q.close > 0) paintIndex(it.id, q.close, q.change, it.dec);
       }));
     }
-    document.querySelectorAll(".pair-tabs button").forEach(btn => {
+    document.querySelectorAll("#goldPair button").forEach(btn => {
       btn.addEventListener("click", async () => {
-        document.querySelectorAll(".pair-tabs button").forEach(b => b.classList.remove("on"));
+        document.querySelectorAll("#goldPair button").forEach(b => b.classList.remove("on"));
         btn.classList.add("on");
         state.ccy = btn.dataset.ccy;
         state.sessionDay = null;
@@ -1558,6 +1642,16 @@
       el.value = v ? v + map[op] : (op === "-" ? "-" : "");
       el.focus();
     });
+    document.getElementById("fxAmt")?.addEventListener("input", paintFxConv);
+    document.getElementById("fxFromRow")?.addEventListener("click", e => {
+      const b = e.target.closest("button[data-fx]");
+      if (b) setFxSide("from", b.dataset.fx);
+    });
+    document.getElementById("fxToRow")?.addEventListener("click", e => {
+      const b = e.target.closest("button[data-fx]");
+      if (b) setFxSide("to", b.dataset.fx);
+    });
+    paintFxTabs();
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
 
     boot(true);
