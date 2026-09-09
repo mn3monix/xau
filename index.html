@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.59 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.60 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -62,7 +62,7 @@
       background: var(--bg-2); border: 1px solid var(--line);
       border-radius: 18px; padding: 16px;
     }
-    .pair-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: nowrap; }
+    .pair-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
     .pair-tabs button, .refresh-btn {
       background: transparent; color: var(--muted);
       border: 1px solid var(--line); border-radius: 999px;
@@ -70,7 +70,7 @@
       min-height: 44px; touch-action: manipulation;
     }
     .pair-tabs button {
-      flex: 1 1 0; min-width: 0; padding: 8px 6px; font-size: .72rem;
+      flex: 1 1 calc(33.33% - 6px); min-width: 0; padding: 8px 4px; font-size: .68rem;
       white-space: nowrap; letter-spacing: 0;
     }
     .pair-tabs button.dim { opacity: .38; pointer-events: none; }
@@ -274,7 +274,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.59</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.60</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -294,6 +294,8 @@
           <button data-ccy="USD">XAU / USD</button>
           <button data-ccy="CHF">XAU / CHF</button>
           <button data-ccy="PLN">XAU / PLN</button>
+          <button data-ccy="GBP">XAU / GBP</button>
+          <button data-ccy="JPY">XAU / JPY</button>
         </div>
         <div class="price-row">
           <div class="px" id="price">—</div>
@@ -371,13 +373,15 @@
             <strong class="fold-title" style="color:var(--gold-2)">Cambio valuta</strong>
             <span class="fold-actions"><span class="fold-btn"></span></span>
           </summary>
-          <p class="hint" style="margin-top:6px">Importo in alto, risultato sotto. Tasso live EUR / USD / CHF / PLN.</p>
+          <p class="hint" style="margin-top:6px">Importo in alto, risultato sotto. Tasso live EUR / USD / CHF / PLN / GBP / JPY.</p>
           <div class="fx-lab">Da</div>
           <div class="pair-tabs" id="fxFromRow">
             <button type="button" data-fx="EUR">EUR</button>
             <button type="button" data-fx="USD">USD</button>
             <button type="button" data-fx="CHF" class="on">CHF</button>
             <button type="button" data-fx="PLN">PLN</button>
+            <button type="button" data-fx="GBP">GBP</button>
+            <button type="button" data-fx="JPY">JPY</button>
           </div>
           <div class="fx-lab">A</div>
           <div class="pair-tabs" id="fxToRow">
@@ -385,6 +389,8 @@
             <button type="button" data-fx="USD">USD</button>
             <button type="button" data-fx="CHF">CHF</button>
             <button type="button" data-fx="PLN">PLN</button>
+            <button type="button" data-fx="GBP">GBP</button>
+            <button type="button" data-fx="JPY">JPY</button>
           </div>
           <div class="calc-row" style="margin-top:10px">
             <div class="fx-amt-wrap">
@@ -455,7 +461,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.59 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.60 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -553,17 +559,28 @@
       });
       body.innerHTML = rows.join("");
     }
-    function goldSymbol() { return state.ccy === "EUR" ? "XAUEUR" : "XAUUSD"; }
-    function fxSymbol() { return state.ccy === "PLN" ? "USDPLN" : state.ccy === "CHF" ? "USDCHF" : null; }
+    function goldSymbol() {
+      return (state.ccy === "EUR" || state.ccy === "GBP" || state.ccy === "JPY") ? "XAUEUR" : "XAUUSD";
+    }
+    function fxSymbol() {
+      if (state.ccy === "PLN") return "USDPLN";
+      if (state.ccy === "CHF") return "USDCHF";
+      if (state.ccy === "GBP") return "EURGBP";
+      if (state.ccy === "JPY") return "EURJPY";
+      return null;
+    }
     function fmt(n, d = 2) {
       if (n == null || Number.isNaN(n)) return "—";
       return Number(n).toLocaleString("it-IT", { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: true });
     }
-    function money(n, d = 2) {
+    function money(n, d) {
+      if (d == null) d = state.ccy === "JPY" ? 0 : 2;
       const num = fmt(n, d);
       if (state.ccy === "PLN") return num + "\u00A0zł";
       if (state.ccy === "CHF") return num + "\u00A0CHF";
       if (state.ccy === "USD") return num + "\u00A0$";
+      if (state.ccy === "GBP") return num + "\u00A0£";
+      if (state.ccy === "JPY") return num + "\u00A0¥";
       return num + "\u00A0€";
     }
     function paintClock(d) {
@@ -825,6 +842,14 @@
       if (state.ccy === "CHF") {
         const usdchf = (q.eurchf > 0 && q.eurusd > 0) ? (q.eurchf / q.eurusd) : null;
         return usdchf ? usd * usdchf : null;
+      }
+      if (state.ccy === "GBP") {
+        const usdgbp = (q.eurgbp > 0 && q.eurusd > 0) ? (q.eurgbp / q.eurusd) : null;
+        return usdgbp ? usd * usdgbp : null;
+      }
+      if (state.ccy === "JPY") {
+        const usdjpy = (q.eurjpy > 0 && q.eurusd > 0) ? (q.eurjpy / q.eurusd) : null;
+        return usdjpy ? usd * usdjpy : null;
       }
       return usd;
     }
@@ -1157,20 +1182,33 @@
         getJSON(`${API}/XAUUSD`, 4500),
         getJSON(`${API}/EURUSD`, 4500),
         getJSON(`${API}/EURCHF`, 3500).catch(() => ({ mid: null })),
-        getJSON(`${API}/EURJPY`, 3500).catch(() => ({ mid: null }))
+        getJSON(`${API}/EURJPY`, 3500).catch(() => ({ mid: null })),
+        getJSON(`${API}/EURGBP`, 3500).catch(() => ({ mid: null }))
       ];
-      if (fxName) reqs.push(getJSON(`${API}/${fxName}`, 4500));
-      const [gold, epln, xauUsdQ, eurUsdQ, eurChfQ, eurJpyQ, fx] = await Promise.all(reqs);
+      if (fxName) reqs.push(getJSON(`${API}/${fxName}`, 4500).catch(() => null));
+      const [gold, epln, xauUsdQ, eurUsdQ, eurChfQ, eurJpyQ, eurGbpQ, fx] = await Promise.all(reqs);
+      const bag = {
+        eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid,
+        eurchf: eurChfQ.mid, eurjpy: eurJpyQ.mid, eurgbp: eurGbpQ.mid,
+        eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent,
+        eurchfDiff: eurChfQ.dayDiffPercent, eurjpyDiff: eurJpyQ.dayDiffPercent,
+        eurgbpDiff: eurGbpQ.dayDiffPercent
+      };
       let q;
       if (!fxName) {
-        q = { ...gold, symbol: gold.symbol || goldSymbol(), eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent };
+        q = { ...gold, symbol: gold.symbol || goldSymbol(), ...bag };
       } else {
+        const fxMid = (fx && fx.mid > 0) ? fx.mid
+          : (state.ccy === "GBP" ? Number(eurGbpQ && eurGbpQ.mid) : state.ccy === "JPY" ? Number(eurJpyQ && eurJpyQ.mid) : 0);
+        if (!(gold && gold.mid > 0 && fxMid > 0)) throw new Error("fx");
         q = {
-          mid: gold.mid * fx.mid, high: gold.high * fx.high, low: gold.low * fx.low,
-          marketState: gold.marketState, stale: gold.stale || fx.stale,
+          mid: gold.mid * fxMid,
+          high: gold.high * ((fx && fx.high) || fxMid),
+          low: gold.low * ((fx && fx.low) || fxMid),
+          marketState: gold.marketState, stale: gold.stale || (fx && fx.stale),
           lastQuoteAt: gold.lastQuoteAt || gold.timestamp, timestamp: gold.timestamp,
-          symbol: "XAUPLN", dayDiffPercent: gold.dayDiffPercent,
-          eurpln: epln.mid, xauusd: xauUsdQ.mid, eurusd: eurUsdQ.mid, eurchf: eurChfQ.mid, eurusdDiff: eurUsdQ.dayDiffPercent, eurplnDiff: epln.dayDiffPercent, eurchfDiff: eurChfQ.dayDiffPercent, eurjpy: eurJpyQ.mid, eurjpyDiff: eurJpyQ.dayDiffPercent,
+          symbol: "XAU" + state.ccy, dayDiffPercent: gold.dayDiffPercent,
+          ...bag
         };
       }
       const closed = (state.daily || []).filter(b => !b.isOpen);
@@ -1195,19 +1233,27 @@
       const [eur, usd, fx] = await Promise.all([
         getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-EUR-SPOT"),
         getJSON("https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT"),
-        getJSON("https://api.frankfurter.app/latest?from=EUR&to=PLN,USD,CHF,JPY"),
+        getJSON("https://api.frankfurter.app/latest?from=EUR&to=PLN,USD,CHF,JPY,GBP"),
       ]);
       const xauEur = Number(eur.symbols[0].price);
       const xauUsd = Number(usd.symbols[0].price);
       const eurpln = Number(fx.rates.PLN);
       const eurusd = Number(fx.rates.USD);
+      const eurchf = Number(fx.rates.CHF || 0);
+      const eurjpy = Number(fx.rates.JPY || 0);
+      const eurgbp = Number(fx.rates.GBP || 0);
       const ts = eur.symbols[0].computed_at;
-      const mid = state.ccy === "PLN" ? xauEur * eurpln : state.ccy === "USD" ? xauUsd : state.ccy === "CHF" ? xauEur * Number(fx.rates.CHF || 0) : xauEur;
+      const mid = state.ccy === "PLN" ? xauEur * eurpln
+        : state.ccy === "USD" ? xauUsd
+        : state.ccy === "CHF" ? xauEur * eurchf
+        : state.ccy === "GBP" ? xauEur * eurgbp
+        : state.ccy === "JPY" ? xauEur * eurjpy
+        : xauEur;
       return {
         mid, high: mid, low: mid, marketState: "open", stale: false,
         lastQuoteAt: ts, timestamp: ts,
-        symbol: state.ccy === "PLN" ? "XAUPLN" : state.ccy === "USD" ? "XAUUSD" : state.ccy === "CHF" ? "XAUCHF" : "XAUEUR",
-        dayDiffPercent: 0, eurpln, xauusd: xauUsd, eurusd, eurchf: Number(fx.rates.CHF || 0), eurjpy: Number(fx.rates.JPY || 0), _xauUsd: xauUsd,
+        symbol: "XAU" + state.ccy,
+        dayDiffPercent: 0, eurpln, xauusd: xauUsd, eurusd, eurchf, eurjpy, eurgbp, _xauUsd: xauUsd,
       };
     }
     async function loadQuote() {
@@ -1222,7 +1268,7 @@
       startGoldStream();
     }
     function goldStreamSymbols() {
-      return ["XAUEUR", "XAUUSD", "EURUSD", "EURPLN", "EURCHF", "EURJPY", "USDPLN", "USDCHF"];
+      return ["XAUEUR", "XAUUSD", "EURUSD", "EURPLN", "EURCHF", "EURJPY", "EURGBP", "USDPLN", "USDCHF"];
     }
     function tickMid(sym) {
       const t = state.ticks[sym];
@@ -1236,6 +1282,7 @@
       const eurpln = tickMid("EURPLN") || base.eurpln;
       const eurchf = tickMid("EURCHF") || base.eurchf;
       const eurjpy = tickMid("EURJPY") || base.eurjpy;
+      const eurgbp = tickMid("EURGBP") || base.eurgbp;
       const usdpln = tickMid("USDPLN");
       const usdchf = tickMid("USDCHF");
       let mid = null, high = null, low = null, ts = null, gold = null;
@@ -1248,6 +1295,12 @@
       } else if (state.ccy === "CHF") {
         if (gEur && eurchf) mid = gEur * eurchf;
         else if (gUsd && usdchf) mid = gUsd * usdchf;
+        gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
+      } else if (state.ccy === "GBP") {
+        if (gEur && eurgbp) mid = gEur * eurgbp;
+        gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
+      } else if (state.ccy === "JPY") {
+        if (gEur && eurjpy) mid = gEur * eurjpy;
         gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
       } else gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
       if (gold && gold.mid > 0 && mid == null) {
@@ -1267,11 +1320,12 @@
         mid, high: high || mid, low: low || mid,
         lastQuoteAt: ts || Date.now(), timestamp: ts || Date.now(),
         stale: false, marketState: "open",
-        eurusd, eurpln, eurchf, eurjpy, xauusd: gUsd || base.xauusd,
+        eurusd, eurpln, eurchf, eurjpy, eurgbp, xauusd: gUsd || base.xauusd,
         eurusdDiff: state.ticks.EURUSD && state.ticks.EURUSD.dayDiffPercent,
         eurplnDiff: state.ticks.EURPLN && state.ticks.EURPLN.dayDiffPercent,
         eurchfDiff: state.ticks.EURCHF && state.ticks.EURCHF.dayDiffPercent,
         eurjpyDiff: state.ticks.EURJPY && state.ticks.EURJPY.dayDiffPercent,
+        eurgbpDiff: state.ticks.EURGBP && state.ticks.EURGBP.dayDiffPercent,
         dayDiffPercent: gold && Number.isFinite(gold.dayDiffPercent) ? gold.dayDiffPercent : base.dayDiffPercent
       };
     }
@@ -1374,13 +1428,15 @@
       return bag;
     }
     function fxUnit(ccy) {
-      return ccy === "PLN" ? "zł" : ccy === "USD" ? "$" : ccy === "CHF" ? "CHF" : "€";
+      return ccy === "PLN" ? "zł" : ccy === "USD" ? "$" : ccy === "CHF" ? "CHF" : ccy === "GBP" ? "£" : ccy === "JPY" ? "¥" : "€";
     }
     function eurPerUnit(ccy, q) {
       if (!q) return null;
       if (ccy === "EUR") return 1;
       if (ccy === "USD") return q.eurusd > 0 ? 1 / q.eurusd : null;
       if (ccy === "CHF") return q.eurchf > 0 ? 1 / q.eurchf : null;
+      if (ccy === "GBP") return q.eurgbp > 0 ? 1 / q.eurgbp : null;
+      if (ccy === "JPY") return q.eurjpy > 0 ? 1 / q.eurjpy : null;
       if (ccy === "PLN") return q.eurpln > 0 ? 1 / q.eurpln : null;
       return null;
     }
@@ -1409,7 +1465,8 @@
       const raw = String(document.getElementById("fxAmt")?.value || "").replace(/\s/g, "").replace(",", ".");
       const amt = Number(raw);
       if (!(amt > 0) || !rate) { out.textContent = "—\u00A0" + fxUnit(to); return; }
-      out.textContent = fmt(amt * rate, 2) + "\u00A0" + fxUnit(to);
+      const dec = to === "JPY" ? 0 : 2;
+      out.textContent = fmt(amt * rate, dec) + "\u00A0" + fxUnit(to);
     }
     function setFxSide(side, ccy) {
       if (side === "from") {
@@ -1446,9 +1503,9 @@
       while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() - 1);
       const iso = d.toISOString().slice(0, 10);
       try {
-        const j = await getJSON("https://api.frankfurter.app/" + iso + "?from=EUR&to=USD,PLN,CHF,JPY");
+        const j = await getJSON("https://api.frankfurter.app/" + iso + "?from=EUR&to=USD,PLN,CHF,JPY,GBP");
         if (j && j.rates) {
-          state.fxPrev = { eurusd: Number(j.rates.USD), eurpln: Number(j.rates.PLN), eurchf: Number(j.rates.CHF), eurjpy: Number(j.rates.JPY) };
+          state.fxPrev = { eurusd: Number(j.rates.USD), eurpln: Number(j.rates.PLN), eurchf: Number(j.rates.CHF), eurjpy: Number(j.rates.JPY), eurgbp: Number(j.rates.GBP) };
         }
       } catch (e) {}
     }
