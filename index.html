@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.63 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.64 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -276,7 +276,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.63</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.64</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -397,14 +397,14 @@
           <div class="calc-row" style="margin-top:10px">
             <div class="fx-amt-wrap">
               <input id="fxAmt" type="text" inputmode="decimal" placeholder="importo" autocomplete="off" />
-              <span class="fx-amt-unit" id="fxAmtUnit">CHF</span>
+              <span class="fx-amt-unit" id="fxAmtUnit" style="display:none"></span>
             </div>
           </div>
           <div class="fx-lab" id="fxRateLab" style="margin-top:10px">1 CHF → EUR</div>
           <div class="calc-row">
             <div class="fx-amt-wrap">
               <div class="fx-out" id="fxOut">—</div>
-              <span class="fx-amt-unit fx-out-unit" id="fxOutUnit">€</span>
+              <span class="fx-amt-unit fx-out-unit" id="fxOutUnit" style="display:none"></span>
             </div>
           </div>
         </details>
@@ -468,7 +468,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.63 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.64 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1483,13 +1483,20 @@
       const a = eurPerUnit(from, q);
       const b = eurPerUnit(to, q);
       const rate = (a > 0 && b > 0) ? (a / b) : null;
+      const amt = parseFxAmt(document.getElementById("fxAmt")?.value);
       const unitEl = document.getElementById("fxAmtUnit");
       const outUnit = document.getElementById("fxOutUnit");
-      if (unitEl) unitEl.textContent = fxUnit(from);
-      if (outUnit) outUnit.textContent = fxUnit(to);
+      const hasAmt = amt > 0;
+      if (unitEl) {
+        unitEl.textContent = hasAmt ? fxUnit(from) : "";
+        unitEl.style.display = hasAmt ? "" : "none";
+      }
+      if (outUnit) {
+        outUnit.textContent = (hasAmt && rate) ? fxUnit(to) : "";
+        outUnit.style.display = (hasAmt && rate) ? "" : "none";
+      }
       lab.textContent = "1 " + from + " → " + to + (rate ? "  ·  " + fmt(rate, 4) : "");
-      const amt = parseFxAmt(document.getElementById("fxAmt")?.value);
-      if (!(amt > 0) || !rate) { out.textContent = "—"; return; }
+      if (!hasAmt || !rate) { out.textContent = ""; return; }
       out.textContent = fmt(amt * rate, 2);
     }
     function setFxSide(side, ccy) {
