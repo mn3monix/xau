@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.62 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.63 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -198,18 +198,20 @@
       padding: 12px 12px; font: inherit; font-size: 1.35rem;
       font-weight: 600; text-align: right; font-variant-numeric: tabular-nums;
     }
-    #fxAmt { padding-right: 72px; }
+    #fxAmt, .fx-out {
+      height: 52px; min-height: 52px; max-height: 52px; box-sizing: border-box;
+      padding: 12px 56px 12px 12px;
+    }
     .fx-amt-unit {
       position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      min-width: 2.35em; text-align: left;
       color: var(--text); font-size: 1.35rem; font-weight: 600;
       pointer-events: none; font-variant-numeric: tabular-nums;
     }
-    #fxAmt, .fx-out {
-      height: 52px; min-height: 52px; max-height: 52px; box-sizing: border-box;
-    }
+    .fx-out-unit { color: var(--gold-2); }
     .fx-out {
       display: flex; align-items: center; justify-content: flex-end;
-      width: 100%; margin-top: 8px; padding: 0 12px;
+      width: 100%; padding: 12px 56px 12px 12px;
       background: #0e1014; color: var(--gold-2);
       border: 1px solid var(--line); border-radius: 10px;
       font: inherit; font-size: 1.35rem; font-weight: 600;
@@ -274,7 +276,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.62</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.63</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -399,7 +401,12 @@
             </div>
           </div>
           <div class="fx-lab" id="fxRateLab" style="margin-top:10px">1 CHF → EUR</div>
-          <div class="fx-out" id="fxOut">—</div>
+          <div class="calc-row">
+            <div class="fx-amt-wrap">
+              <div class="fx-out" id="fxOut">—</div>
+              <span class="fx-amt-unit fx-out-unit" id="fxOutUnit">€</span>
+            </div>
+          </div>
         </details>
       </section>
       <section class="card">
@@ -461,7 +468,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.62 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.63 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1457,15 +1464,14 @@
     function formatFxAmt(s) {
       const raw = String(s || "").replace(/\s/g, "");
       if (!raw) return "";
-      const trail = /[.,]$/.test(raw);
       const norm = raw.replace(/\./g, "").replace(",", ".");
       const parts = norm.split(".");
       const intPart = (parts[0] || "").replace(/\D/g, "");
-      let dec = parts.length > 1 ? parts.slice(1).join("").replace(/\D/g, "").slice(0, 2) : null;
-      if (parts.length === 1) dec = null;
-      const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      if (dec != null) return grouped + "," + dec;
-      return trail ? grouped + "," : grouped;
+      if (!intPart && parts.length < 2) return "";
+      let dec = (parts.length > 1 ? parts.slice(1).join("") : "").replace(/\D/g, "").slice(0, 2);
+      while (dec.length < 2) dec += "0";
+      const grouped = (intPart || "0").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      return grouped + "," + dec;
     }
     function paintFxConv() {
       const lab = document.getElementById("fxRateLab");
@@ -1478,12 +1484,13 @@
       const b = eurPerUnit(to, q);
       const rate = (a > 0 && b > 0) ? (a / b) : null;
       const unitEl = document.getElementById("fxAmtUnit");
+      const outUnit = document.getElementById("fxOutUnit");
       if (unitEl) unitEl.textContent = fxUnit(from);
+      if (outUnit) outUnit.textContent = fxUnit(to);
       lab.textContent = "1 " + from + " → " + to + (rate ? "  ·  " + fmt(rate, 4) : "");
       const amt = parseFxAmt(document.getElementById("fxAmt")?.value);
-      if (!(amt > 0) || !rate) { out.textContent = "—\u00A0" + fxUnit(to); return; }
-      const dec = to === "JPY" ? 0 : 2;
-      out.textContent = fmt(amt * rate, dec) + "\u00A0" + fxUnit(to);
+      if (!(amt > 0) || !rate) { out.textContent = "—"; return; }
+      out.textContent = fmt(amt * rate, 2);
     }
     function setFxSide(side, ccy) {
       if (side === "from") {
@@ -1739,8 +1746,26 @@
     document.getElementById("fxAmt")?.addEventListener("input", e => {
       const el = e.target;
       const cur = el.value;
+      const sel = el.selectionStart || 0;
+      const commaAt = cur.indexOf(",");
+      const inDec = commaAt >= 0 && sel > commaAt;
       const next = formatFxAmt(cur);
-      if (next !== cur) el.value = next;
+      el.value = next;
+      const c = next.indexOf(",");
+      if (c < 0) {
+        const p = next.length;
+        el.setSelectionRange(p, p);
+      } else if (inDec) {
+        const decTyped = Math.min(2, Math.max(0, sel - commaAt - 1));
+        const p = Math.min(next.length, c + 1 + decTyped);
+        el.setSelectionRange(p, p);
+      } else {
+        el.setSelectionRange(c, c);
+      }
+      paintFxConv();
+    });
+    document.getElementById("fxAmt")?.addEventListener("blur", e => {
+      e.target.value = formatFxAmt(e.target.value);
       paintFxConv();
     });
     document.getElementById("fxFromRow")?.addEventListener("click", e => {
