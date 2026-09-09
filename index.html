@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.61 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.62 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -198,7 +198,7 @@
       padding: 12px 12px; font: inherit; font-size: 1.35rem;
       font-weight: 600; text-align: right; font-variant-numeric: tabular-nums;
     }
-    #fxAmt { padding-right: 58px; }
+    #fxAmt { padding-right: 72px; }
     .fx-amt-unit {
       position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
       color: var(--text); font-size: 1.35rem; font-weight: 600;
@@ -274,7 +274,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.61</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.62</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -461,7 +461,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.61 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.62 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1449,6 +1449,24 @@
         });
       });
     }
+    function parseFxAmt(s) {
+      const t = String(s || "").replace(/\s/g, "").replace(/\./g, "").replace(",", ".");
+      const n = Number(t);
+      return Number.isFinite(n) ? n : NaN;
+    }
+    function formatFxAmt(s) {
+      const raw = String(s || "").replace(/\s/g, "");
+      if (!raw) return "";
+      const trail = /[.,]$/.test(raw);
+      const norm = raw.replace(/\./g, "").replace(",", ".");
+      const parts = norm.split(".");
+      const intPart = (parts[0] || "").replace(/\D/g, "");
+      let dec = parts.length > 1 ? parts.slice(1).join("").replace(/\D/g, "").slice(0, 2) : null;
+      if (parts.length === 1) dec = null;
+      const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      if (dec != null) return grouped + "," + dec;
+      return trail ? grouped + "," : grouped;
+    }
     function paintFxConv() {
       const lab = document.getElementById("fxRateLab");
       const out = document.getElementById("fxOut");
@@ -1462,8 +1480,7 @@
       const unitEl = document.getElementById("fxAmtUnit");
       if (unitEl) unitEl.textContent = fxUnit(from);
       lab.textContent = "1 " + from + " → " + to + (rate ? "  ·  " + fmt(rate, 4) : "");
-      const raw = String(document.getElementById("fxAmt")?.value || "").replace(/\s/g, "").replace(",", ".");
-      const amt = Number(raw);
+      const amt = parseFxAmt(document.getElementById("fxAmt")?.value);
       if (!(amt > 0) || !rate) { out.textContent = "—\u00A0" + fxUnit(to); return; }
       const dec = to === "JPY" ? 0 : 2;
       out.textContent = fmt(amt * rate, dec) + "\u00A0" + fxUnit(to);
@@ -1719,7 +1736,13 @@
       el.value = v ? v + map[op] : (op === "-" ? "-" : "");
       el.focus();
     });
-    document.getElementById("fxAmt")?.addEventListener("input", paintFxConv);
+    document.getElementById("fxAmt")?.addEventListener("input", e => {
+      const el = e.target;
+      const cur = el.value;
+      const next = formatFxAmt(cur);
+      if (next !== cur) el.value = next;
+      paintFxConv();
+    });
     document.getElementById("fxFromRow")?.addEventListener("click", e => {
       const b = e.target.closest("button[data-fx]");
       if (b) setFxSide("from", b.dataset.fx);
