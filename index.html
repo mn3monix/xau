@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.58 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.59 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -191,11 +191,18 @@
     .calc18 { display: flex; flex-direction: column; gap: 8px; }
     .calc18 label { font-size: .8rem; }
     .calc-row { display: flex; gap: 6px; }
+    .fx-amt-wrap { position: relative; flex: 1; width: 100%; }
     .calc18 input, #fxAmt {
       flex: 1; width: 100%; background: #0e1014; color: var(--text);
       border: 1px solid var(--line); border-radius: 10px;
       padding: 12px 12px; font: inherit; font-size: 1.35rem;
       font-weight: 600; text-align: right; font-variant-numeric: tabular-nums;
+    }
+    #fxAmt { padding-right: 58px; }
+    .fx-amt-unit {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--text); font-size: 1.35rem; font-weight: 600;
+      pointer-events: none; font-variant-numeric: tabular-nums;
     }
     #fxAmt, .fx-out {
       height: 52px; min-height: 52px; max-height: 52px; box-sizing: border-box;
@@ -267,7 +274,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.58</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.59</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -380,7 +387,10 @@
             <button type="button" data-fx="PLN">PLN</button>
           </div>
           <div class="calc-row" style="margin-top:10px">
-            <input id="fxAmt" type="text" inputmode="decimal" placeholder="importo" autocomplete="off" />
+            <div class="fx-amt-wrap">
+              <input id="fxAmt" type="text" inputmode="decimal" placeholder="importo" autocomplete="off" />
+              <span class="fx-amt-unit" id="fxAmtUnit">CHF</span>
+            </div>
           </div>
           <div class="fx-lab" id="fxRateLab" style="margin-top:10px">1 CHF → EUR</div>
           <div class="fx-out" id="fxOut">—</div>
@@ -445,7 +455,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.58 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.59 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -1393,10 +1403,12 @@
       const a = eurPerUnit(from, q);
       const b = eurPerUnit(to, q);
       const rate = (a > 0 && b > 0) ? (a / b) : null;
+      const unitEl = document.getElementById("fxAmtUnit");
+      if (unitEl) unitEl.textContent = fxUnit(from);
       lab.textContent = "1 " + from + " → " + to + (rate ? "  ·  " + fmt(rate, 4) : "");
       const raw = String(document.getElementById("fxAmt")?.value || "").replace(/\s/g, "").replace(",", ".");
       const amt = Number(raw);
-      if (!(amt > 0) || !rate) { out.textContent = "—"; return; }
+      if (!(amt > 0) || !rate) { out.textContent = "—\u00A0" + fxUnit(to); return; }
       out.textContent = fmt(amt * rate, 2) + "\u00A0" + fxUnit(to);
     }
     function setFxSide(side, ccy) {
