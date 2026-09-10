@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.68 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.69 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -276,7 +276,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.68</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.69</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -354,6 +354,8 @@
             <div class="stat stack"><label>Treasury 10 anni <i class="mkt" data-mkt="ust"></i></label><b id="ust10">—</b></div>
             <div class="stat stack"><label>Treasury 30 anni <i class="mkt" data-mkt="ust"></i></label><b id="ust30">—</b></div>
             <div class="stat stack"><label>Bund 10 anni <i class="mkt" data-mkt="bund"></i></label><b id="de10">—</b></div>
+            <div class="stat stack"><label>Giappone 10 anni <i class="mkt" data-mkt="jgb"></i></label><b id="jp10">—</b></div>
+            <div class="stat stack"><label>Svizzera 10 anni <i class="mkt" data-mkt="chb"></i></label><b id="ch10">—</b></div>
             <div class="stat-sep" role="separator"></div>
             <div class="stat stack"><label>DAX <i class="mkt" data-mkt="eu"></i></label><b id="idxDax">—</b></div>
             <div class="stat stack"><label>Euro Stoxx 50 <i class="mkt" data-mkt="eu"></i></label><b id="idxSx5e">—</b></div>
@@ -468,7 +470,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.68 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.69 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -665,6 +667,14 @@
         const c = tzClock("Europe/Berlin");
         if (c.wd < 1 || c.wd > 5) return false;
         return kind === "eu" ? between(c.min, 9 * 60, 17 * 60 + 30) : between(c.min, 8 * 60, 22 * 60);
+      }
+      if (kind === "jgb") {
+        const c = tzClock("Asia/Tokyo");
+        return c.wd >= 1 && c.wd <= 5 && between(c.min, 8 * 60 + 30, 15 * 60);
+      }
+      if (kind === "chb") {
+        const c = tzClock("Europe/Zurich");
+        return c.wd >= 1 && c.wd <= 5 && between(c.min, 8 * 60, 17 * 60 + 30);
       }
       if (kind === "us") {
         const c = tzClock("America/New_York");
@@ -1544,7 +1554,7 @@
     function paintYield(id, yld, chg) {
       const el = document.getElementById(id);
       if (!el) return;
-      if (!(yld > 0)) { el.textContent = "—"; return; }
+      if (!Number.isFinite(yld)) { el.textContent = "—"; return; }
       const d = Number(chg);
       const cls = d > 0.0001 ? "up" : (d < -0.0001 ? "down" : "");
       const pct = Number.isFinite(d) ? ((d >= 0 ? "+" : "") + fmt(d, 2) + "%") : "—";
@@ -1656,7 +1666,9 @@
         { id: "ust2", tv: "TVC:US02Y", y: "2YY=F" },
         { id: "ust10", tv: "TVC:US10Y", y: "^TNX" },
         { id: "ust30", tv: "TVC:US30Y", y: "^TYX" },
-        { id: "de10", tv: "TVC:DE10Y", y: null }
+        { id: "de10", tv: "TVC:DE10Y", y: null },
+        { id: "jp10", tv: "TVC:JP10Y", y: null },
+        { id: "ch10", tv: "TVC:CH10Y", y: null }
       ];
       await Promise.all(specs.map(async it => {
         let close = null, change = null;
