@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Oro Live v2.18.69 — Prezzo e statistiche</title>
+  <title>Oro Live v2.18.71 — Prezzo e statistiche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23d4af37'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0d78c' stroke-width='2'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='18' font-family='Georgia,serif' font-weight='700' fill='%231a1404'%3EAu%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -145,7 +145,27 @@
     }
     .stat.k18 label { color: var(--gold-2); }
     .stat.k18 b { color: var(--gold-2); }
-    .apart { margin-top: 14px; }
+    .sup-now {
+      margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid var(--line); font-size: .88rem; line-height: 1.4;
+    }
+    .sup-now.hot { border-color: var(--gold); background: rgba(212,175,55,.1); color: var(--gold-2); }
+    .sup-now.ok { border-color: rgba(61,214,140,.4); background: rgba(61,214,140,.08); }
+    .sup-row {
+      display: grid; grid-template-columns: 1fr auto; gap: 4px 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--line);
+    }
+    .sup-row:last-child { border-bottom: 0; }
+    .sup-row.in { background: rgba(212,175,55,.08); margin: 0 -8px; padding: 10px 8px; border-radius: 10px; }
+    .sup-lvl { font-size: 1.22rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .sup-meta { color: var(--muted); font-size: .75rem; }
+    .sup-score { text-align: right; color: var(--gold-2); font-weight: 700; font-size: 1.05rem; }
+    .sup-pills { margin-top: 4px; }
+    .sup-pill {
+      display: inline-block; font-size: .62rem; letter-spacing: .02em;
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 2px 7px; margin: 2px 3px 0 0; color: var(--muted);
+    }
     details.fold > summary {
       list-style: none; cursor: pointer;
       display: flex; align-items: center; justify-content: space-between;
@@ -276,7 +296,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.69</span></h1>
+        <h1>Oro Live <span style="font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0">v2.18.71</span></h1>
       </div>
       <div class="status">
         <div class="status-row">
@@ -369,6 +389,18 @@
             <div class="stat stack"><label>E-mini S&P 500 <i class="mkt" data-mkt="emini"></i></label><b id="futEs">—</b></div>
             <div class="stat stack"><label>E-mini Nasdaq 100 <i class="mkt" data-mkt="emini"></i></label><b id="futNq">—</b></div>
           </div>
+        </details>
+      </section>
+      <section class="card">
+        <details class="fold" id="supFold">
+          <summary>
+            <strong class="fold-title" style="color:var(--gold-2)">Supporti 15 anni</strong>
+            <span class="fold-actions"><span class="fold-btn"></span></span>
+          </summary>
+          <p class="hint" style="margin-top:6px">Zone da confluenza: swing, Fibonacci 1A/5A, EMA 50/200, round number, pivot S1, stop-run, RSI, dollaro. Per oro fisico, non timing infallibile.</p>
+          <div class="sup-now" id="supNow">Carico lo storico…</div>
+          <div id="supList"></div>
+          <p class="hint" id="supNote"></p>
         </details>
       </section>
       <section class="card">
@@ -470,7 +502,7 @@
     <footer>
       Dati da feed CFD MetaTrader 5. Lo zloty è XAU/USD × USD/PLN.
       Carati sul grammo: 24k = 999,9 · 21,6k = 900 · 18k = 750. 1 oncia troy = 31,1034768 g.
-      App v2.18.69 — 9 settembre 2026. Non è un consiglio personalizzato.
+      App v2.18.71 — 9 settembre 2026. Non è un consiglio personalizzato.
     </footer>
   </div>
 
@@ -544,7 +576,7 @@
       { name: "Krugerrand 1 oz", karat: "22K — 916,7", gross: 33.93000, fine: 31.10350, cc: "ZA" },
     ];
     const K18 = 18 / 24;
-    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, g24: null, tvCache: {}, ticks: {}, hub: null, lastSpark: 0, fxFrom: "CHF", fxTo: "EUR" };
+    const state = { ccy: "EUR", tf: "1D", daily: [], quote: null, sessionDay: null, sessionCcy: null, sessionHigh: null, sessionLow: null, sessionOpen: null, g24: null, tvCache: {}, ticks: {}, hub: null, lastSpark: 0, fxFrom: "CHF", fxTo: "EUR", hist15: null, dxy15: null, sup: null };
     function renderCoins(g24) {
       const body = document.getElementById("coinsBody");
       if (!body) return;
@@ -702,9 +734,15 @@
       });
     }
     function sameScale(v, mid, band) {
-      if (v == null || mid == null || !(mid > 0)) return false;
+      if (v == null || mid == null || !(mid > 0) || !(v > 0)) return false;
       const b = band || 0.2;
       return v > mid * (1 - b) && v < mid * (1 + b);
+    }
+    function fitsDayPx(v, mid, quote) {
+      if (!sameScale(v, mid, 0.07)) return false;
+      const usd = quote && Number(quote.xauusd);
+      if (usd > 0 && Math.abs(v - usd) / usd < 0.004 && Math.abs(mid - usd) / usd > 0.02) return false;
+      return true;
     }
     function todayBar(daily, quote) {
       const mid = quote?.mid;
@@ -716,28 +754,33 @@
         state.sessionLow = mid ?? null;
         state.sessionOpen = mid ?? null;
       }
+      if (mid > 0) {
+        if (!fitsDayPx(state.sessionHigh, mid, quote)) state.sessionHigh = mid;
+        if (!fitsDayPx(state.sessionLow, mid, quote)) state.sessionLow = mid;
+      }
       const pool = []
         .concat(daily || [])
         .concat(state.intraday || []);
+      const todayKey = sessionDayKey(new Date());
       const bars = pool.filter(b => {
         const t0 = new Date(b.openTime || b.time || 0);
-        return !Number.isNaN(t0.getTime()) && sessionDayKey(t0) === sessionDayKey(new Date());
+        return !Number.isNaN(t0.getTime()) && sessionDayKey(t0) === todayKey;
       });
       let high = mid, low = mid;
       bars.forEach(b => {
-        if (sameScale(b.high, mid, 0.18)) high = Math.max(high, b.high);
-        if (sameScale(b.low, mid, 0.18)) low = Math.min(low, b.low);
-        if (sameScale(b.close, mid, 0.18)) {
+        if (fitsDayPx(b.high, mid, quote)) high = Math.max(high, b.high);
+        if (fitsDayPx(b.low, mid, quote)) low = Math.min(low, b.low);
+        if (fitsDayPx(b.close, mid, quote)) {
           high = Math.max(high, b.close);
           low = Math.min(low, b.close);
         }
       });
-      if (sameScale(quote?.high, mid, 0.18)) high = Math.max(high, quote.high);
-      if (sameScale(quote?.low, mid, 0.18)) low = Math.min(low, quote.low);
-      if (sameScale(state.sessionHigh, mid, 0.18)) high = Math.max(high, state.sessionHigh);
-      if (sameScale(state.sessionLow, mid, 0.18)) low = Math.min(low, state.sessionLow);
-      const openPx = bars.find(b => sameScale(b.open, mid, 0.18))?.open
-        || state.sessionOpen
+      if (fitsDayPx(quote?.high, mid, quote)) high = Math.max(high, quote.high);
+      if (fitsDayPx(quote?.low, mid, quote)) low = Math.min(low, quote.low);
+      if (fitsDayPx(state.sessionHigh, mid, quote)) high = Math.max(high, state.sessionHigh);
+      if (fitsDayPx(state.sessionLow, mid, quote)) low = Math.min(low, state.sessionLow);
+      const openPx = bars.find(b => fitsDayPx(b.open, mid, quote))?.open
+        || (fitsDayPx(state.sessionOpen, mid, quote) ? state.sessionOpen : null)
         || mid;
       if (state.sessionOpen == null && openPx) state.sessionOpen = openPx;
       state.sessionHigh = high;
@@ -1017,6 +1060,7 @@
       paintFx("eurchf", q.eurchf, 4, q.eurchfDiff);
       paintFx("eurjpy", q.eurjpy, 2, q.eurjpyDiff);
       paintFxConv();
+      if (state.sup && document.getElementById("supFold")?.open) paintSupports();
       const when = new Date(q.lastQuoteAt || q.timestamp || Date.now());
       state.lastTick = when;
       paintClock(when);
@@ -1191,6 +1235,209 @@
       const series = fx ? multiplyBars(gold, await loadOhlc(fx, "1d", 400)) : gold;
       state.daily = (series || []).slice().sort((a, b) => new Date(a.openTime || a.time || 0) - new Date(b.openTime || b.time || 0));
     }
+    const SUP_TOOLS = {
+      swing: "Swing", fib1y: "Fib 1A", fib5y: "Fib 5A", ema50: "EMA50",
+      ema200: "EMA200", round: "Round", s1: "Pivot S1"
+    };
+    function parseYahooHist(raw) {
+      let txt = String(raw || "");
+      if (txt.trim().charAt(0) === "{" && txt.indexOf('"contents"') >= 0) {
+        try { txt = JSON.parse(txt).contents || txt; } catch (e) {}
+      }
+      const j = JSON.parse(txt);
+      const res = j.chart && j.chart.result && j.chart.result[0];
+      if (!res) return null;
+      const ts = res.timestamp || [];
+      const q = ((res.indicators || {}).quote || [])[0] || {};
+      const rows = [];
+      for (let i = 0; i < ts.length; i++) {
+        const c = Number(q.close && q.close[i]);
+        const h = Number(q.high && q.high[i]);
+        const l = Number(q.low && q.low[i]);
+        if (!(c > 0) || !(h > 0) || !(l > 0)) continue;
+        rows.push({ t: ts[i] * 1000, o: Number(q.open && q.open[i] || c), h, l, c, v: Number(q.volume && q.volume[i] || 0) });
+      }
+      return rows.length > 200 ? rows : null;
+    }
+    async function fetchYahooHist(sym, range) {
+      const url = "https://query1.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=" + range;
+      const url2 = "https://query2.finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(sym) + "?interval=1d&range=" + range;
+      return raceParsed(
+        [url, url2, "https://api.allorigins.win/raw?url=" + encodeURIComponent(url), "https://corsproxy.io/?" + encodeURIComponent(url)],
+        parseYahooHist, 8000, 12000
+      );
+    }
+    function supSma(a, p, i) {
+      if (i < p - 1) return null;
+      let s = 0;
+      for (let k = i - p + 1; k <= i; k++) s += a[k];
+      return s / p;
+    }
+    function supEma(a, p) {
+      const out = new Array(a.length).fill(null);
+      const k = 2 / (p + 1);
+      const s0 = supSma(a, p, p - 1);
+      if (s0 == null) return out;
+      out[p - 1] = s0;
+      for (let i = p; i < a.length; i++) out[i] = a[i] * k + out[i - 1] * (1 - k);
+      return out;
+    }
+    function supRsi(a, p, i) {
+      if (i < p) return null;
+      let g = 0, l = 0;
+      for (let k = i - p + 1; k <= i; k++) {
+        const d = a[k] - a[k - 1];
+        if (d >= 0) g += d; else l -= d;
+      }
+      if (l === 0) return 100;
+      return 100 - 100 / (1 + g / l);
+    }
+    function supAtr(H, L, C, i, p) {
+      if (i < p) return null;
+      let s = 0;
+      for (let k = i - p + 1; k <= i; k++) {
+        s += Math.max(H[k] - L[k], Math.abs(H[k] - C[k - 1]), Math.abs(L[k] - C[k - 1]));
+      }
+      return s / p;
+    }
+    function computeSupports(rows) {
+      const n = rows.length;
+      if (n < 260) return null;
+      const C = rows.map(r => r.c), H = rows.map(r => r.h), L = rows.map(r => r.l);
+      const ema50 = supEma(C, 50), ema200 = supEma(C, 200);
+      const i = n - 1;
+      const px = C[i];
+      const atr = supAtr(H, L, C, i, 14) || px * 0.01;
+      const rsi = supRsi(C, 14, i);
+      const sl = [];
+      const w = 5;
+      for (let j = w; j < n - w - 1; j++) {
+        const x = L[j];
+        let ok = true;
+        for (let k = 1; k <= w; k++) if (L[j - k] < x || L[j + k] < x) { ok = false; break; }
+        if (ok) sl.push(j);
+      }
+      const fibs = look => {
+        const a = Math.max(0, i - look);
+        let hi = a, lo = a;
+        for (let k = a; k <= i; k++) {
+          if (H[k] >= H[hi]) hi = k;
+          if (L[k] <= L[lo]) lo = k;
+        }
+        const rng = H[hi] - L[lo];
+        if (!(rng > 0)) return [];
+        return [0.382, 0.5, 0.618, 0.786].map(f => H[hi] - rng * f);
+      };
+      const cands = [];
+      const from = Math.max(0, i - 252 * 5);
+      sl.forEach(j => {
+        if (j < from || j >= i - 10) return;
+        const lv = L[j];
+        if (lv >= px * 0.88 && lv <= px * 1.008) cands.push(["swing", lv, 1]);
+      });
+      fibs(252).forEach(lv => { if (lv >= px * 0.88 && lv <= px * 1.008) cands.push(["fib1y", lv, 1]); });
+      fibs(252 * 5).forEach(lv => { if (lv >= px * 0.88 && lv <= px * 1.008) cands.push(["fib5y", lv, 1]); });
+      if (ema50[i] > 0 && ema50[i] >= px * 0.88 && ema50[i] <= px * 1.012) cands.push(["ema50", ema50[i], 1]);
+      if (ema200[i] > 0 && ema200[i] >= px * 0.88 && ema200[i] <= px * 1.012) cands.push(["ema200", ema200[i], 1.2]);
+      [50, 100].forEach(step => {
+        const lv = Math.round(px / step) * step;
+        if (lv >= px * 0.94 && lv <= px * 1.004) cands.push(["round", lv, 0.6]);
+      });
+      if (i >= 21) {
+        let hh = H[i - 21], ll = L[i - 21];
+        for (let k = i - 20; k < i; k++) { if (H[k] > hh) hh = H[k]; if (L[k] < ll) ll = L[k]; }
+        const s1 = 2 * ((hh + ll + C[i - 1]) / 3) - hh;
+        if (s1 >= px * 0.88 && s1 <= px * 1.008) cands.push(["s1", s1, 0.7]);
+      }
+      cands.sort((a, b) => a[1] - b[1]);
+      const clusters = [];
+      let cur = cands.length ? [cands[0]] : [];
+      const band0 = Math.max(8, atr * 0.45);
+      for (let k = 1; k < cands.length; k++) {
+        const m = cur.reduce((s, x) => s + x[1], 0) / cur.length;
+        if (Math.abs(cands[k][1] - m) <= band0) cur.push(cands[k]);
+        else { clusters.push(cur); cur = [cands[k]]; }
+      }
+      if (cur.length) clusters.push(cur);
+      const zones = clusters.map(z => {
+        const lvl = z.reduce((s, x) => s + x[1], 0) / z.length;
+        const tools = [];
+        z.forEach(x => { if (!tools.includes(x[0])) tools.push(x[0]); });
+        const score = z.reduce((s, x) => s + x[2], 0) + 0.4 * Math.max(0, tools.length - 1);
+        return { lvl, score, tools };
+      }).filter(z => z.score >= 1.5)
+        .sort((a, b) => (b.score - Math.abs(px - b.lvl) / (atr * 4)) - (a.score - Math.abs(px - a.lvl) / (atr * 4)));
+      const last = rows[i];
+      const near = zones.filter(z => z.lvl <= px + atr * 0.2).slice(0, 4);
+      return { zones: near, atr, rsi, ema50: ema50[i], ema200: ema200[i], px, last };
+    }
+    function paintSupports() {
+      const box = document.getElementById("supNow");
+      const list = document.getElementById("supList");
+      const note = document.getElementById("supNote");
+      if (!box || !list) return;
+      const pack = state.sup;
+      if (!pack) { box.className = "sup-now"; box.textContent = "Storico 15 anni non disponibile."; return; }
+      const usd = (state.quote && state.quote.xauusd > 0) ? state.quote.xauusd : pack.px;
+      const toShow = v => {
+        const x = toCcyFromUsd(v);
+        return x > 0 ? money(x) : money(v);
+      };
+      const dxy = state.dxy15 || [];
+      let dxyChg = null;
+      if (dxy.length >= 6 && dxy[dxy.length - 1] > 0 && dxy[dxy.length - 6] > 0) {
+        dxyChg = ((dxy[dxy.length - 1] - dxy[dxy.length - 6]) / dxy[dxy.length - 6]) * 100;
+      }
+      const atr = pack.atr;
+      const band = Math.max(6, atr * 0.55);
+      let phase = "niente";
+      let phaseTxt = "Nessun supporto in zona. Le quote sotto sono i livelli con più confluenza.";
+      let cls = "sup-now";
+      pack.zones.forEach(z => {
+        const dist = usd - z.lvl;
+        const inZ = Math.abs(dist) <= band || (usd >= z.lvl - band && usd <= z.lvl + band * 1.1);
+        const sweep = pack.last && pack.last.l < z.lvl - band * 0.25 && pack.last.c >= z.lvl && inZ;
+        z.inZ = inZ; z.sweep = sweep; z.dist = dist;
+        if (sweep && z.score >= 3) { phase = "sweep"; phaseTxt = "Stop-run: wick sotto il supporto e chiusura sopra. Confluenza " + z.score.toFixed(1) + "."; cls = "sup-now hot"; }
+        else if (inZ && z.score >= 3 && phase !== "sweep") { phase = "in"; phaseTxt = "Prezzo in zona di supporto (confluenza " + z.score.toFixed(1) + ")."; cls = "sup-now hot"; }
+        else if (dist > 0 && dist <= atr * 1.2 && z.score >= 3 && phase === "niente") { phase = "near"; phaseTxt = "In avvicinamento a un supporto (confluenza " + z.score.toFixed(1) + ")."; cls = "sup-now ok"; }
+      });
+      const rsiTxt = pack.rsi != null ? ("RSI 14: " + pack.rsi.toFixed(0)) : "";
+      const usdTxt = dxyChg != null ? ("DXY 5s: " + (dxyChg >= 0 ? "+" : "") + dxyChg.toFixed(2) + "%") : "";
+      const extra = [rsiTxt, usdTxt].filter(Boolean).join(" · ");
+      box.className = cls;
+      box.textContent = phaseTxt + (extra ? "  " + extra : "");
+      list.innerHTML = pack.zones.map(z => {
+        const pills = z.tools.map(t => '<span class="sup-pill">' + (SUP_TOOLS[t] || t) + "</span>").join("");
+        const distTxt = z.dist >= 0 ? ("+" + fmt(toCcyFromUsd(z.dist) || z.dist, 0)) : fmt(toCcyFromUsd(z.dist) || z.dist, 0);
+        return '<div class="sup-row' + (z.inZ ? " in" : "") + '"><div><div class="sup-lvl">' + toShow(z.lvl) + (z.sweep ? ' · stop-run' : "") + '</div><div class="sup-meta">distanza ' + distTxt + ' · ATR ' + fmt(toCcyFromUsd(atr) || atr, 0) + '</div><div class="sup-pills">' + pills + '</div></div><div class="sup-score">' + z.score.toFixed(1) + '<div class="sup-meta">score</div></div></div>';
+      }).join("") || '<p class="hint">Nessuna zona sotto il prezzo con score ≥ 1,5.</p>';
+      if (note) note.textContent = "Backtest GC=F 2011–2026. Hold (rimbalzo ≥ 0,9 ATR in 15 sedute, senza 2 chiusure sotto): ~43% in-sample, ~49% dal 2022. Con stop-run e score ≥ 3: ~55% out-of-sample (20 casi). Non arriva all’80%. Non è un consiglio di investimento.";
+    }
+    async function loadSupportHist() {
+      const nowEl = document.getElementById("supNow");
+      try {
+        const cached = JSON.parse(localStorage.getItem("oroSup15") || "null");
+        if (cached && cached.at && Date.now() - cached.at < 18 * 3600 * 1000 && cached.gold && cached.gold.length > 200) {
+          state.hist15 = cached.gold;
+          state.dxy15 = cached.dxy || [];
+        }
+      } catch (e) {}
+      if (!state.hist15) {
+        if (nowEl) nowEl.textContent = "Scarico 15 anni di quotazioni…";
+        const [gold, dxy] = await Promise.all([
+          fetchYahooHist("GC=F", "16y"),
+          fetchYahooHist("DX-Y.NYB", "16y").catch(() => [])
+        ]);
+        state.hist15 = gold;
+        state.dxy15 = (dxy || []).map(r => r.c);
+        try { localStorage.setItem("oroSup15", JSON.stringify({ at: Date.now(), gold, dxy: state.dxy15 })); } catch (e) {}
+      }
+      const cut = Date.now() - 15 * 365.25 * 24 * 3600 * 1000;
+      const rows = (state.hist15 || []).filter(r => r.t >= cut);
+      state.sup = computeSupports(rows);
+      paintSupports();
+    }
     async function loadQuoteBiquote() {
       const fxName = fxSymbol();
       const reqs = [
@@ -1236,13 +1483,15 @@
       const day = sessionDayKey(new Date());
       const todayBars = (state.daily || []).filter(b => sessionDayKey(new Date(b.openTime || b.time || 0)) === day);
       if (todayBars.length) {
-        const th = Math.max(...todayBars.map(b => b.high || q.mid), q.mid);
-        const tl = Math.min(...todayBars.map(b => b.low || q.mid), q.mid);
-        q.high = Math.max(q.high || q.mid, th);
-        q.low = Math.min(q.low || q.mid, tl);
+        const th = Math.max(...todayBars.map(b => fitsDayPx(b.high, q.mid, q) ? b.high : q.mid), q.mid);
+        const tl = Math.min(...todayBars.map(b => fitsDayPx(b.low, q.mid, q) ? b.low : q.mid), q.mid);
+        if (fitsDayPx(q.high, q.mid, q)) q.high = Math.max(q.high, th);
+        else q.high = th;
+        if (fitsDayPx(q.low, q.mid, q)) q.low = Math.min(q.low, tl);
+        else q.low = tl;
       } else {
-        q.high = q.mid;
-        q.low = q.mid;
+        if (!fitsDayPx(q.high, q.mid, q)) q.high = q.mid;
+        if (!fitsDayPx(q.low, q.mid, q)) q.low = q.mid;
       }
       return q;
     }
@@ -1304,7 +1553,7 @@
       const usdchf = tickMid("USDCHF");
       let mid = null, high = null, low = null, ts = null, gold = null;
       if (state.ccy === "USD" && gUsd) gold = state.ticks.XAUUSD;
-      else if (state.ccy === "EUR" && gEur) gold = state.ticks.XAUEUR;
+      else if (state.ccy === "EUR") gold = gEur ? state.ticks.XAUEUR : null;
       else if (state.ccy === "PLN") {
         if (gUsd && usdpln) mid = gUsd * usdpln;
         else if (gEur && eurpln) mid = gEur * eurpln;
@@ -1319,7 +1568,7 @@
       } else if (state.ccy === "JPY") {
         if (gEur && eurjpy) mid = gEur * eurjpy;
         gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
-      } else gold = state.ticks.XAUEUR || state.ticks.XAUUSD;
+      } else gold = (state.ccy === "USD") ? (state.ticks.XAUUSD || null) : (state.ticks.XAUEUR || null);
       if (gold && gold.mid > 0 && mid == null) {
         mid = gold.mid;
         high = gold.high;
@@ -1391,6 +1640,10 @@
         if (full) {
           loadUsTreasuries().catch(e => console.warn("treasury", e));
           loadIndices().catch(e => console.warn("indici", e));
+          loadSupportHist().catch(e => {
+            const el = document.getElementById("supNow");
+            if (el) { el.className = "sup-now"; el.textContent = "Storico 15 anni non arrivato."; }
+          });
         }
         if (full || !state.fxPrev) {
           loadFxPrev().then(() => {
@@ -1797,6 +2050,12 @@
       if (b) setFxSide("to", b.dataset.fx);
     });
     paintFxTabs();
+    document.getElementById("supFold")?.addEventListener("toggle", () => {
+      if (document.getElementById("supFold").open) {
+        if (state.sup) paintSupports();
+        else loadSupportHist().catch(() => {});
+      }
+    });
     document.getElementById("reloadBtn").addEventListener("click", () => boot(true));
 
     boot(true);
